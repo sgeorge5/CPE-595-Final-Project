@@ -1,11 +1,3 @@
-"""Headless orange-peg Gymnasium environment using PegglePy's actual physics.
-
-Upstream: https://github.com/Mr0o/PegglePy (GPL-3.0; see upstream LICENSE).
-The upstream Vector, Ball and collision function bodies execute unchanged.
-Only imports are redirected, in memory, to an isolated package with explicit
-physics settings and a lightweight peg record. No game files are modified.
-"""
-
 import ast
 from dataclasses import dataclass
 from functools import lru_cache
@@ -25,7 +17,6 @@ else:
 
 @dataclass
 class HeadlessPeg:
-    """PegglePy's physics/state fields, without drawing, timers or animation."""
     pos: Any
     color: str
     radius: float
@@ -40,13 +31,6 @@ class HeadlessPeg:
 
 @lru_cache(maxsize=None)
 def _load_physics(config):
-    """Redirect upstream local.* imports without replacing the global local package.
-
-    Importing upstream local.config directly would load user settings, run an
-    automatic installer and potentially initialize a display. The private config
-    supplies its documented default constants instead. Collision code needs only
-    Peg's position and radius, so graphical Peg construction is unnecessary.
-    """
     source_dir = PEGGLE_ROOT / "local"
     if not (source_dir / "collision.py").exists():
         raise FileNotFoundError(f"Expected the downloaded PegglePy source at {PEGGLE_ROOT}")
@@ -91,13 +75,6 @@ _PHYSICS_PACKAGES = []
 
 
 class PeggleEnv(gym.Env):
-    """One step launches and finishes one shot; actions never use a trajectory oracle.
-
-    Hit pegs remain solid during the shot and are removed at its end, as in
-    PegglePy. Low-speed repeated contacts remove an already-hit peg after a
-    deterministic 24-tick delay, replacing the game's wall-clock stuck timer.
-    Bucket/free-ball/power-up/score effects are deliberately outside this stage.
-    """
     metadata = {"render_modes": []}
 
     def __init__(self, config: RLConfig = CONFIG):
@@ -178,8 +155,6 @@ class PeggleEnv(gym.Env):
                         active.remove(peg)
                         peg.isVisible = False
                         self.stuck_removals += 1
-            # Keep the timer across the tiny gaps between bounces, as upstream
-            # does; a subsequent fast contact cancels it for that peg.
         for peg in self.pegs:
             if peg.isHit:
                 peg.isVisible = False
@@ -199,8 +174,6 @@ class PeggleEnv(gym.Env):
         newly_cleared = info["orange_cleared"] - before
         reward = self.config.orange_reward * newly_cleared - self.config.shot_penalty
         terminated = bool(info["success"] or self.shots_remaining == 0)
-        # The shot budget is part of the finite task and observation, so failure
-        # at zero shots is terminal, not a time-limit truncation to bootstrap from.
         if info["success"]:
             reward += self.config.completion_bonus
         self._done = terminated

@@ -1,5 +1,3 @@
-"""Configuration for the orange-only, fixed-board mid-stage experiment."""
-
 from dataclasses import asdict, dataclass
 from pathlib import Path
 import hashlib
@@ -16,8 +14,7 @@ SEED = 42
 DEFAULT_TIMESTEPS = 10_000
 DEFAULT_EVAL_EPISODES = 100
 
-# A deliberately small, hand-authored board, NOT a claimed original .lvl file.
-# Keep this order for the lifetime of the experiment, including cleared pegs.
+
 FIXED_BOARD = (
     (420.0, 300.0, "orange"),
     (600.0, 420.0, "orange"),
@@ -36,7 +33,6 @@ N_ORANGE = sum(color == "orange" for _, _, color in FIXED_BOARD)
 
 @dataclass(frozen=True)
 class RLConfig:
-    # Match local/PegglePy-main/local/config.py defaults; ignore user.cfg.
     width: int = 1200
     height: int = 900
     max_shots: int = 10
@@ -72,7 +68,6 @@ class RLConfig:
 
     @property
     def angles_degrees(self):
-        """Degrees from downward vertical: negative left, positive right."""
         return np.linspace(self.min_angle, self.max_angle, self.n_actions)
 
 
@@ -85,7 +80,6 @@ def ensure_directories():
 
 
 def experiment_spec(config=CONFIG):
-    """Serializable board/physics/reward specification, shared by train/eval."""
     return {"config": asdict(config), "board": [list(row) for row in FIXED_BOARD],
             "observation": "10 * [x/width, y/height, is_orange, is_hit] + shots/max_shots",
             "physics_sha256": {

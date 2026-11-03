@@ -1,5 +1,3 @@
-"""Focused behavior/integration checks. Run: python -m pytest levels/test_environment.py -q"""
-
 from dataclasses import replace
 import json
 import sys

@@ -1,5 +1,3 @@
-"""Train only the orange-target DQN and save measured episode logs."""
-
 import argparse
 import csv
 import importlib.metadata

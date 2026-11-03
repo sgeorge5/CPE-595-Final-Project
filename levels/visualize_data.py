@@ -1,5 +1,3 @@
-"""Extract archived level coordinates and plot original and small-board data."""
-
 import io
 import pickle
 from pathlib import Path

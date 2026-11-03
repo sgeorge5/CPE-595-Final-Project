@@ -1,5 +1,3 @@
-"""Measure deterministic DQN vs uniform random angles under identical conditions."""
-
 import argparse
 import hashlib
 import json
