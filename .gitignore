@@ -2,10 +2,12 @@
 __pycache__/
 
 # Project virtual environment
-/.venv/
+.venv/
 
 # Pytest caches at any depth
 .pytest_cache/
 
 # Generated model checkpoints and metadata
-/models/
+models/
+
+.gitignore
