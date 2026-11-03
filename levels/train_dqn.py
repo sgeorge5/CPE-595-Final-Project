@@ -117,7 +117,6 @@ def train_agent(total_timesteps=DEFAULT_TIMESTEPS, seed=SEED, model_path=MODEL_P
                 "python": platform.python_version(), "versions": {
                     name: importlib.metadata.version(name) for name in
                     ("numpy", "torch", "gymnasium", "stable-baselines3", "matplotlib", "pandas")}}
-    # Sidecar ties evaluation conditions to this specific model configuration.
     model_path.with_suffix(".json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     (results_dir / "training_metadata.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     plt.close(plot_training(results_dir / "training_episodes.csv", results_dir / "training_rewards.png"))

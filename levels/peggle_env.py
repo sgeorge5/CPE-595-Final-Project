@@ -135,8 +135,6 @@ class PeggleEnv(gym.Env):
             if not ball.isAlive:
                 timed_out = False
                 break
-            # Cheap swept bounding-box filter; collision decisions and response
-            # still use the upstream functions, including their sampling logic.
             reach = ball.radius + cfg.peg_radius
             xmin, xmax = min(ball.prevPos.x, ball.pos.x) - reach, max(ball.prevPos.x, ball.pos.x) + reach
             ymin, ymax = min(ball.prevPos.y, ball.pos.y) - reach, max(ball.prevPos.y, ball.pos.y) + reach

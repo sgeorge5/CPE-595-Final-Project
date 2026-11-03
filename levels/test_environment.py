@@ -53,7 +53,6 @@ def test_full_shot_and_reward_accounting(action):
     expected = 10 * info["new_orange_cleared"] - 1 + (25 if info["success"] else 0)
     assert reward == expected
     assert terminated == info["success"]
-    # Coordinates/colors keep the same slots even when pegs have been removed.
     np.testing.assert_array_equal(obs[:-1].reshape(10, 4)[:, :3], initial[:-1].reshape(10, 4)[:, :3])
 
 
@@ -70,7 +69,6 @@ def test_physical_hit_not_rewarded_twice():
 def test_success_bonus_and_terminal_guard():
     env = PeggleEnv()
     env.reset(seed=42)
-    # Construct a reachable final-orange state, then physically hit that orange.
     env.pegs[0].isHit = env.pegs[2].isHit = True
     _, reward, terminated, truncated, info = env.step(10)
     assert terminated and not truncated and info["success"]
@@ -150,7 +148,6 @@ def test_training_and_evaluation_artifacts(tmp_path):
     path = tmp_path / "dqn_orange.zip"
     _, metadata = train_agent(32, model_path=path, results_dir=tmp_path, verbose=0)
     assert path.exists() and metadata["completed_episodes"] > 0
-    # 32 steps deliberately checks the pipeline, not a claim of useful learning.
     summary, episodes = evaluate_agents(path, episodes=3, results_dir=tmp_path)
     assert len(episodes) == 6 and list(summary.agent) == ["DQN", "Random"]
     saved = pd.read_csv(tmp_path / "evaluation_episodes.csv")
