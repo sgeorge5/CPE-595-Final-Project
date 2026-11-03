@@ -1,5 +1,4 @@
 from dataclasses import replace
-import json
 import sys
 
 import numpy as np
@@ -146,8 +145,9 @@ def test_dqn_updates_weights_and_save_load(tmp_path):
 
 def test_training_and_evaluation_artifacts(tmp_path):
     path = tmp_path / "dqn_orange.zip"
-    _, metadata = train_agent(32, model_path=path, results_dir=tmp_path, verbose=0)
-    assert path.exists() and metadata["completed_episodes"] > 0
+    model, training_log = train_agent(32, model_path=path, results_dir=tmp_path, verbose=0)
+    assert path.exists() and len(training_log) > 0
+    assert model.num_timesteps == 32
     summary, episodes = evaluate_agents(path, episodes=3, results_dir=tmp_path)
     assert len(episodes) == 6 and list(summary.agent) == ["DQN", "Random"]
     saved = pd.read_csv(tmp_path / "evaluation_episodes.csv")
@@ -160,7 +160,12 @@ def test_training_and_evaluation_artifacts(tmp_path):
         successful = actual[actual.success]
         assert (np.isnan(row.avg_shots_success) if successful.empty else
                 row.avg_shots_success == pytest.approx(successful.shots_used.mean()))
-    assert json.loads((tmp_path / "evaluation_metadata.json").read_text())["training_timesteps"] == 32
+    # Evaluation also accepts a trained Python object, without reading a file.
+    in_memory, _ = evaluate_agents(tmp_path / "missing.zip", episodes=3,
+                                    results_dir=tmp_path, model=model)
+    pd.testing.assert_frame_equal(summary, in_memory)
+    assert not list(tmp_path.glob("*.json"))
+    assert not (tmp_path / "training.monitor.csv").exists()
     for name in ("training_rewards.png", "dqn_vs_random.png"):
         assert (tmp_path / name).stat().st_size > 1000
 

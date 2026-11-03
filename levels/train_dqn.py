@@ -1,11 +1,6 @@
 import argparse
 import csv
-import importlib.metadata
-import json
 from pathlib import Path
-import platform
-import time
-from datetime import datetime, timezone
 
 import matplotlib
 matplotlib.use("Agg")
@@ -17,12 +12,12 @@ from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.monitor import Monitor
 
 if __package__:
-    from .config_rl import (CONFIG, DEFAULT_TIMESTEPS, MODEL_PATH, RESULTS_DIR, SEED,
-                            experiment_id, experiment_spec)
+    from .config_rl import (CONFIG, DEFAULT_TIMESTEPS, DQN_POLICY, DQN_SETTINGS,
+                            MODEL_PATH, RESULTS_DIR, SEED)
     from .peggle_env import PeggleEnv
 else:
-    from config_rl import (CONFIG, DEFAULT_TIMESTEPS, MODEL_PATH, RESULTS_DIR, SEED,
-                           experiment_id, experiment_spec)
+    from config_rl import (CONFIG, DEFAULT_TIMESTEPS, DQN_POLICY, DQN_SETTINGS,
+                           MODEL_PATH, RESULTS_DIR, SEED)
     from peggle_env import PeggleEnv
 
 
@@ -82,7 +77,11 @@ def plot_training(log_path=RESULTS_DIR / "training_episodes.csv", output_path=No
 
 def train_agent(total_timesteps=DEFAULT_TIMESTEPS, seed=SEED, model_path=MODEL_PATH,
                 results_dir=RESULTS_DIR, config=CONFIG, verbose=1):
-    """A single initial configuration, no hyperparameter search or action oracle."""
+    """Train a fresh DQN; return the model and measured episode DataFrame.
+
+    Settings live in config_rl.py. Only the model ZIP, episode CSV and reward
+    plot are saved; no JSON settings, timestamps or package inventories.
+    """
     if total_timesteps < 1:
         raise ValueError("total_timesteps must be positive.")
     model_path, results_dir = Path(model_path), Path(results_dir)
@@ -91,16 +90,9 @@ def train_agent(total_timesteps=DEFAULT_TIMESTEPS, seed=SEED, model_path=MODEL_P
     model_path.parent.mkdir(parents=True, exist_ok=True)
     results_dir.mkdir(parents=True, exist_ok=True)
     torch.set_num_threads(1)  # Small MLPs run efficiently and reproducibly on CPU.
-    env = Monitor(PeggleEnv(config), filename=str(results_dir / "training.monitor.csv"),
-                  info_keywords=("orange_cleared", "success", "shots_used"))
-    params = dict(learning_rate=1e-3, buffer_size=20_000, learning_starts=200,
-                  batch_size=64, gamma=0.99, train_freq=4, gradient_steps=1,
-                  target_update_interval=500, exploration_fraction=0.6,
-                  exploration_initial_eps=1.0, exploration_final_eps=0.05,
-                  policy_kwargs=dict(net_arch=[64, 64]))
-    model = DQN("MlpPolicy", env, seed=seed, device="cpu", verbose=verbose, **params)
+    env = Monitor(PeggleEnv(config))
+    model = DQN(DQN_POLICY, env, seed=seed, device="cpu", verbose=verbose, **DQN_SETTINGS)
     callback = EpisodeLogger(results_dir / "training_episodes.csv")
-    started = time.perf_counter()
     try:
         model.learn(total_timesteps=total_timesteps, callback=callback, log_interval=100)
         model.save(model_path)
@@ -108,19 +100,8 @@ def train_agent(total_timesteps=DEFAULT_TIMESTEPS, seed=SEED, model_path=MODEL_P
         if hasattr(callback, "handle") and not callback.handle.closed:
             callback.handle.close()
         env.close()
-    metadata = {"algorithm": "Stable-Baselines3 DQN", "policy": "MlpPolicy", "seed": seed,
-                "requested_timesteps": total_timesteps, "actual_timesteps": model.num_timesteps,
-                "completed_episodes": callback.count, "elapsed_seconds": time.perf_counter() - started,
-                "finished_utc": datetime.now(timezone.utc).isoformat(),
-                "model_path": str(model_path.resolve()), "hyperparameters": params,
-                "experiment_id": experiment_id(config), "experiment": experiment_spec(config),
-                "python": platform.python_version(), "versions": {
-                    name: importlib.metadata.version(name) for name in
-                    ("numpy", "torch", "gymnasium", "stable-baselines3", "matplotlib", "pandas")}}
-    model_path.with_suffix(".json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
-    (results_dir / "training_metadata.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     plt.close(plot_training(results_dir / "training_episodes.csv", results_dir / "training_rewards.png"))
-    return model, metadata
+    return model, pd.read_csv(results_dir / "training_episodes.csv")
 
 
 def main():
@@ -130,8 +111,10 @@ def main():
     parser.add_argument("--model-path", type=Path, default=MODEL_PATH)
     parser.add_argument("--results-dir", type=Path, default=RESULTS_DIR)
     args = parser.parse_args()
-    _, metadata = train_agent(args.timesteps, args.seed, args.model_path, args.results_dir)
-    print(json.dumps({key: metadata[key] for key in ("actual_timesteps", "completed_episodes", "elapsed_seconds", "model_path")}, indent=2))
+    model, episodes = train_agent(args.timesteps, args.seed, args.model_path, args.results_dir)
+    print(f"Training shots: {model.num_timesteps}")
+    print(f"Completed episodes: {len(episodes)}")
+    print(f"Saved model: {args.model_path}")
 
 
 if __name__ == "__main__":

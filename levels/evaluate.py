@@ -1,6 +1,4 @@
 import argparse
-import hashlib
-import json
 from pathlib import Path
 
 import matplotlib
@@ -12,11 +10,11 @@ from stable_baselines3 import DQN
 
 if __package__:
     from .config_rl import (CONFIG, DEFAULT_EVAL_EPISODES, MODEL_PATH, N_ORANGE,
-                            RESULTS_DIR, SEED, experiment_id, experiment_spec)
+                            RESULTS_DIR, SEED)
     from .peggle_env import PeggleEnv
 else:
     from config_rl import (CONFIG, DEFAULT_EVAL_EPISODES, MODEL_PATH, N_ORANGE,
-                           RESULTS_DIR, SEED, experiment_id, experiment_spec)
+                           RESULTS_DIR, SEED)
     from peggle_env import PeggleEnv
 
 
@@ -42,17 +40,22 @@ def plot_comparison(summary, path=None):
 
 
 def evaluate_agents(model_path=MODEL_PATH, episodes=DEFAULT_EVAL_EPISODES,
-                    seed=SEED + 10_000, results_dir=RESULTS_DIR, config=CONFIG):
+                    seed=SEED + 10_000, results_dir=RESULTS_DIR, config=CONFIG,
+                    model=None):
+    """Evaluate an in-memory DQN or load its ZIP. No JSON sidecar is needed.
+
+    Use the same config_rl.py board/settings for training and evaluation;
+    retrain after changing the task. The notebook passes its freshly trained
+    model directly, while the CLI loads the saved checkpoint.
+    """
     if episodes < 1:
         raise ValueError("episodes must be positive.")
     model_path, results_dir = Path(model_path), Path(results_dir)
-    if not model_path.exists():
-        raise FileNotFoundError(f"Train the model first: {model_path}")
-    training = json.loads(model_path.with_suffix(".json").read_text(encoding="utf-8"))
-    if training["experiment_id"] != experiment_id(config):
-        raise ValueError("The model's board/physics/reward configuration differs from evaluation.")
+    if model is None:
+        if not model_path.exists():
+            raise FileNotFoundError(f"Train the model first: {model_path}")
+        model = DQN.load(model_path, device="cpu")
     results_dir.mkdir(parents=True, exist_ok=True)
-    model = DQN.load(model_path, device="cpu")
     rows = []
     shots = []
     for agent in ("DQN", "Random"):
@@ -100,15 +103,6 @@ def evaluate_agents(model_path=MODEL_PATH, episodes=DEFAULT_EVAL_EPISODES,
     episodes_df.to_csv(results_dir / "evaluation_episodes.csv", index=False)
     pd.DataFrame(shots).to_csv(results_dir / "evaluation_shots.csv", index=False)
     summary.to_csv(results_dir / "evaluation_summary.csv", index=False)
-    metadata = {"episodes_per_agent": episodes, "first_episode_seed": seed,
-                "model_sha256": hashlib.sha256(model_path.read_bytes()).hexdigest(),
-                "training_timesteps": training["actual_timesteps"],
-                "training_seed": training["seed"], "experiment_id": experiment_id(config),
-                "experiment": experiment_spec(config),
-                "policy": "deterministic DQN; uniform random over the same 21 actions",
-                "note": "Fixed deterministic board: repeated DQN episodes have identical trajectories."
-                        " Random seeds vary random actions, not boards. No generalization claim."}
-    (results_dir / "evaluation_metadata.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     plt.close(plot_comparison(summary, results_dir / "dqn_vs_random.png"))
     return summary, episodes_df
 

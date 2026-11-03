@@ -1,7 +1,5 @@
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from pathlib import Path
-import hashlib
-import json
 
 import numpy as np
 
@@ -13,6 +11,16 @@ MODEL_PATH = MODELS_DIR / "dqn_orange.zip"
 SEED = 42
 DEFAULT_TIMESTEPS = 10_000
 DEFAULT_EVAL_EPISODES = 100
+
+# DQN settings are Python values, shared by the script and notebook.
+DQN_POLICY = "MlpPolicy"
+DQN_SETTINGS = dict(
+    learning_rate=1e-3, buffer_size=20_000, learning_starts=200,
+    batch_size=64, gamma=0.99, train_freq=4, gradient_steps=1,
+    target_update_interval=500, exploration_fraction=0.6,
+    exploration_initial_eps=1.0, exploration_final_eps=0.05,
+    policy_kwargs=dict(net_arch=[64, 64]),
+)
 
 
 FIXED_BOARD = (
@@ -79,14 +87,3 @@ def ensure_directories():
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def experiment_spec(config=CONFIG):
-    return {"config": asdict(config), "board": [list(row) for row in FIXED_BOARD],
-            "observation": "10 * [x/width, y/height, is_orange, is_hit] + shots/max_shots",
-            "physics_sha256": {
-                name: hashlib.sha256((PEGGLE_ROOT / "local" / name).read_bytes()).hexdigest()
-                for name in ("vectors.py", "ball.py", "collision.py")}}
-
-
-def experiment_id(config=CONFIG):
-    encoded = json.dumps(experiment_spec(config), sort_keys=True).encode()
-    return hashlib.sha256(encoded).hexdigest()
