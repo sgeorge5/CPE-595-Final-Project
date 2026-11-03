@@ -1,0 +1,11 @@
+# Python bytecode caches at any depth
+__pycache__/
+
+# Project virtual environment
+/.venv/
+
+# Pytest caches at any depth
+.pytest_cache/
+
+# Generated model checkpoints and metadata
+/models/
