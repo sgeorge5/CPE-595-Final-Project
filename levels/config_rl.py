@@ -1,0 +1,98 @@
+"""Configuration for the orange-only, fixed-board mid-stage experiment."""
+
+from dataclasses import asdict, dataclass
+from pathlib import Path
+import hashlib
+import json
+
+import numpy as np
+
+ROOT = Path(__file__).resolve().parents[1]
+PEGGLE_ROOT = ROOT / "local" / "PegglePy-main"
+MODELS_DIR = ROOT / "models"
+RESULTS_DIR = ROOT / "results"
+MODEL_PATH = MODELS_DIR / "dqn_orange.zip"
+SEED = 42
+DEFAULT_TIMESTEPS = 10_000
+DEFAULT_EVAL_EPISODES = 100
+
+# A deliberately small, hand-authored board, NOT a claimed original .lvl file.
+# Keep this order for the lifetime of the experiment, including cleared pegs.
+FIXED_BOARD = (
+    (420.0, 300.0, "orange"),
+    (600.0, 420.0, "orange"),
+    (800.0, 300.0, "orange"),
+    (230.0, 440.0, "blue"),
+    (350.0, 550.0, "blue"),
+    (500.0, 620.0, "blue"),
+    (690.0, 600.0, "blue"),
+    (900.0, 500.0, "blue"),
+    (1000.0, 650.0, "blue"),
+    (600.0, 720.0, "blue"),
+)
+N_PEGS = len(FIXED_BOARD)
+N_ORANGE = sum(color == "orange" for _, _, color in FIXED_BOARD)
+
+
+@dataclass(frozen=True)
+class RLConfig:
+    # Match local/PegglePy-main/local/config.py defaults; ignore user.cfg.
+    width: int = 1200
+    height: int = 900
+    max_shots: int = 10
+    n_actions: int = 21
+    min_angle: float = -60.0
+    max_angle: float = 60.0
+    launch_force: float = 5.0
+    gravity: float = 0.045
+    max_ball_velocity: float = 10.0
+    ball_radius: float = 12.0
+    peg_radius: float = 25.0
+    ball_mass: float = 4.0
+    peg_mass: float = 20.0
+    collision_samples: int = 10
+    dt: float = 1.0
+    max_frames_per_shot: int = 10_000
+    stuck_frames: int = 24  # 0.4 seconds at a nominal 60 simulation ticks/s.
+    orange_reward: float = 10.0
+    completion_bonus: float = 25.0
+    shot_penalty: float = 1.0
+
+    def __post_init__(self):
+        if self.max_shots < 1 or self.max_frames_per_shot < 1 or self.stuck_frames < 1:
+            raise ValueError("Shot budget and simulation limits must be positive.")
+        if self.n_actions < 2 or not -90 < self.min_angle < self.max_angle < 90:
+            raise ValueError("Use at least two downward launch angles in (-90, 90).")
+        if self.dt <= 0 or self.width <= 0 or self.height <= 0:
+            raise ValueError("Simulation step and board dimensions must be positive.")
+        if any(not (self.peg_radius < x < self.width - self.peg_radius
+                    and self.peg_radius < y < self.height - self.peg_radius)
+               for x, y, _ in FIXED_BOARD):
+            raise ValueError("Every fixed peg must fit inside the board.")
+
+    @property
+    def angles_degrees(self):
+        """Degrees from downward vertical: negative left, positive right."""
+        return np.linspace(self.min_angle, self.max_angle, self.n_actions)
+
+
+CONFIG = RLConfig()
+
+
+def ensure_directories():
+    MODELS_DIR.mkdir(parents=True, exist_ok=True)
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def experiment_spec(config=CONFIG):
+    """Serializable board/physics/reward specification, shared by train/eval."""
+    return {"config": asdict(config), "board": [list(row) for row in FIXED_BOARD],
+            "observation": "10 * [x/width, y/height, is_orange, is_hit] + shots/max_shots",
+            "physics_sha256": {
+                name: hashlib.sha256((PEGGLE_ROOT / "local" / name).read_bytes()).hexdigest()
+                for name in ("vectors.py", "ball.py", "collision.py")}}
+
+
+def experiment_id(config=CONFIG):
+    encoded = json.dumps(experiment_spec(config), sort_keys=True).encode()
+    return hashlib.sha256(encoded).hexdigest()

@@ -1,0 +1,16 @@
+[
+  {
+    "mode": "fresh-training Run All",
+    "code_cells_executed": 11,
+    "elapsed_seconds": 10.93143670000427,
+    "embedded_images": 4,
+    "status": "passed"
+  },
+  {
+    "mode": "saved-model report Run All",
+    "code_cells_executed": 11,
+    "elapsed_seconds": 11.555255700004636,
+    "embedded_images": 4,
+    "status": "passed"
+  }
+]

@@ -1,0 +1,3 @@
+agent,episodes,successes,success_rate_pct,orange_cleared_pct,avg_shots_success,avg_shots_all,mean_episode_reward,simulation_timeouts
+DQN,100,100,100.0,100.0,1.0,1.0,54.0,0
+Random,100,66,66.0,88.33333333333331,5.363636363636363,6.94,36.06,0

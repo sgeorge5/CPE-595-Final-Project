@@ -1,0 +1,5 @@
+Skipping automatic dependency installation. Please ensure all dependencies are installed manually.
+
+ORIGINAL_GAME_STARTUP_PASSED
+
+Scope: original startup and clean exit using a temporary copy and SDL dummy display; no manual gameplay validation.

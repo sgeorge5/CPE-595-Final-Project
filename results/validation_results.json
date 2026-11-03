@@ -1,0 +1,63 @@
+{
+  "python_executable": "C:\\Users\\sgeorge5\\Downloads\\CPE 595\\Final Project\\.venv\\Scripts\\python.exe",
+  "tests": {
+    "command": ".venv/Scripts/python.exe -m pytest levels/test_environment.py -q",
+    "result": "...............................                                          [100%]\n31 passed in 3.90s"
+  },
+  "dependency_check": {
+    "command": ".venv/Scripts/python.exe -m pip check",
+    "result": "No broken requirements found."
+  },
+  "commands_succeeded": [
+    ".venv/Scripts/python.exe -m levels.visualize_data",
+    ".venv/Scripts/python.exe -m levels.train_dqn --timesteps 256 --model-path models/smoke/dqn_orange.zip --results-dir results/smoke",
+    ".venv/Scripts/python.exe -m levels.evaluate --episodes 10 --model-path models/smoke/dqn_orange.zip --results-dir results/smoke",
+    ".venv/Scripts/python.exe -m levels.train_dqn --timesteps 10000",
+    ".venv/Scripts/python.exe -m levels.evaluate --episodes 100"
+  ],
+  "notebook_executions": [
+    {
+      "mode": "fresh-training Run All",
+      "code_cells_executed": 11,
+      "elapsed_seconds": 10.93143670000427,
+      "embedded_images": 4,
+      "status": "passed"
+    },
+    {
+      "mode": "saved-model report Run All",
+      "code_cells_executed": 11,
+      "elapsed_seconds": 11.555255700004636,
+      "embedded_images": 4,
+      "status": "passed"
+    }
+  ],
+  "upstream_files_unchanged": 235,
+  "original_game_check": "startup and clean exit passed on temporary copy with SDL dummy display; interactive play not manually tested",
+  "training_timesteps": 10000,
+  "completed_training_episodes": 5050,
+  "embedded_report_images": 4,
+  "measured_results": [
+    {
+      "agent": "DQN",
+      "episodes": 100,
+      "successes": 100,
+      "success_rate_pct": 100.0,
+      "orange_cleared_pct": 100.0,
+      "avg_shots_success": 1.0,
+      "avg_shots_all": 1.0,
+      "mean_episode_reward": 54.0,
+      "simulation_timeouts": 0
+    },
+    {
+      "agent": "Random",
+      "episodes": 100,
+      "successes": 66,
+      "success_rate_pct": 66.0,
+      "orange_cleared_pct": 88.33333333333331,
+      "avg_shots_success": 5.363636363636363,
+      "avg_shots_all": 6.94,
+      "mean_episode_reward": 36.06,
+      "simulation_timeouts": 0
+    }
+  ]
+}
