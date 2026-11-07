@@ -1,38 +1,33 @@
 """Gymnasium environment: reset a board, choose an angle, simulate a full shot."""
 
 import ast
-from dataclasses import dataclass
-from functools import lru_cache
 import sys
 import types
-from typing import Any
 
 import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
 
-if __package__:
-    from .config_rl import CONFIG, FIXED_BOARD, N_ORANGE, N_PEGS, PEGGLE_ROOT, RLConfig
-else:
-    from config_rl import CONFIG, FIXED_BOARD, N_ORANGE, N_PEGS, PEGGLE_ROOT, RLConfig
+from levels.config_rl import CONFIG, FIXED_BOARD, N_ORANGE, N_PEGS, PEGGLE_ROOT, RLConfig
 
 
-@dataclass
 class HeadlessPeg:
     """Peg position, color and hit status, without game images or animations."""
-    pos: Any
-    color: str
-    radius: float
-    mass: float
-    isHit: bool = False
-    isVisible: bool = True
 
-    @property
-    def isOrange(self):
-        return self.color == "orange"
+    def __init__(self, pos, color, radius, mass):
+        self.pos = pos
+        self.color = color
+        self.radius = radius
+        self.mass = mass
+        self.isHit = False
+        self.isVisible = True
+        self.isOrange = color == "orange"
 
 
-@lru_cache(maxsize=None)
+# Remember physics that has already been loaded for a set of settings.
+_PHYSICS_CACHE = {}
+
+
 def _load_physics(config):
     """Load PegglePy's physics without starting its graphical game.
 
@@ -40,11 +35,18 @@ def _load_physics(config):
     those imports keeps the original physics functions intact while supplying
     headless settings. The sys/ast/module code is confined to this adapter.
     """
+    cache_key = (
+        config.width, config.height, config.gravity,
+        config.max_ball_velocity, config.ball_radius,
+        config.ball_mass, config.collision_samples,
+    )
+    if cache_key in _PHYSICS_CACHE:
+        return _PHYSICS_CACHE[cache_key]
+
     source_dir = PEGGLE_ROOT / "local"
     if not (source_dir / "collision.py").exists():
         raise FileNotFoundError(f"Expected the downloaded PegglePy source at {PEGGLE_ROOT}")
-    package_name = f"_peggle_rl_physics_{len(_PHYSICS_PACKAGES)}"
-    _PHYSICS_PACKAGES.append(package_name)
+    package_name = f"_peggle_rl_physics_{len(_PHYSICS_CACHE)}"
     package = types.ModuleType(package_name)
     package.__path__ = [str(source_dir)]
     sys.modules[package_name] = package
@@ -77,10 +79,9 @@ def _load_physics(config):
     module("peg").Peg = HeadlessPeg
     ball = load("ball")
     collision = load("collision")
-    return vectors.Vector, ball.Ball, collision
-
-
-_PHYSICS_PACKAGES = []
+    physics = (vectors.Vector, ball.Ball, collision)
+    _PHYSICS_CACHE[cache_key] = physics
+    return physics
 
 
 class PeggleEnv(gym.Env):

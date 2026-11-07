@@ -1,15 +1,15 @@
 """Settings for one small board and one orange-peg DQN agent."""
 
-from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[1]
-PEGGLE_ROOT = ROOT / "local" / "PegglePy-main"
-MODELS_DIR = ROOT / "models"
-RESULTS_DIR = ROOT / "results"
-MODEL_PATH = MODELS_DIR / "dqn_orange.zip"
+# Run the notebook or scripts from the Final Project folder.
+ROOT = Path(".")
+PEGGLE_ROOT = Path("local/PegglePy-main")
+MODELS_DIR = Path("models")
+RESULTS_DIR = Path("results")
+MODEL_PATH = Path("models/dqn_orange.zip")
 # Edit these values to change training and evaluation when running the scripts.
 SEED = 42
 DEFAULT_TIMESTEPS = 10_000
@@ -50,35 +50,43 @@ N_PEGS = len(FIXED_BOARD)
 N_ORANGE = sum(color == "orange" for _, _, color in FIXED_BOARD)
 
 
-@dataclass(frozen=True)
 class RLConfig:
     """A group of named settings, accessed as CONFIG.width, CONFIG.max_shots, etc."""
 
-    # Board and action settings.
-    width: int = 1200
-    height: int = 900
-    max_shots: int = 10
-    n_actions: int = 21
-    min_angle: float = -60.0
-    max_angle: float = 60.0
-    # Physics defaults from PegglePy, used by the headless adapter.
-    launch_force: float = 5.0
-    gravity: float = 0.045
-    max_ball_velocity: float = 10.0
-    ball_radius: float = 12.0
-    peg_radius: float = 25.0
-    ball_mass: float = 4.0
-    peg_mass: float = 20.0
-    collision_samples: int = 10
-    dt: float = 1.0
-    max_frames_per_shot: int = 10_000
-    stuck_frames: int = 24  # 0.4 seconds at a nominal 60 simulation ticks/s.
-    # Rewards for the orange-only objective.
-    orange_reward: float = 10.0
-    completion_bonus: float = 25.0
-    shot_penalty: float = 1.0
+    def __init__(self, max_shots=10):
+        # Board and action settings.
+        self.width = 1200
+        self.height = 900
+        self.max_shots = max_shots
+        self.n_actions = 21
+        self.min_angle = -60.0
+        self.max_angle = 60.0
 
-    def __post_init__(self):
+        # Physics defaults from PegglePy, used by the headless adapter.
+        self.launch_force = 5.0
+        self.gravity = 0.045
+        self.max_ball_velocity = 10.0
+        self.ball_radius = 12.0
+        self.peg_radius = 25.0
+        self.ball_mass = 4.0
+        self.peg_mass = 20.0
+        self.collision_samples = 10
+        self.dt = 1.0
+        self.max_frames_per_shot = 10_000
+        self.stuck_frames = 24  # 0.4 seconds at a nominal 60 simulation ticks/s.
+
+        # Rewards for the orange-only objective.
+        self.orange_reward = 10.0
+        self.completion_bonus = 25.0
+        self.shot_penalty = 1.0
+
+        self.validate()
+        self.angles_degrees = np.linspace(
+            self.min_angle, self.max_angle, self.n_actions
+        )
+
+    def validate(self):
+        """Check settings before using them to create an environment."""
         if self.max_shots < 1 or self.max_frames_per_shot < 1 or self.stuck_frames < 1:
             raise ValueError("Shot budget and simulation limits must be positive.")
         if self.n_actions < 2 or not -90 < self.min_angle < self.max_angle < 90:
@@ -89,12 +97,6 @@ class RLConfig:
                     and self.peg_radius < y < self.height - self.peg_radius)
                for x, y, _ in FIXED_BOARD):
             raise ValueError("Every fixed peg must fit inside the board.")
-
-    @property
-    def angles_degrees(self):
-        """21 angles from -60 to +60 degrees, measured from downward vertical."""
-        return np.linspace(self.min_angle, self.max_angle, self.n_actions)
-
 
 CONFIG = RLConfig()
 

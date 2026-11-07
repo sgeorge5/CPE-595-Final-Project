@@ -1,4 +1,3 @@
-from dataclasses import replace
 import sys
 
 import numpy as np
@@ -9,18 +8,11 @@ from gymnasium.utils.env_checker import check_env as gym_check_env
 from stable_baselines3 import DQN
 from stable_baselines3.common.env_checker import check_env as sb3_check_env
 
-if __package__:
-    from .config_rl import CONFIG, FIXED_BOARD, N_ORANGE, ROOT
-    from .peggle_env import PeggleEnv
-    from .visualize_data import original_level_data, level_inventory
-    from .train_dqn import train_agent
-    from .evaluate import evaluate_agents
-else:
-    from config_rl import CONFIG, FIXED_BOARD, N_ORANGE, ROOT
-    from peggle_env import PeggleEnv
-    from visualize_data import original_level_data, level_inventory
-    from train_dqn import train_agent
-    from evaluate import evaluate_agents
+from levels.config_rl import FIXED_BOARD, N_ORANGE, ROOT, RLConfig
+from levels.peggle_env import PeggleEnv
+from levels.visualize_data import original_level_data, level_inventory
+from levels.train_dqn import train_agent
+from levels.evaluate import evaluate_agents
 
 
 def test_reset_and_preprocessing():
@@ -39,20 +31,20 @@ def test_reset_and_preprocessing():
     assert reset_info == info
 
 
-@pytest.mark.parametrize("action", range(21))
-def test_full_shot_and_reward_accounting(action):
-    env = PeggleEnv()
-    initial, _ = env.reset(seed=123)
-    obs, reward, terminated, truncated, info = env.step(action)
-    assert env.observation_space.contains(obs)
-    assert obs[-1] == np.float32(0.9)
-    assert info["shots_used"] == 1 and info["simulation_frames"] > 1
-    assert not truncated
-    assert not info["shot_timed_out"]
-    expected = 10 * info["new_orange_cleared"] - 1 + (25 if info["success"] else 0)
-    assert reward == expected
-    assert terminated == info["success"]
-    np.testing.assert_array_equal(obs[:-1].reshape(10, 4)[:, :3], initial[:-1].reshape(10, 4)[:, :3])
+def test_full_shot_and_reward_accounting():
+    for action in range(21):
+        env = PeggleEnv()
+        initial, _ = env.reset(seed=123)
+        obs, reward, terminated, truncated, info = env.step(action)
+        assert env.observation_space.contains(obs)
+        assert obs[-1] == np.float32(0.9)
+        assert info["shots_used"] == 1 and info["simulation_frames"] > 1
+        assert not truncated
+        assert not info["shot_timed_out"]
+        expected = 10 * info["new_orange_cleared"] - 1 + (25 if info["success"] else 0)
+        assert reward == expected
+        assert terminated == info["success"]
+        np.testing.assert_array_equal(obs[:-1].reshape(10, 4)[:, :3], initial[:-1].reshape(10, 4)[:, :3])
 
 
 def test_physical_hit_not_rewarded_twice():
@@ -78,7 +70,7 @@ def test_success_bonus_and_terminal_guard():
 
 
 def test_budget_exhaustion():
-    env = PeggleEnv(replace(CONFIG, max_shots=1))
+    env = PeggleEnv(RLConfig(max_shots=1))
     env.reset(seed=42)
     obs, reward, terminated, truncated, info = env.step(0)
     assert terminated and not truncated and not info["success"]
@@ -114,6 +106,20 @@ def test_deterministic_sequences_and_isolated_instances():
 def test_gymnasium_and_sb3_contract():
     gym_check_env(PeggleEnv(), skip_render_check=True)
     sb3_check_env(PeggleEnv(), warn=True)
+
+
+def test_physics_settings_stay_separate():
+    normal_env = PeggleEnv(RLConfig())
+    stronger_gravity = RLConfig()
+    stronger_gravity.gravity = 0.09
+    stronger_env = PeggleEnv(stronger_gravity)
+
+    normal_ball = normal_env.Ball(600, 36)
+    stronger_ball = stronger_env.Ball(600, 36)
+    normal_ball.update()
+    stronger_ball.update()
+    assert normal_ball.vel.y == pytest.approx(0.045)
+    assert stronger_ball.vel.y == pytest.approx(0.09)
 
 
 def test_upstream_data_and_no_graphical_side_effects():

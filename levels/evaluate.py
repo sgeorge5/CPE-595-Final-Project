@@ -9,14 +9,10 @@ import numpy as np
 import pandas as pd
 from stable_baselines3 import DQN
 
-if __package__:
-    from .config_rl import (CONFIG, DEFAULT_EVAL_EPISODES, MODEL_PATH, N_ORANGE,
-                            RESULTS_DIR, SEED)
-    from .peggle_env import PeggleEnv
-else:
-    from config_rl import (CONFIG, DEFAULT_EVAL_EPISODES, MODEL_PATH, N_ORANGE,
-                           RESULTS_DIR, SEED)
-    from peggle_env import PeggleEnv
+from levels.config_rl import (
+    CONFIG, DEFAULT_EVAL_EPISODES, MODEL_PATH, N_ORANGE, RESULTS_DIR, SEED
+)
+from levels.peggle_env import PeggleEnv
 
 
 def plot_comparison(summary, path=None):

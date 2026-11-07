@@ -11,14 +11,10 @@ from stable_baselines3 import DQN
 from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.monitor import Monitor
 
-if __package__:
-    from .config_rl import (CONFIG, DEFAULT_TIMESTEPS, DQN_POLICY, DQN_SETTINGS,
-                            MODEL_PATH, RESULTS_DIR, SEED)
-    from .peggle_env import PeggleEnv
-else:
-    from config_rl import (CONFIG, DEFAULT_TIMESTEPS, DQN_POLICY, DQN_SETTINGS,
-                           MODEL_PATH, RESULTS_DIR, SEED)
-    from peggle_env import PeggleEnv
+from levels.config_rl import (
+    CONFIG, DEFAULT_TIMESTEPS, DQN_POLICY, DQN_SETTINGS, MODEL_PATH, RESULTS_DIR, SEED
+)
+from levels.peggle_env import PeggleEnv
 
 
 class EpisodeLogger(BaseCallback):

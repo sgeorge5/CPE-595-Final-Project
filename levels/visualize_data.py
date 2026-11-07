@@ -9,12 +9,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-if __package__:
-    from .config_rl import CONFIG, PEGGLE_ROOT, RESULTS_DIR, ensure_directories
-    from .peggle_env import PeggleEnv
-else:
-    from config_rl import CONFIG, PEGGLE_ROOT, RESULTS_DIR, ensure_directories
-    from peggle_env import PeggleEnv
+from levels.config_rl import CONFIG, PEGGLE_ROOT, RESULTS_DIR, ensure_directories
+from levels.peggle_env import PeggleEnv
 
 
 class _CoordinateUnpickler(pickle.Unpickler):
