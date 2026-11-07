@@ -1,3 +1,5 @@
+"""Gymnasium environment: reset a board, choose an angle, simulate a full shot."""
+
 import ast
 from dataclasses import dataclass
 from functools import lru_cache
@@ -17,6 +19,7 @@ else:
 
 @dataclass
 class HeadlessPeg:
+    """Peg position, color and hit status, without game images or animations."""
     pos: Any
     color: str
     radius: float
@@ -31,6 +34,12 @@ class HeadlessPeg:
 
 @lru_cache(maxsize=None)
 def _load_physics(config):
+    """Load PegglePy's physics without starting its graphical game.
+
+    PegglePy imports its settings and classes as local.* modules. Redirecting
+    those imports keeps the original physics functions intact while supplying
+    headless settings. The sys/ast/module code is confined to this adapter.
+    """
     source_dir = PEGGLE_ROOT / "local"
     if not (source_dir / "collision.py").exists():
         raise FileNotFoundError(f"Expected the downloaded PegglePy source at {PEGGLE_ROOT}")
@@ -75,6 +84,7 @@ _PHYSICS_PACKAGES = []
 
 
 class PeggleEnv(gym.Env):
+    """DQN observes the board between shots; one step finishes one whole shot."""
     metadata = {"render_modes": []}
 
     def __init__(self, config: RLConfig = CONFIG):
@@ -101,10 +111,16 @@ class PeggleEnv(gym.Env):
         return self._observation(), self._info()
 
     def _observation(self):
-        features = [[peg.pos.x / self.config.width, peg.pos.y / self.config.height,
-                     float(peg.isOrange), float(peg.isHit)] for peg in self.pegs]
-        return np.concatenate((np.asarray(features, dtype=np.float32).ravel(),
-                               [self.shots_remaining / self.config.max_shots])).astype(np.float32)
+        features = []
+        for peg in self.pegs:
+            features.extend([
+                peg.pos.x / self.config.width,
+                peg.pos.y / self.config.height,
+                float(peg.isOrange),
+                float(peg.isHit),
+            ])
+        features.append(self.shots_remaining / self.config.max_shots)
+        return np.array(features, dtype=np.float32)
 
     def board_records(self):
         """Extract raw coordinates, colors and current hit status in stable ID order."""
@@ -175,8 +191,13 @@ class PeggleEnv(gym.Env):
         if info["success"]:
             reward += self.config.completion_bonus
         self._done = terminated
+        if info["success"]:
+            terminal_reason = "success"
+        elif terminated:
+            terminal_reason = "shot_budget"
+        else:
+            terminal_reason = None
         info.update(new_orange_cleared=newly_cleared, angle_degrees=angle,
                     simulation_frames=frames, shot_timed_out=timeout,
-                    terminal_reason="success" if info["success"] else
-                                    "shot_budget" if terminated else None)
+                    terminal_reason=terminal_reason)
         return self._observation(), float(reward), terminated, False, info

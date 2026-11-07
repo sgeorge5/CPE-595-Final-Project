@@ -1,4 +1,5 @@
-import io
+"""Read PegglePy's level coordinates and plot the original and training boards."""
+
 import pickle
 from pathlib import Path
 
@@ -17,6 +18,7 @@ else:
 
 
 class _CoordinateUnpickler(pickle.Unpickler):
+    """Read coordinate values while rejecting executable objects in level files."""
     def find_class(self, module, name):
         raise pickle.UnpicklingError("Level data must contain primitive coordinates only.")
 
@@ -32,7 +34,9 @@ def original_level_data(level_name="Level 1.lvl"):
     path = (level_dir / level_name).resolve()
     if path.parent != level_dir or path.suffix != ".lvl":
         raise ValueError("Choose a bundled .lvl filename.")
-    positions = np.asarray(_CoordinateUnpickler(io.BytesIO(path.read_bytes())).load(), dtype=float)
+    with path.open("rb") as level_file:
+        raw_positions = _CoordinateUnpickler(level_file).load()
+    positions = np.asarray(raw_positions, dtype=float)
     if positions.ndim != 2 or positions.shape[1] != 2 or len(positions) == 0 or not np.isfinite(positions).all():
         raise ValueError("Expected a nonempty list of finite (x, y) coordinates.")
     center = (positions.min(axis=0) + positions.max(axis=0)) / 2

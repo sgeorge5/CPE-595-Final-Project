@@ -1,4 +1,5 @@
-import argparse
+"""Compare DQN with random shooting. Settings come from config_rl.py."""
+
 from pathlib import Path
 
 import matplotlib
@@ -68,7 +69,11 @@ def evaluate_agents(model_path=MODEL_PATH, episodes=DEFAULT_EVAL_EPISODES,
                 total_reward = 0.0
                 done = False
                 while not done:
-                    action = int(model.predict(obs, deterministic=True)[0]) if agent == "DQN" else int(rng.integers(config.n_actions))
+                    if agent == "DQN":
+                        predicted_action, _ = model.predict(obs, deterministic=True)
+                        action = int(predicted_action)
+                    else:
+                        action = int(rng.integers(config.n_actions))
                     obs, reward, terminated, truncated, info = env.step(action)
                     total_reward += reward
                     shots.append({"agent": agent, "episode": episode + 1, "seed": episode_seed,
@@ -92,10 +97,14 @@ def evaluate_agents(model_path=MODEL_PATH, episodes=DEFAULT_EVAL_EPISODES,
     summary_rows = []
     for agent, data in episodes_df.groupby("agent", sort=False):
         successes = data[data.success]
+        if len(successes) > 0:
+            average_successful_shots = successes.shots_used.mean()
+        else:
+            average_successful_shots = np.nan  # No successful games to average.
         summary_rows.append({"agent": agent, "episodes": len(data), "successes": len(successes),
                              "success_rate_pct": 100 * data.success.mean(),
                              "orange_cleared_pct": data.orange_cleared_pct.mean(),
-                             "avg_shots_success": successes.shots_used.mean() if len(successes) else np.nan,
+                             "avg_shots_success": average_successful_shots,
                              "avg_shots_all": data.shots_used.mean(),
                              "mean_episode_reward": data.episode_reward.mean(),
                              "simulation_timeouts": int(data.simulation_timeouts.sum())})
@@ -108,13 +117,7 @@ def evaluate_agents(model_path=MODEL_PATH, episodes=DEFAULT_EVAL_EPISODES,
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--episodes", type=int, default=DEFAULT_EVAL_EPISODES)
-    parser.add_argument("--seed", type=int, default=SEED + 10_000)
-    parser.add_argument("--model-path", type=Path, default=MODEL_PATH)
-    parser.add_argument("--results-dir", type=Path, default=RESULTS_DIR)
-    args = parser.parse_args()
-    summary, _ = evaluate_agents(args.model_path, args.episodes, args.seed, args.results_dir)
+    summary, _ = evaluate_agents()
     print(summary.to_string(index=False))
 
 

@@ -1,5 +1,5 @@
-import argparse
-import csv
+"""Train the orange-peg agent. Edit the default budget in config_rl.py."""
+
 from pathlib import Path
 
 import matplotlib
@@ -22,32 +22,29 @@ else:
 
 
 class EpisodeLogger(BaseCallback):
-    """One CSV row per completed training episode; never synthesize results."""
-    fields = ["episode", "timesteps", "episode_reward", "shots_used", "orange_cleared",
-              "success", "simulation_timeouts", "stuck_removals"]
+    """SB3 calls this helper while learning; collect each finished game's results."""
+    columns = ["episode", "timesteps", "episode_reward", "shots_used", "orange_cleared",
+               "success", "simulation_timeouts", "stuck_removals"]
 
-    def __init__(self, path):
+    def __init__(self):
         super().__init__()
-        self.path = Path(path)
-        self.count = 0
-
-    def _on_training_start(self):
-        self.handle = self.path.open("w", newline="", encoding="utf-8")
-        self.writer = csv.DictWriter(self.handle, fieldnames=self.fields)
-        self.writer.writeheader()
+        self.rows = []
 
     def _on_step(self):
-        for done, info in zip(self.locals["dones"], self.locals["infos"]):
-            if done:
-                self.count += 1
-                self.writer.writerow({"episode": self.count, "timesteps": self.num_timesteps,
-                                      "episode_reward": info["episode"]["r"],
-                                      **{key: info[key] for key in self.fields[3:]}})
-                self.handle.flush()
+        for info in self.locals["infos"]:
+            # Monitor adds "episode" only when a game finishes.
+            if "episode" in info:
+                self.rows.append({
+                    "episode": len(self.rows) + 1,
+                    "timesteps": self.num_timesteps,
+                    "episode_reward": info["episode"]["r"],
+                    "shots_used": info["shots_used"],
+                    "orange_cleared": info["orange_cleared"],
+                    "success": info["success"],
+                    "simulation_timeouts": info["simulation_timeouts"],
+                    "stuck_removals": info["stuck_removals"],
+                })
         return True
-
-    def _on_training_end(self):
-        self.handle.close()
 
 
 def plot_training(log_path=RESULTS_DIR / "training_episodes.csv", output_path=None):
@@ -92,29 +89,23 @@ def train_agent(total_timesteps=DEFAULT_TIMESTEPS, seed=SEED, model_path=MODEL_P
     torch.set_num_threads(1)  # Small MLPs run efficiently and reproducibly on CPU.
     env = Monitor(PeggleEnv(config))
     model = DQN(DQN_POLICY, env, seed=seed, device="cpu", verbose=verbose, **DQN_SETTINGS)
-    callback = EpisodeLogger(results_dir / "training_episodes.csv")
+    callback = EpisodeLogger()
     try:
         model.learn(total_timesteps=total_timesteps, callback=callback, log_interval=100)
         model.save(model_path)
     finally:
-        if hasattr(callback, "handle") and not callback.handle.closed:
-            callback.handle.close()
         env.close()
+    episodes = pd.DataFrame(callback.rows, columns=EpisodeLogger.columns)
+    episodes.to_csv(results_dir / "training_episodes.csv", index=False)
     plt.close(plot_training(results_dir / "training_episodes.csv", results_dir / "training_rewards.png"))
-    return model, pd.read_csv(results_dir / "training_episodes.csv")
+    return model, episodes
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--timesteps", type=int, default=DEFAULT_TIMESTEPS)
-    parser.add_argument("--seed", type=int, default=SEED)
-    parser.add_argument("--model-path", type=Path, default=MODEL_PATH)
-    parser.add_argument("--results-dir", type=Path, default=RESULTS_DIR)
-    args = parser.parse_args()
-    model, episodes = train_agent(args.timesteps, args.seed, args.model_path, args.results_dir)
+    model, episodes = train_agent()
     print(f"Training shots: {model.num_timesteps}")
     print(f"Completed episodes: {len(episodes)}")
-    print(f"Saved model: {args.model_path}")
+    print(f"Saved model: {MODEL_PATH}")
 
 
 if __name__ == "__main__":
