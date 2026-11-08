@@ -8,7 +8,15 @@ import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
 
-from levels.config_rl import CONFIG, FIXED_BOARD, N_ORANGE, N_PEGS, PEGGLE_ROOT, RLConfig
+from levels.config_rl import CONFIG, FIXED_BOARD, PEGGLE_ROOT, RLConfig
+
+
+def random_peg_colors(n_pegs, n_orange, rng):
+    """Choose distinct orange pegs once per game; all other pegs are blue."""
+    colors = ["blue"] * n_pegs
+    for index in rng.choice(n_pegs, size=n_orange, replace=False):
+        colors[index] = "orange"
+    return colors
 
 
 class HeadlessPeg:
@@ -93,7 +101,7 @@ class PeggleEnv(gym.Env):
         self.config = config
         self.Vector, self.Ball, self.collision = _load_physics(config)
         self.action_space = spaces.Discrete(config.n_actions)
-        self.observation_space = spaces.Box(0.0, 1.0, shape=(N_PEGS * 4 + 1,), dtype=np.float32)
+        self.observation_space = spaces.Box(0.0, 1.0, shape=(config.n_pegs * 4 + 1,), dtype=np.float32)
         self.render_mode = None
         self.pegs = []
         self.shots_remaining = config.max_shots
@@ -106,8 +114,16 @@ class PeggleEnv(gym.Env):
 
     def reset(self, *, seed=None, options=None):
         super().reset(seed=seed)
-        self.pegs = [HeadlessPeg(self.Vector(x, y), color, self.config.peg_radius,
-                                 self.config.peg_mass) for x, y, color in FIXED_BOARD]
+        if self.config.random_oranges:
+            colors = random_peg_colors(self.config.n_pegs, self.config.n_orange,
+                                      self.np_random)
+        else:
+            colors = [color for x, y, color in FIXED_BOARD]
+        self.pegs = []
+        for (x, y), color in zip(self.config.coordinates, colors):
+            self.pegs.append(HeadlessPeg(self.Vector(x, y), color,
+                                        self.config.peg_radius, self.config.peg_mass))
+        self.orange_initial = sum(peg.isOrange for peg in self.pegs)
         self.shots_remaining = self.config.max_shots
         self.simulation_timeouts = 0
         self.stuck_removals = 0
@@ -135,7 +151,8 @@ class PeggleEnv(gym.Env):
 
     def _info(self):
         remaining = sum(p.isOrange and not p.isHit for p in self.pegs)
-        return {"orange_remaining": remaining, "orange_cleared": N_ORANGE - remaining,
+        return {"orange_initial": self.orange_initial,
+                "orange_remaining": remaining, "orange_cleared": self.orange_initial - remaining,
                 "success": remaining == 0, "shots_remaining": self.shots_remaining,
                 "shots_used": self.config.max_shots - self.shots_remaining,
                 "simulation_timeouts": self.simulation_timeouts,

@@ -1,5 +1,6 @@
-"""Settings for one small board and one orange-peg DQN agent."""
+"""Settings for Level 1 with random oranges, plus the original small board."""
 
+import pickle
 from pathlib import Path
 
 import numpy as np
@@ -8,8 +9,10 @@ import numpy as np
 ROOT = Path(".")
 PEGGLE_ROOT = Path("local/PegglePy-main")
 MODELS_DIR = Path("models")
-RESULTS_DIR = Path("results")
-MODEL_PATH = Path("models/dqn_orange.zip")
+RESULTS_DIR = Path("results/level1_random")
+MODEL_PATH = Path("models/dqn_level1_random.zip")
+SMALL_RESULTS_DIR = Path("results")
+SMALL_MODEL_PATH = Path("models/dqn_orange.zip")
 # Edit these values to change training and evaluation when running the scripts.
 SEED = 42
 DEFAULT_TIMESTEPS = 10_000
@@ -33,7 +36,7 @@ DQN_SETTINGS = {
 }
 
 
-# Each entry is (x coordinate, y coordinate, color). This is the only RL board.
+# The original ten-peg experiment remains available with RLConfig(board="small").
 FIXED_BOARD = (
     (420.0, 300.0, "orange"),
     (600.0, 420.0, "orange"),
@@ -46,14 +49,36 @@ FIXED_BOARD = (
     (1000.0, 650.0, "blue"),
     (600.0, 720.0, "blue"),
 )
-N_PEGS = len(FIXED_BOARD)
-N_ORANGE = sum(color == "orange" for _, _, color in FIXED_BOARD)
+
+
+class _CoordinateUnpickler(pickle.Unpickler):
+    """The bundled level files should contain coordinates, not executable objects."""
+
+    def find_class(self, module, name):
+        raise pickle.UnpicklingError("Level data must contain primitive coordinates only.")
+
+
+def load_level_coordinates(level_name="Level 1.lvl", center=True, width=1200, height=900):
+    """Keep archive order and apply only PegglePy loadData's normal translation."""
+    level_dir = (PEGGLE_ROOT / "levels").resolve()
+    path = (level_dir / level_name).resolve()
+    if path.parent != level_dir or path.suffix != ".lvl":
+        raise ValueError("Choose a bundled .lvl filename.")
+    with path.open("rb") as level_file:
+        positions = np.asarray(_CoordinateUnpickler(level_file).load(), dtype=float)
+    if (positions.ndim != 2 or positions.shape[1] != 2 or len(positions) == 0
+            or not np.isfinite(positions).all()):
+        raise ValueError("Expected a nonempty list of finite (x, y) coordinates.")
+    if center:
+        midpoint = (positions.min(axis=0) + positions.max(axis=0)) / 2
+        positions = positions + np.array([width / 2, height / 2]) - midpoint
+    return positions
 
 
 class RLConfig:
     """A group of named settings, accessed as CONFIG.width, CONFIG.max_shots, etc."""
 
-    def __init__(self, max_shots=10):
+    def __init__(self, max_shots=10, board="level1"):
         # Board and action settings.
         self.width = 1200
         self.height = 900
@@ -61,6 +86,25 @@ class RLConfig:
         self.n_actions = 21
         self.min_angle = -60.0
         self.max_angle = 60.0
+        self.board = board
+        if board == "level1":
+            self.coordinates = load_level_coordinates(width=self.width, height=self.height)
+            if len(self.coordinates) != 77:
+                raise ValueError("Expected all 77 pegs from the original Level 1.")
+            self.n_orange = 25  # PegglePy local/peg.py: createPegColors.
+            self.random_oranges = True
+            self.model_path = MODEL_PATH
+            self.results_dir = RESULTS_DIR
+        elif board == "small":
+            self.coordinates = np.array([(x, y) for x, y, color in FIXED_BOARD])
+            self.n_orange = sum(color == "orange" for x, y, color in FIXED_BOARD)
+            self.random_oranges = False
+            # Optional new small-board runs must not overwrite the old experiment.
+            self.model_path = Path("models/dqn_small_board.zip")
+            self.results_dir = Path("results/small_board")
+        else:
+            raise ValueError('board must be "level1" or "small".')
+        self.n_pegs = len(self.coordinates)
 
         # Physics defaults from PegglePy, used by the headless adapter.
         self.launch_force = 5.0
@@ -95,10 +139,11 @@ class RLConfig:
             raise ValueError("Simulation step and board dimensions must be positive.")
         if any(not (self.peg_radius < x < self.width - self.peg_radius
                     and self.peg_radius < y < self.height - self.peg_radius)
-               for x, y, _ in FIXED_BOARD):
+               for x, y in self.coordinates):
             raise ValueError("Every fixed peg must fit inside the board.")
 
 CONFIG = RLConfig()
+SMALL_CONFIG = RLConfig(board="small")
 
 
 def ensure_directories():

@@ -1,6 +1,5 @@
 """Read PegglePy's level coordinates and plot the original and training boards."""
 
-import pickle
 from pathlib import Path
 
 import matplotlib
@@ -9,14 +8,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from levels.config_rl import CONFIG, PEGGLE_ROOT, RESULTS_DIR, ensure_directories
+from levels.config_rl import (
+    CONFIG, PEGGLE_ROOT, RESULTS_DIR, SEED, ensure_directories, load_level_coordinates
+)
 from levels.peggle_env import PeggleEnv
-
-
-class _CoordinateUnpickler(pickle.Unpickler):
-    """Read coordinate values while rejecting executable objects in level files."""
-    def find_class(self, module, name):
-        raise pickle.UnpicklingError("Level data must contain primitive coordinates only.")
 
 
 def original_level_data(level_name="Level 1.lvl"):
@@ -26,17 +21,8 @@ def original_level_data(level_name="Level 1.lvl"):
     reproduce that translation and show both archived and centered values. Its
     normal loader creates blue, unhit Pegs before random color assignment.
     """
-    level_dir = (PEGGLE_ROOT / "levels").resolve()
-    path = (level_dir / level_name).resolve()
-    if path.parent != level_dir or path.suffix != ".lvl":
-        raise ValueError("Choose a bundled .lvl filename.")
-    with path.open("rb") as level_file:
-        raw_positions = _CoordinateUnpickler(level_file).load()
-    positions = np.asarray(raw_positions, dtype=float)
-    if positions.ndim != 2 or positions.shape[1] != 2 or len(positions) == 0 or not np.isfinite(positions).all():
-        raise ValueError("Expected a nonempty list of finite (x, y) coordinates.")
-    center = (positions.min(axis=0) + positions.max(axis=0)) / 2
-    centered = positions + np.array([CONFIG.width / 2, CONFIG.height / 2]) - center
+    positions = load_level_coordinates(level_name, center=False)
+    centered = load_level_coordinates(level_name, width=CONFIG.width, height=CONFIG.height)
     return pd.DataFrame({"peg_id": np.arange(len(positions)),
                          "archive_x": positions[:, 0], "archive_y": positions[:, 1],
                          "x": centered[:, 0], "y": centered[:, 1],
@@ -50,29 +36,49 @@ def level_inventory():
                                             key=lambda p: int(p.stem.split()[-1]))])
 
 
-def plot_board(records=None, path=None):
+def plot_board(records=None, path=None, config=CONFIG, ax=None):
     """Scatter plot with orange/blue pegs and game-style downward-positive y."""
     if records is None:
-        env = PeggleEnv()
-        env.reset()
+        env = PeggleEnv(config)
+        env.reset(seed=SEED)
         records = env.board_records()
         env.close()
     board = pd.DataFrame(records)
-    fig, ax = plt.subplots(figsize=(8, 6))
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(8, 6))
+    else:
+        fig = ax.figure
     for color, display_color in (("orange", "#ed8b22"), ("blue", "#2786c4")):
-        subset = board[board.color == color]
-        ax.scatter(subset.x, subset.y, s=220, c=display_color, edgecolors="black", label=f"{color.title()} ({len(subset)})")
-        for peg in subset.itertuples():
-            ax.annotate(str(peg.peg_id), (peg.x, peg.y), ha="center", va="center", color="white", fontsize=9)
-    ax.scatter([CONFIG.width / 2], [CONFIG.height / 25], marker="v", c="black", s=100, label="Launcher")
-    ax.set(xlim=(0, CONFIG.width), ylim=(CONFIG.height, 0), xlabel="x (pixels)", ylabel="y (pixels)",
-           title="Mid-stage fixed board: 3 orange targets and 7 blue obstacles")
+        subset = board[(board.color == color) & board.is_visible]
+        ax.scatter(subset.x, subset.y, s=90 if len(board) > 15 else 220,
+                   c=display_color, edgecolors="black", linewidths=0.5,
+                   label=f"{color.title()} ({len(subset)})")
+        hit = subset[subset.is_hit]
+        ax.scatter(hit.x, hit.y, marker="x", s=30, c="black")
+        if len(board) <= 15:
+            for peg in subset.itertuples():
+                ax.annotate(str(peg.peg_id), (peg.x, peg.y), ha="center", va="center", color="white", fontsize=9)
+    ax.scatter([config.width / 2], [config.height / 25], marker="v", c="black", s=70, label="Launcher")
+    ax.set(xlim=(0, config.width), ylim=(config.height, 0), xlabel="x (pixels)", ylabel="y (pixels)",
+           title=f"{len(board)}-peg board: {(board.color == 'orange').sum()} orange targets")
     ax.set_aspect("equal")
     ax.grid(alpha=0.2)
     ax.legend(loc="upper right")
     fig.tight_layout()
     if path is not None:
         fig.savefig(path, dpi=160)
+    return fig
+
+
+def plot_arrangements(first, second, path=None, config=CONFIG):
+    """Two resets: identical coordinates, different orange assignments."""
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+    for number, (board, ax) in enumerate(zip((first, second), axes), start=1):
+        plot_board(board, config=config, ax=ax)
+        ax.set_title(f"Arrangement {number}: {config.n_orange} orange / {config.n_pegs} pegs")
+    fig.tight_layout()
+    if path is not None:
+        fig.savefig(path, dpi=200)
     return fig
 
 
@@ -144,17 +150,21 @@ def plot_gameplay(board, trajectory, frame_index, angle, shot_number,
     return fig
 
 
-def export_data(output_dir=RESULTS_DIR):
+def export_data(output_dir=RESULTS_DIR, seed=SEED, config=CONFIG):
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    env = PeggleEnv()
-    env.reset()
+    env = PeggleEnv(config)
+    env.reset(seed=seed)
     board = pd.DataFrame(env.board_records())
+    env.reset()  # Continue the seeded generator; do not reseed each game.
+    second = pd.DataFrame(env.board_records())
     board.to_csv(output_dir / "board_data.csv", index=False)
+    second.to_csv(output_dir / "board_arrangement_2.csv", index=False)
     original = original_level_data()
     original.to_csv(output_dir / "original_level_data.csv", index=False)
     level_inventory().to_csv(output_dir / "level_inventory.csv", index=False)
-    plt.close(plot_board(board, output_dir / "board_visualization.png"))
+    plt.close(plot_board(board, output_dir / "board_visualization.png", config=config))
+    plt.close(plot_arrangements(board, second, output_dir / "random_arrangements.png", config))
     plt.close(plot_original_board(original, output_dir / "original_board_visualization.png"))
     env.close()
     return board, original
