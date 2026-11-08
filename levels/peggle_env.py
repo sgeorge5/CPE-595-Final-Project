@@ -88,7 +88,7 @@ class PeggleEnv(gym.Env):
     """DQN observes the board between shots; one step finishes one whole shot."""
     metadata = {"render_modes": []}
 
-    def __init__(self, config: RLConfig = CONFIG):
+    def __init__(self, config: RLConfig = CONFIG, record_trajectory=False):
         super().__init__()
         self.config = config
         self.Vector, self.Ball, self.collision = _load_physics(config)
@@ -100,6 +100,9 @@ class PeggleEnv(gym.Env):
         self._done = True
         self.simulation_timeouts = 0
         self.stuck_removals = 0
+        # Optional display data only; training leaves recording switched off.
+        self.record_trajectory = record_trajectory
+        self.trajectory = []
 
     def reset(self, *, seed=None, options=None):
         super().reset(seed=seed)
@@ -109,6 +112,7 @@ class PeggleEnv(gym.Env):
         self.simulation_timeouts = 0
         self.stuck_removals = 0
         self._done = False
+        self.trajectory = []
         return self._observation(), self._info()
 
     def _observation(self):
@@ -137,6 +141,16 @@ class PeggleEnv(gym.Env):
                 "simulation_timeouts": self.simulation_timeouts,
                 "stuck_removals": self.stuck_removals}
 
+    def _record_frame(self, ball, frame, shot_finished=False):
+        if self.record_trajectory:
+            # Copy values now so later collisions cannot change earlier frames.
+            self.trajectory.append({
+                "frame": frame, "x": float(ball.pos.x), "y": float(ball.pos.y),
+                "ball_alive": ball.isAlive and not shot_finished,
+                "is_hit": [peg.isHit for peg in self.pegs],
+                "is_visible": [peg.isVisible for peg in self.pegs],
+            })
+
     def _simulate_shot(self, angle_degrees):
         cfg = self.config
         ball = self.Ball(cfg.width / 2, cfg.height / 25)
@@ -144,12 +158,15 @@ class PeggleEnv(gym.Env):
         angle = np.deg2rad(angle_degrees)
         ball.applyForce(self.Vector(cfg.launch_force * np.sin(angle),
                                     cfg.launch_force * np.cos(angle)))
+        self.trajectory = []  # Only keep the current shot.
+        self._record_frame(ball, 0)
         active = [p for p in self.pegs if not p.isHit]
         slow_contacts = {}
         timed_out = True
         for frame in range(1, cfg.max_frames_per_shot + 1):
             ball.update(cfg.dt)
             if not ball.isAlive:
+                self._record_frame(ball, frame)
                 timed_out = False
                 break
             reach = ball.radius + cfg.peg_radius
@@ -170,9 +187,11 @@ class PeggleEnv(gym.Env):
                         active.remove(peg)
                         peg.isVisible = False
                         self.stuck_removals += 1
+            self._record_frame(ball, frame)
         for peg in self.pegs:
             if peg.isHit:
                 peg.isVisible = False
+        self._record_frame(ball, frame, shot_finished=True)
         self.simulation_timeouts += int(timed_out)
         return frame, timed_out
 

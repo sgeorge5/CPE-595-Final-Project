@@ -91,6 +91,59 @@ def plot_original_board(data=None, path=None):
     return fig
 
 
+def plot_gameplay(board, trajectory, frame_index, angle, shot_number,
+                  config=CONFIG, ax=None):
+    """Draw one recorded moment, using that moment's hit and visibility states."""
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(5, 4.5))
+    else:
+        fig = ax.figure
+        ax.clear()
+    frame = trajectory[frame_index]
+    path = trajectory[:frame_index + 1]
+    ax.plot([point["x"] for point in path], [point["y"] for point in path],
+            color="#555555", linewidth=1, zorder=1)
+
+    orange_remaining = 0
+    for i, peg in enumerate(board):
+        hit = frame["is_hit"][i]
+        if peg["color"] == "orange" and not hit:
+            orange_remaining += 1
+        if not frame["is_visible"][i]:
+            continue
+        color = "#ed8b22" if peg["color"] == "orange" else "#2786c4"
+        # Hit pegs stay solid until removed: keep their color and mark an X.
+        ax.add_patch(plt.Circle((peg["x"], peg["y"]), peg["radius"],
+                               facecolor=color, edgecolor="black", linewidth=0.7,
+                               zorder=3))
+        if hit:
+            ax.plot(peg["x"], peg["y"], marker="x", color="black",
+                    markersize=5, markeredgewidth=1, zorder=4)
+    if frame["ball_alive"]:
+        ax.add_patch(plt.Circle((frame["x"], frame["y"]), config.ball_radius,
+                               facecolor="black", zorder=5))
+    ax.plot(config.width / 2, config.height / 25, marker="v", color="black",
+            markersize=5)
+    # Empty markers make a small legend without adding anything to the board.
+    for label, color, marker in (("Orange", "#ed8b22", "o"),
+                                 ("Blue", "#2786c4", "o"),
+                                 ("Ball", "black", "o"),
+                                 ("Hit peg", "black", "x")):
+        ax.plot([], [], marker=marker, color=color, linestyle="none", label=label)
+    ax.set(xlim=(0, config.width), ylim=(config.height, 0),
+           xlabel="x (pixels)", ylabel="y (pixels)",
+           title=f"DQN angle: {angle:+.0f}\N{DEGREE SIGN} from downward vertical\n"
+                 f"Shots fired: {shot_number} | Orange remaining: {orange_remaining}")
+    ax.set_aspect("equal")
+    ax.tick_params(labelsize=8)
+    ax.title.set_fontsize(10)
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.17),
+              ncol=4, fontsize=8, frameon=False, handletextpad=0.3,
+              columnspacing=1)
+    fig.tight_layout()
+    return fig
+
+
 def export_data(output_dir=RESULTS_DIR):
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
