@@ -12,9 +12,9 @@ from levels.config_rl import (
     CONFIG, FIXED_BOARD, ROOT, RLConfig, SMALL_CONFIG, load_level_coordinates
 )
 from levels.peggle_env import PeggleEnv
-from levels.visualize_data import original_level_data, level_inventory, plot_board, plot_gameplay
-from levels.train_dqn import train_agent
-from levels.evaluate import evaluate_agents
+from levels.visualize_data import original_level_data, level_inventory, plot_board, plot_gameplay, record_gameplay
+from levels.train_dqn import train_agent, load_training_model, checkpoint_key
+from levels.evaluate import evaluate_agents, angle_diagnostic, greedy_diagnostic, run_policy
 
 
 def test_reset_and_preprocessing():
@@ -306,6 +306,162 @@ def test_trajectory_and_visualizations_use_current_states():
     plt.close(fig)
     recorded.reset()
     assert recorded.trajectory == []
+
+
+def test_only_resolved_contact_is_marked_hit():
+    # One swept segment detects two pegs, but the first bounce prevents the second hit.
+    config = RLConfig(board="small")
+    config.gravity = 0
+    config.launch_force = config.max_ball_velocity = 100
+    config.max_frames_per_shot = 1
+    env = PeggleEnv(config)
+    env.reset(seed=42)
+    env.pegs = env.pegs[:2]
+    env.pegs[0].pos = env.Vector(600, 100)
+    env.pegs[1].pos = env.Vector(600, 130)
+    env._simulate_shot(0)
+    assert env.pegs[0].isHit
+    assert not env.pegs[1].isHit
+
+
+def test_compact_observation_preserves_changing_state():
+    env = PeggleEnv(RLConfig(observation="compact"))
+    obs, _ = env.reset(seed=42)
+    assert obs.shape == (155,) and obs.dtype == np.float32
+    for action in (10, 4, 16):
+        full = env._observation("full")
+        np.testing.assert_array_equal(obs[:-1], full[:-1].reshape(77, 4)[:, 2:].flatten())
+        assert obs[-1] == full[-1]
+        obs, _, done, _, _ = env.step(action)
+        assert env.observation_space.contains(obs)
+        if done:
+            break
+    gym_check_env(PeggleEnv(RLConfig(observation="compact")), skip_render_check=True)
+
+
+def test_empty_shot_penalty_and_full_reward_formula():
+    for penalty in (0, 5):
+        cfg = RLConfig(board="small", empty_shot_penalty=penalty)
+        env = PeggleEnv(cfg)
+        env.reset(seed=42)
+        _, reward, _, _, info = env.step(0)
+        assert info["new_orange_cleared"] == 0 and reward == -1 - penalty
+        env.reset(seed=42)
+        _, reward, done, _, info = env.step(9)
+        assert done and info["success"] and reward == 54  # No empty-shot penalty on success.
+
+
+def test_checkpoint_resume_retains_weights_optimizer_replay_and_history(tmp_path):
+    from stable_baselines3.common.monitor import Monitor
+    from levels.config_rl import DQN_SETTINGS
+
+    cfg = RLConfig(observation="compact")
+    settings = dict(DQN_SETTINGS)
+    settings.update(learning_starts=16, learning_rate=0.0003)
+    path = tmp_path / "last_model.zip"
+    model, history = train_agent(64, config=cfg, dqn_settings=settings,
+        model_path=path, results_dir=tmp_path, checkpoint_interval=32,
+        validation_episodes=1, verbose=0)
+    old_weights = {k: v.clone() for k, v in model.q_net.state_dict().items()}
+    restored = load_training_model(path, Monitor(PeggleEnv(cfg)))
+    assert restored.num_timesteps == 64 and restored.learning_rate == 0.0003
+    assert restored.replay_buffer.size() == model.replay_buffer.size() == 64
+    for key, value in restored.q_net.state_dict().items():
+        assert torch.equal(value, old_weights[key])
+    assert restored.policy.optimizer.state_dict()["state"]  # Adam's learned moments restored.
+    restored.get_env().close()
+    saved_checkpoint = (tmp_path / "checkpoint_64.zip").read_bytes()
+    continued, full_history = train_agent(64, config=cfg, resume_from=path,
+        model_path=path, results_dir=tmp_path, checkpoint_interval=32,
+        validation_episodes=1, verbose=0)
+    assert continued.num_timesteps == 128 and continued._n_updates > model._n_updates
+    assert continued.replay_buffer.size() == 128
+    assert (tmp_path / "checkpoint_64.zip").read_bytes() == saved_checkpoint
+    pd.testing.assert_frame_equal(history, full_history.iloc[:len(history)].reset_index(drop=True))
+    assert full_history.timesteps.is_monotonic_increasing
+    scores = pd.read_csv(tmp_path / "checkpoint_evaluation.csv")
+    selected = scores[scores.is_best].iloc[0]
+    assert checkpoint_key(selected) == max(checkpoint_key(row) for _, row in scores.iterrows())
+    best = DQN.load(tmp_path / "best_model.zip", device="cpu")
+    checkpoint = DQN.load(selected.checkpoint, device="cpu")
+    for key, value in best.q_net.state_dict().items():
+        assert torch.equal(value, checkpoint.q_net.state_dict()[key])
+    with pytest.raises(FileExistsError):
+        train_agent(32, config=cfg, model_path=path, results_dir=tmp_path)
+
+
+def test_all_baselines_share_boards_and_current_reward_rules(tmp_path):
+    compact = RLConfig(observation="compact", empty_shot_penalty=5)
+    model = DQN("MlpPolicy", PeggleEnv(compact), seed=42, device="cpu", buffer_size=128)
+    old = DQN("MlpPolicy", PeggleEnv(), seed=42, device="cpu", buffer_size=128)
+    old.save(tmp_path / "old.zip")
+    summary, episodes = evaluate_agents(model=model, episodes=2, config=compact,
+        results_dir=tmp_path, include_baselines=True, original_model_path=tmp_path / "old.zip")
+    assert set(summary.agent) == {"DQN", "Random", "Straight down", "Original DQN"}
+    arrangements = pd.read_csv(tmp_path / "evaluation_arrangements.csv").pivot(
+        index="episode", columns="agent", values="orange_peg_ids")
+    for agent in arrangements:
+        assert arrangements[agent].equals(arrangements.DQN)
+    shots = pd.read_csv(tmp_path / "evaluation_shots.csv")
+    expected = 10 * shots.new_orange_cleared - 1 - 5 * shots.new_orange_cleared.eq(0)
+    expected += 25 * shots.orange_remaining.eq(0)
+    np.testing.assert_array_equal(shots.reward, expected)
+    assert shots[shots.agent == "Straight down"].angle_degrees.eq(0).all()
+    for row in episodes.itertuples():
+        actual = shots[(shots.agent == row.agent) & (shots.episode == row.episode)]
+        assert row.episode_reward == actual.reward.sum()
+
+
+def test_angle_diagnostic_and_greedy_are_separate_measured_probes(tmp_path):
+    data = angle_diagnostic(seeds=(42, 43), results_dir=tmp_path)
+    assert len(data) == 42
+    for seed, rows in data.groupby("seed"):
+        assert rows.x_at_frame_10.nunique() == 21
+        assert rows.orange_cleared.nunique() > 1
+        np.testing.assert_array_equal(rows.reward, 10 * rows.orange_cleared - 1)
+    greedy = greedy_diagnostic(seeds=(42,), config=RLConfig(max_shots=1), results_dir=tmp_path)
+    assert greedy.iloc[0].orange_cleared == data[data.seed == 42].orange_cleared.max()
+    assert greedy.iloc[0].shots_used == 1
+
+
+def test_upstream_free_flight_and_isolated_collision_equations():
+    # Independent arithmetic checks against the bundled Ball.update integration order.
+    env = PeggleEnv()
+    for angle in (-30, 30):
+        ball = env.Ball(600, 36)
+        ball.isAlive = True
+        velocity = 5 * np.array([np.sin(np.deg2rad(angle)), np.cos(np.deg2rad(angle))])
+        ball.applyForce(env.Vector(*velocity))
+        position = np.array([600.0, 36.0])
+        for frame in range(15):
+            velocity += [0, 0.045]
+            position += velocity
+            ball.update(1)
+            np.testing.assert_allclose([ball.pos.x, ball.pos.y], position, atol=1e-10)
+    env.reset(seed=42)
+    peg = env.pegs[0]
+    peg.pos = env.Vector(600, 300)
+    ball = env.Ball(600, 260)
+    ball.prevPos, ball.pos, ball.vel = env.Vector(600, 260), env.Vector(600, 280), env.Vector(0, 5)
+    assert env.collision.isBallTouchingPeg(ball, peg, 1)
+    ball = env.collision.resolveCollision(ball, [peg], 1)
+    assert ball.pos.x == pytest.approx(600) and ball.pos.y == pytest.approx(263)
+    assert ball.vel.y == pytest.approx(-4.5)  # Original restitution 0.90 at this speed.
+
+
+def test_recorded_gameplay_matches_policy_evaluation():
+    cfg = RLConfig(observation="compact", empty_shot_penalty=5)
+    model = DQN("MlpPolicy", PeggleEnv(cfg), seed=42, device="cpu", buffer_size=128)
+    _, episodes, measured_shots, _ = run_policy(model, episodes=1, seed=42, config=cfg)
+    trajectories, shown_shots = record_gameplay(model, 42, cfg)
+    for column in ("angle_degrees", "new_orange_cleared", "orange_remaining", "shots_remaining", "reward"):
+        np.testing.assert_array_equal(shown_shots[column], measured_shots[column])
+    assert shown_shots.iloc[-1].orange_remaining == episodes.iloc[0].orange_remaining
+    for shot in trajectories:
+        assert len(shot["trajectory"]) > 1
+        final = shot["trajectory"][-1]
+        assert not final["ball_alive"]
+        assert len(final["is_hit"]) == 77
 
 
 if __name__ == "__main__":

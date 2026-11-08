@@ -1,0 +1,3 @@
+starting_step,additional_shots,seed,observation,input_size,orange_targets,empty_shot_penalty,learning_rate,gamma,buffer_size,batch_size,learning_starts,exploration_fraction,final_epsilon,network,validation_seed,validation_episodes
+0,25000,42,compact,155,25,0,0.0003,0.99,20000,64,200,0.6,0.05,64 64,20042,10
+25000,25000,42,compact,155,25,0,0.0003,0.99,20000,64,200,0.6,0.05,64 64,20042,10

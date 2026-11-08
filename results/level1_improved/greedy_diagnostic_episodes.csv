@@ -1,0 +1,4 @@
+seed,success,shots_used,orange_cleared,orange_remaining,orange_cleared_pct
+30042,False,10,24,1,96.0
+30043,True,7,25,0,100.0
+30044,False,10,23,2,92.0

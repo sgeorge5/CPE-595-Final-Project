@@ -101,7 +101,8 @@ class PeggleEnv(gym.Env):
         self.config = config
         self.Vector, self.Ball, self.collision = _load_physics(config)
         self.action_space = spaces.Discrete(config.n_actions)
-        self.observation_space = spaces.Box(0.0, 1.0, shape=(config.n_pegs * 4 + 1,), dtype=np.float32)
+        size = config.n_pegs * config.features_per_peg + 1
+        self.observation_space = spaces.Box(0.0, 1.0, shape=(size,), dtype=np.float32)
         self.render_mode = None
         self.pegs = []
         self.shots_remaining = config.max_shots
@@ -131,15 +132,14 @@ class PeggleEnv(gym.Env):
         self.trajectory = []
         return self._observation(), self._info()
 
-    def _observation(self):
+    def _observation(self, mode=None):
+        mode = self.config.observation if mode is None else mode
         features = []
         for peg in self.pegs:
-            features.extend([
-                peg.pos.x / self.config.width,
-                peg.pos.y / self.config.height,
-                float(peg.isOrange),
-                float(peg.isHit),
-            ])
+            if mode == "full":
+                features.extend([peg.pos.x / self.config.width,
+                                 peg.pos.y / self.config.height])
+            features.extend([float(peg.isOrange), float(peg.isHit)])
         features.append(self.shots_remaining / self.config.max_shots)
         return np.array(features, dtype=np.float32)
 
@@ -193,6 +193,14 @@ class PeggleEnv(gym.Env):
             touched = [p for p in nearby if self.collision.isBallTouchingPeg(ball, p, cfg.dt)]
             if touched:
                 ball = self.collision.resolveCollision(ball, touched, cfg.dt)
+                # The response stops at its first impact. Later candidates on the
+                # original swept path were not necessarily reached after that bounce.
+                contacts = []
+                for peg in touched:
+                    distance = np.hypot(ball.pos.x - peg.pos.x, ball.pos.y - peg.pos.y)
+                    if abs(distance - ball.radius - peg.radius) < 0.000001:
+                        contacts.append(peg)
+                touched = contacts
                 for peg in touched:
                     peg.isHit = True
                     key = id(peg)
@@ -224,6 +232,8 @@ class PeggleEnv(gym.Env):
         info = self._info()
         newly_cleared = info["orange_cleared"] - before
         reward = self.config.orange_reward * newly_cleared - self.config.shot_penalty
+        if newly_cleared == 0:
+            reward -= self.config.empty_shot_penalty
         terminated = bool(info["success"] or self.shots_remaining == 0)
         if info["success"]:
             reward += self.config.completion_bonus

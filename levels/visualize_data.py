@@ -9,9 +9,10 @@ import numpy as np
 import pandas as pd
 
 from levels.config_rl import (
-    CONFIG, PEGGLE_ROOT, RESULTS_DIR, SEED, ensure_directories, load_level_coordinates
+    CONFIG, PEGGLE_ROOT, IMPROVED_RESULTS_DIR, SEED, ensure_directories, load_level_coordinates
 )
 from levels.peggle_env import PeggleEnv
+from levels.evaluate import model_observation
 
 
 def original_level_data(level_name="Level 1.lvl"):
@@ -111,10 +112,13 @@ def plot_gameplay(board, trajectory, frame_index, angle, shot_number,
             color="#555555", linewidth=1, zorder=1)
 
     orange_remaining = 0
+    new_orange_hits = 0
     for i, peg in enumerate(board):
         hit = frame["is_hit"][i]
         if peg["color"] == "orange" and not hit:
             orange_remaining += 1
+        if peg["color"] == "orange" and hit and not peg["is_hit"]:
+            new_orange_hits += 1
         if not frame["is_visible"][i]:
             continue
         color = "#ed8b22" if peg["color"] == "orange" else "#2786c4"
@@ -139,7 +143,8 @@ def plot_gameplay(board, trajectory, frame_index, angle, shot_number,
     ax.set(xlim=(0, config.width), ylim=(config.height, 0),
            xlabel="x (pixels)", ylabel="y (pixels)",
            title=f"DQN angle: {angle:+.0f}\N{DEGREE SIGN} from downward vertical\n"
-                 f"Shots fired: {shot_number} | Orange remaining: {orange_remaining}")
+                 f"Shot {shot_number} | New orange hits: {new_orange_hits}\n"
+                 f"Orange left: {orange_remaining} | Shots left: {config.max_shots - shot_number}")
     ax.set_aspect("equal")
     ax.tick_params(labelsize=8)
     ax.title.set_fontsize(10)
@@ -150,7 +155,27 @@ def plot_gameplay(board, trajectory, frame_index, angle, shot_number,
     return fig
 
 
-def export_data(output_dir=RESULTS_DIR, seed=SEED, config=CONFIG):
+def record_gameplay(model, seed, config=CONFIG):
+    """Play one real episode; keep each shot's actual trajectory and result."""
+    env = PeggleEnv(config, record_trajectory=True)
+    env.reset(seed=seed)
+    shots, rows = [], []
+    done = False
+    while not done:
+        board = env.board_records()
+        action, _ = model.predict(model_observation(env, model), deterministic=True)
+        _, reward, terminated, truncated, info = env.step(int(action))
+        shots.append({"board": board, "trajectory": env.trajectory, "info": info})
+        rows.append({"shot": info["shots_used"], "angle_degrees": info["angle_degrees"],
+                     "new_orange_cleared": info["new_orange_cleared"],
+                     "orange_remaining": info["orange_remaining"],
+                     "shots_remaining": info["shots_remaining"], "reward": reward})
+        done = terminated or truncated
+    env.close()
+    return shots, pd.DataFrame(rows)
+
+
+def export_data(output_dir=IMPROVED_RESULTS_DIR, seed=SEED, config=CONFIG):
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     env = PeggleEnv(config)
@@ -173,4 +198,4 @@ def export_data(output_dir=RESULTS_DIR, seed=SEED, config=CONFIG):
 if __name__ == "__main__":
     ensure_directories()
     board, original = export_data()
-    print(f"Extracted {len(original)} original coordinates; exported the {len(board)}-peg RL board to {RESULTS_DIR}")
+    print(f"Extracted {len(original)} original coordinates; exported the {len(board)}-peg RL board to {IMPROVED_RESULTS_DIR}")

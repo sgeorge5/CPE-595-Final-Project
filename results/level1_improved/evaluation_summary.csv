@@ -1,0 +1,5 @@
+agent,episodes,successes,success_rate_pct,avg_orange_cleared,orange_cleared_pct,avg_orange_remaining,avg_shots_success,avg_shots_all,mean_episode_reward,distinct_angles,most_common_angle,most_common_angle_pct,simulation_timeouts
+DQN,100,12,12.0,23.15,92.6,1.85,7.916666666666667,9.75,224.75,5,-18.0,44.51282051282051,0
+Random,100,0,0.0,16.28,65.12,8.72,,10.0,152.8,21,-12.0,6.2,0
+Straight down,100,0,0.0,13.06,52.24,11.94,,10.0,120.6,1,0.0,100.0,0
+Original DQN,100,0,0.0,0.96,3.84,24.04,,10.0,-0.4,1,42.0,100.0,0

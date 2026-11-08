@@ -1,0 +1,3 @@
+agent,episodes,successes,success_rate_pct,avg_orange_cleared,orange_cleared_pct,avg_orange_remaining,avg_shots_success,avg_shots_all,mean_episode_reward,distinct_angles,most_common_angle,most_common_angle_pct,simulation_timeouts,timesteps,checkpoint,validation_seed,is_best
+DQN,10,0,0.0,17.9,71.6,7.1,,10.0,169.0,7,-60.0,40.0,0,5000,models\level1_improved\control\checkpoint_5000.zip,20042,False
+DQN,10,0,0.0,18.5,74.0,6.5,,10.0,175.0,8,54.0,41.0,0,10000,models\level1_improved\control\checkpoint_10000.zip,20042,True

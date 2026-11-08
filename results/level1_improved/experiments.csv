@@ -1,0 +1,5 @@
+experiment,observation,input_size,learning_rate,empty_shot_penalty,total_training_shots,completed_episodes,best_step,validation_clearance_pct,validation_win_rate_pct,validation_distinct_angles,seconds
+control,full,309,0.001,0,10000,1000,10000,74.0,0.0,8,56.70609279999917
+lower_lr,full,309,0.0003,0,25000,2501,25000,75.6,0.0,6,141.6729204000003
+empty_penalty,compact,155,0.0003,5,25000,2501,25000,86.8,0.0,6,152.29286690001027
+compact,compact,155,0.0003,0,50000,5027,45000,94.8,40.0,4,

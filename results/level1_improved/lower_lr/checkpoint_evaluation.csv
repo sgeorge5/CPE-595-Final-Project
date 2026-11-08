@@ -1,0 +1,6 @@
+agent,episodes,successes,success_rate_pct,avg_orange_cleared,orange_cleared_pct,avg_orange_remaining,avg_shots_success,avg_shots_all,mean_episode_reward,distinct_angles,most_common_angle,most_common_angle_pct,simulation_timeouts,timesteps,checkpoint,validation_seed,is_best
+DQN,10,0,0.0,15.1,60.4,9.9,,10.0,141.0,3,0.0,60.0,0,5000,models\level1_improved\lower_lr\checkpoint_5000.zip,20042,False
+DQN,10,0,0.0,6.7,26.8,18.3,,10.0,57.0,1,-42.0,100.0,0,10000,models\level1_improved\lower_lr\checkpoint_10000.zip,20042,False
+DQN,10,0,0.0,14.6,58.4,10.4,,10.0,136.0,7,-36.0,70.0,0,15000,models\level1_improved\lower_lr\checkpoint_15000.zip,20042,False
+DQN,10,0,0.0,18.0,72.0,7.0,,10.0,170.0,3,-18.0,62.0,0,20000,models\level1_improved\lower_lr\checkpoint_20000.zip,20042,False
+DQN,10,0,0.0,18.9,75.6,6.1,,10.0,179.0,6,-18.0,58.0,0,25000,models\level1_improved\lower_lr\checkpoint_25000.zip,20042,True

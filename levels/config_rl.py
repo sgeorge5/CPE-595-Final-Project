@@ -13,6 +13,14 @@ RESULTS_DIR = Path("results/level1_random")
 MODEL_PATH = Path("models/dqn_level1_random.zip")
 SMALL_RESULTS_DIR = Path("results")
 SMALL_MODEL_PATH = Path("models/dqn_orange.zip")
+ORIGINAL_LEVEL1_MODEL_PATH = MODEL_PATH
+IMPROVED_MODELS_DIR = Path("models/level1_improved")
+IMPROVED_RESULTS_DIR = Path("results/level1_improved")
+BEST_MODEL_PATH = IMPROVED_MODELS_DIR / "best_model.zip"
+VALIDATION_SEED = 20_042
+TEST_SEED = 50_042
+CHECKPOINT_INTERVAL = 5_000
+VALIDATION_EPISODES = 10
 # Edit these values to change training and evaluation when running the scripts.
 SEED = 42
 DEFAULT_TIMESTEPS = 10_000
@@ -78,7 +86,7 @@ def load_level_coordinates(level_name="Level 1.lvl", center=True, width=1200, he
 class RLConfig:
     """A group of named settings, accessed as CONFIG.width, CONFIG.max_shots, etc."""
 
-    def __init__(self, max_shots=10, board="level1"):
+    def __init__(self, max_shots=10, board="level1", observation="full", empty_shot_penalty=0):
         # Board and action settings.
         self.width = 1200
         self.height = 900
@@ -87,6 +95,10 @@ class RLConfig:
         self.min_angle = -60.0
         self.max_angle = 60.0
         self.board = board
+        if observation not in ("full", "compact"):
+            raise ValueError('observation must be "full" or "compact".')
+        self.observation = observation
+        self.features_per_peg = 4 if observation == "full" else 2
         if board == "level1":
             self.coordinates = load_level_coordinates(width=self.width, height=self.height)
             if len(self.coordinates) != 77:
@@ -123,6 +135,7 @@ class RLConfig:
         self.orange_reward = 10.0
         self.completion_bonus = 25.0
         self.shot_penalty = 1.0
+        self.empty_shot_penalty = empty_shot_penalty
 
         self.validate()
         self.angles_degrees = np.linspace(
@@ -137,6 +150,8 @@ class RLConfig:
             raise ValueError("Use at least two downward launch angles in (-90, 90).")
         if self.dt <= 0 or self.width <= 0 or self.height <= 0:
             raise ValueError("Simulation step and board dimensions must be positive.")
+        if self.empty_shot_penalty < 0:
+            raise ValueError("The empty-shot penalty must be nonnegative.")
         if any(not (self.peg_radius < x < self.width - self.peg_radius
                     and self.peg_radius < y < self.height - self.peg_radius)
                for x, y in self.coordinates):

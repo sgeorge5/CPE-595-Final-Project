@@ -1,0 +1,8 @@
+shot,angle_degrees,new_orange_cleared,orange_remaining,shots_remaining,reward
+1,0.0,13,12,9,129.0
+2,-60.0,4,8,8,39.0
+3,-18.0,3,5,7,29.0
+4,-18.0,1,4,6,9.0
+5,-18.0,2,2,5,19.0
+6,-18.0,1,1,4,9.0
+7,36.0,1,0,3,34.0

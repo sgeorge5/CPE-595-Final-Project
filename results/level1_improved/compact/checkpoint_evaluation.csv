@@ -1,0 +1,11 @@
+agent,episodes,successes,success_rate_pct,avg_orange_cleared,orange_cleared_pct,avg_orange_remaining,avg_shots_success,avg_shots_all,mean_episode_reward,distinct_angles,most_common_angle,most_common_angle_pct,simulation_timeouts,timesteps,checkpoint,validation_seed,is_best
+DQN,10,0,0.0,16.8,67.2,8.2,,10.0,158.0,1,-60.0,100.0,0,5000,models\level1_improved\compact\checkpoint_5000.zip,20042,False
+DQN,10,0,0.0,6.7,26.8,18.3,,10.0,57.0,1,-42.0,100.0,0,10000,models\level1_improved\compact\checkpoint_10000.zip,20042,False
+DQN,10,0,0.0,10.5,42.0,14.5,,10.0,95.0,1,6.0,100.0,0,15000,models\level1_improved\compact\checkpoint_15000.zip,20042,False
+DQN,10,0,0.0,17.1,68.4,7.9,,10.0,161.0,6,-18.0,75.0,0,20000,models\level1_improved\compact\checkpoint_20000.zip,20042,False
+DQN,10,3,30.0,23.5,94.0,1.5,8.333333333333334,9.5,233.0,6,-18.0,43.1578947368421,0,25000,models\level1_improved\compact\checkpoint_25000.zip,20042,False
+DQN,10,0,0.0,21.6,86.4,3.4,,10.0,206.0,5,-18.0,36.0,0,30000,models\level1_improved\compact\checkpoint_30000.zip,20042,False
+DQN,10,0,0.0,22.6,90.4,2.4,,10.0,216.0,5,-18.0,40.0,0,35000,models\level1_improved\compact\checkpoint_35000.zip,20042,False
+DQN,10,0,0.0,22.8,91.2,2.2,,10.0,218.0,5,-18.0,43.0,0,40000,models\level1_improved\compact\checkpoint_40000.zip,20042,False
+DQN,10,4,40.0,23.7,94.8,1.3,7.25,8.9,238.1,4,-18.0,49.438202247191015,0,45000,models\level1_improved\compact\checkpoint_45000.zip,20042,True
+DQN,10,2,20.0,23.0,92.0,2.0,7.5,9.5,225.5,6,-18.0,38.94736842105263,0,50000,models\level1_improved\compact\checkpoint_50000.zip,20042,False
