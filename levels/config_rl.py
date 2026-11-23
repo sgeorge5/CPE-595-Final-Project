@@ -21,29 +21,6 @@ VALIDATION_EPISODES = 10
 SEED = 42
 DEFAULT_TIMESTEPS = 10_000
 DEFAULT_EVAL_EPISODES = 100
-PPO_MAX_SHOTS = 10
-PPO_TIMESTEPS = 10_000
-PPO_MODEL_PATH = "models/ppo_all_pegs_level1.zip"
-PPO_RESULTS_DIR = "results/ppo_all_pegs"
-PPO_VERSIONS_DIR = "results/ppo_all_pegs/versions"
-PPO_V4_RESULTS_DIR = "results/ppo_version4"
-PPO_V4_MODEL_PATH = "models/ppo_version4_best.zip"
-PPO_V4_IMPROVED_DIR = "results/ppo_v4_improved"
-PPO_V4_FURTHER_DIR = "results/ppo_v4_further"
-PPO_V4_SHOT_ORDER_DIR = "results/ppo_v4_improved_F"
-PPO_V5_RESULTS_DIR = "results/ppo_version5"
-PPO_V5_MODEL_PATH = "models/ppo_version5_best.zip"
-PPO_SETTINGS = {
-    "learning_rate": 0.0003,
-    "gamma": 0.99,
-    "n_steps": 512,
-    "batch_size": 64,
-    "n_epochs": 10,
-    "ent_coef": 0.01,
-    "policy_kwargs": {"net_arch": [64, 64]},
-}
-PPO_V4_SETTINGS = dict(PPO_SETTINGS, ent_coef=0.02)
-PPO_V5_SETTINGS = dict(PPO_V4_SETTINGS)
 
 # DQN settings are Python values, shared by the script and notebook.
 DQN_POLICY = "MlpPolicy"
@@ -173,3 +150,7 @@ class RLConfig:
             raise ValueError("Every fixed peg must fit inside the board.")
 
 CONFIG = RLConfig()
+
+# Historical final policy remains optional for local playback.
+FINAL_DQN_PATH = "models/dqn_eight_shot_experiment/best_new.zip"
+DEMONSTRATION_ANGLES = (-6, 12, -30, -60, -54, 0, -42, -42)

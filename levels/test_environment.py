@@ -6,7 +6,7 @@ import pandas as pd
 import pytest
 import torch
 from gymnasium.utils.env_checker import check_env as gym_check_env
-from stable_baselines3 import DQN, PPO
+from stable_baselines3 import DQN
 from stable_baselines3.common.env_checker import check_env as sb3_check_env
 
 from levels.config_rl import (
@@ -116,7 +116,10 @@ def test_physics_settings_stay_separate():
 
 def test_upstream_data_and_no_graphical_side_effects():
     data = original_level_data()
-    assert len(data) == 77 and len(level_inventory()) == 10
+    assert len(data) == 77
+    inventory = level_inventory()
+    # A minimal source submission includes Level 1 only; the local research copy keeps all ten.
+    assert inventory.loc[inventory.level == "Level 1.lvl", "peg_count"].tolist() == [77]
     assert not data.color_stored_in_file.any()
     assert not data.initial_is_hit.any()
     assert "local.config" not in sys.modules
@@ -166,10 +169,10 @@ def test_training_and_evaluation_artifacts(tmp_path):
     in_memory, _ = evaluate_agents(os.path.join(tmp_path, "missing.zip"), episodes=3,
                                     results_dir=tmp_path, model=model)
     pd.testing.assert_frame_equal(summary, in_memory)
-    ppo = PPO("MlpPolicy", PeggleEnv(RLConfig(goal="all")), device="cpu", n_steps=64)
+    other = DQN("MlpPolicy", PeggleEnv(RLConfig(goal="all")), device="cpu")
     with pytest.raises(ValueError, match="Model input size"):
-        evaluate_agents(model=ppo, episodes=1, results_dir=tmp_path)
-    ppo.get_env().close()
+        evaluate_agents(model=other, episodes=1, results_dir=tmp_path)
+    other.get_env().close()
     pairs = pd.read_csv(os.path.join(tmp_path, "evaluation_arrangements.csv")).pivot(
         index="episode", columns="agent", values="orange_peg_ids")
     assert pairs.DQN.equals(pairs.Random)
@@ -469,7 +472,7 @@ def test_recorded_gameplay_matches_policy_evaluation():
         assert len(final["is_hit"]) == 77
 
 
-def test_ppo_goal_and_observation_keep_dqn_defaults():
+def test_all_pegs_goal_and_observation_keep_dqn_defaults():
     orange = PeggleEnv(RLConfig(observation="compact"))
     all_pegs = PeggleEnv(RLConfig(goal="all"))
     orange_obs, _ = orange.reset(seed=42)
@@ -489,7 +492,7 @@ def test_ppo_goal_and_observation_keep_dqn_defaults():
     assert not all_pegs._info()["success"]
 
 
-def test_ppo_color_independent_reward_and_no_double_count():
+def test_all_pegs_color_independent_reward_and_no_double_count():
     env = PeggleEnv(RLConfig(goal="all", max_shots=2))
     for color in ("orange", "blue"):
         env.reset(seed=42)
@@ -511,7 +514,7 @@ def test_ppo_color_independent_reward_and_no_double_count():
         assert obs[-1] == 0 and info["terminal_reason"] == "shot_budget"
 
 
-def test_ppo_ends_at_last_hit_and_adds_completion_bonus():
+def test_all_pegs_ends_at_last_hit_and_adds_completion_bonus():
     env = PeggleEnv(RLConfig(goal="all"), record_trajectory=True)
     env.reset(seed=42)
     for peg in env.pegs:
@@ -529,7 +532,7 @@ def test_ppo_ends_at_last_hit_and_adds_completion_bonus():
     assert not env.trajectory[-1]["ball_alive"]
 
 
-def test_ppo_empty_shot_penalty_changes_only_empty_shot_rewards():
+def test_all_pegs_empty_shot_penalty_changes_only_empty_shot_rewards():
     original = PeggleEnv(RLConfig(goal="all"))
     penalized = PeggleEnv(RLConfig(goal="all", empty_shot_penalty=3))
     original.reset(seed=42)
@@ -546,93 +549,11 @@ def test_ppo_empty_shot_penalty_changes_only_empty_shot_rewards():
     assert 0 < empty_shots < 5
 
 
-def test_ppo_training_checkpoint_and_model_selection_menu(tmp_path, monkeypatch, capsys):
-    from levels.config_rl import BEST_MODEL_PATH, PPO_SETTINGS
-    from levels.train_ppo import train_ppo, checkpoint_score, play_episode
-    from play import load_game_mode, main
-
-    path = os.path.join(tmp_path, "ppo_all.zip")
-    config = RLConfig(goal="all", max_shots=2)
-    settings = dict(PPO_SETTINGS, n_steps=64, n_epochs=1)
-    model, history = train_ppo(60, config, path, tmp_path, settings)
-    assert model.num_timesteps == 64 and len(history) == 32
-    checkpoints = pd.read_csv(os.path.join(tmp_path, "checkpoint_evaluation.csv"))
-    assert checkpoints.is_best.sum() == 1
-    assert os.path.isfile(os.path.join(tmp_path, "ppo_all_checkpoints", checkpoints.iloc[0].checkpoint))
-    assert checkpoint_score({"completion_pct": 100, "avg_shots_success": 8}) > checkpoint_score(
-        {"completion_pct": 100, "avg_shots_success": 9})
-    assert checkpoint_score({"completion_pct": 100, "avg_shots_success": 9}) > checkpoint_score(
-        {"completion_pct": 0, "clearance_pct": 99})
-
-    loaded, ppo_config = load_game_mode("2", ppo_path=path, ppo_results=tmp_path)
-    assert isinstance(loaded, PPO) and loaded.observation_space.shape == (78,)
-    assert ppo_config.goal == "all" and ppo_config.max_shots == 2
-    measured, trace = play_episode(ppo_config, "PPO", loaded)
-    _, replay = record_gameplay(loaded, 42, ppo_config, actions=[s["action"] for s in trace])
-    assert measured["pegs_cleared"] == replay.iloc[-1].pegs_cleared
-
-    continued_folder = os.path.join(tmp_path, "continued")
-    continued_path = os.path.join(continued_folder, "ppo_all.zip")
-    continued, continued_history = train_ppo(128, config, continued_path, continued_folder,
-        dict(settings, ent_coef=0.02), resume_from=path, experiment="continued")
-    continued_settings = pd.read_csv(os.path.join(continued_folder, "training_settings.csv")).iloc[0]
-    assert continued.num_timesteps == 128 and continued.ent_coef == 0.02
-    assert continued_history.timesteps.min() > 64
-    assert continued_settings.starting_timesteps == continued_settings.actual_additional_timesteps == 64
-
-    # The published checkpoint demonstrates compatibility with Model 1.
-    if os.path.exists(BEST_MODEL_PATH):
-        dqn, dqn_config = load_game_mode("1")
-        _, table = record_gameplay(dqn, 50119, dqn_config)
-        assert table.iloc[-1].orange_remaining == 0 and len(table) == 7
-    with pytest.raises(ValueError, match="enter 1 or 2"):
-        load_game_mode("invalid")
-    choices = iter(["invalid", "2"])
-    prompts = []
-
-    def choose(prompt):
-        prompts.append(prompt)
-        return next(choices)
-
-    monkeypatch.setattr("builtins.input", choose)
-    monkeypatch.setattr("play.load_game_mode", lambda choice: load_game_mode(
-        choice, ppo_path=path, ppo_results=tmp_path))
-    main()
-    assert "Please enter 1 or 2" in prompts[1]
-    assert "PPO cleared" in capsys.readouterr().out
 
 
-def test_saved_ppo_versions_match_reported_deterministic_games():
-    from levels.config_rl import PPO_VERSIONS_DIR
-    from levels.train_ppo import play_episode
-
-    path = os.path.join(PPO_VERSIONS_DIR, "version_comparison.csv")
-    if not os.path.isfile(path):
-        pytest.skip("The saved PPO comparison is not available.")
-    versions = pd.read_csv(path)
-    assert len(versions) == 3 and versions.shot_limit.eq(10).all()
-    for row in versions.itertuples():
-        model = PPO.load(row.model_path, device="cpu")
-        assert model.observation_space.shape == (78,) and model.action_space.n == 21
-        assert model.num_timesteps == row.selected_timestep
-        episode, trace = play_episode(RLConfig(goal="all"), "PPO", model, seed=50042)
-        assert episode["pegs_cleared"] == row.deterministic_pegs
-        assert episode["shots_used"] == row.deterministic_shots
-        logged = pd.read_csv(os.path.join(row.results_dir, "evaluation_shots.csv"))
-        logged = logged[logged.strategy == "PPO"]
-        np.testing.assert_array_equal(logged.action, [shot["action"] for shot in trace])
-        np.testing.assert_array_equal(logged.pegs_remaining, [shot["pegs_remaining"] for shot in trace])
 
 
 if __name__ == "__main__":
     raise SystemExit(pytest.main([__file__, "-q"]))
 
 
-def state_signature(env):
-    """State carried between shots; the next ball starts at the normal launcher."""
-    return (
-        tuple((peg.pos.x, peg.pos.y, peg.color, peg.isHit, peg.isVisible) for peg in env.pegs),
-        env.shots_remaining, env.shots_fired, env.shot_score, env.total_score,
-        env.shot_free_balls, env.free_balls_earned, env.shots_earning_free_balls,
-        env.simulation_timeouts, env.stuck_removals,
-    )

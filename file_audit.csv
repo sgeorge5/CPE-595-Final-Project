@@ -1,27 +1,27 @@
-Python file,Purpose,Keep or remove,Reason
-levels\config_rl.py,"Model settings, observation choices and Level 1 coordinate loading",Keep,Shared implementation required by retained code
-levels\dqn_all_pegs.py,"Main all-peg DQN training, checkpoint loading, evaluation and playback",Keep,Required demonstration or learning entry point
-levels\dqn_shot_efficiency.py,"Verified simulator sequence replay, with fresh-reset helper",Keep,Required demonstration or learning entry point
-levels\evaluate.py,Original orange-DQN evaluation and shared episode summaries,Keep,Shared implementation required by retained code
-levels\peggle_env.py,"Shared Gymnasium observations, physics adapter, rewards and shot simulation",Keep,Shared implementation required by retained code
-levels\ppo_v4_further.py,Historical notebook A?D settings including Improved D,Keep,Shared implementation required by retained code
-levels\ppo_v4_improved.py,Historical notebook A/B settings and checkpoint verification,Keep,Shared implementation required by retained code
-levels\ppo_v4_shot_order.py,Historical notebook F settings and regression ranking,Keep,Shared implementation required by retained code
-levels\ppo_version4.py,Read-only historical notebook replay helper,Keep,Shared implementation required by retained code
-levels\ppo_version5.py,Historical notebook angle configuration and regression ranking,Keep,Shared implementation required by retained code
-levels\selected_models.py,"Three saved report models, configured and demonstrated individually",Keep,Required demonstration or learning entry point
-levels\test_dqn_all_pegs.py,Regression checks for dqn all pegs,Keep,Preserves behavioral and saved-checkpoint verification
-levels\test_dqn_shot_efficiency.py,Regression checks for dqn shot efficiency,Keep,Preserves behavioral and saved-checkpoint verification
-levels\test_environment.py,Regression checks for environment,Keep,Preserves behavioral and saved-checkpoint verification
-levels\test_ppo_121_angles.py,Regression checks for ppo 121 angles,Keep,Preserves behavioral and saved-checkpoint verification
-levels\test_ppo_v4_further.py,Regression checks for ppo v4 further,Keep,Preserves behavioral and saved-checkpoint verification
-levels\test_ppo_v4_improved.py,Regression checks for ppo v4 improved,Keep,Preserves behavioral and saved-checkpoint verification
-levels\test_ppo_v4_shot_order.py,Regression checks for ppo v4 shot order,Keep,Preserves behavioral and saved-checkpoint verification
-levels\test_ppo_version4.py,Regression checks for ppo version4,Keep,Preserves behavioral and saved-checkpoint verification
-levels\test_ppo_version5.py,Regression checks for ppo version5,Keep,Preserves behavioral and saved-checkpoint verification
-levels\train_dqn.py,Original orange-DQN training and checkpoint explanation,Keep,Shared implementation required by retained code
-levels\train_ppo.py,Shared PPO implementation and preserved notebook training imports,Keep,Shared implementation required by retained code
-levels\visualize_data.py,"Board extraction, plots and actual trajectory recordings",Keep,Shared implementation required by retained code
-play.py,Original two-option menu and unchanged checkpoint selection,Keep,Notebook cells 32 import this module (zero-based). Required demonstration or learning entry point
-levels/ppo_endgame_diagnostics.py,State comparison helper used only by tests,Removed this cleanup,Moved unchanged state_signature into existing test_environment.py. Updated its two test imports. No notebook or runtime caller.
-levels/ppo_121_angles.py,Completed 121-angle experiment trainer,Already removed,Historical notebook reads saved CSVs. Saved checkpoints and all research evidence remain.
+file,purpose,decision,reason
+levels\config_rl.py,Original board and DQN settings; demonstration training angles and optional local checkpoint path,Keep,"Required for final DQN training, gameplay or regression checks"
+levels\dqn_eight_shot_experiment.py,"Final Model 2 loading, neural inference, terminal reward and demonstration generation",Keep,"Required for final DQN training, gameplay or regression checks"
+levels\evaluate.py,Original orange-DQN evaluation plus final all-peg DQN evaluation,Keep,"Required for final DQN training, gameplay or regression checks"
+levels\peggle_env.py,"Unchanged Gymnasium physics, hit flags and reward simulation",Keep,"Required for final DQN training, gameplay or regression checks"
+levels\test_dqn_eight_shot_experiment.py,"Demonstrations, Q-value inference, menu and no-pretrained-file smoke tests",Keep,"Required for final DQN training, gameplay or regression checks"
+levels\test_environment.py,"Orange and all-peg environment, physics and original training regression tests",Keep,"Required for final DQN training, gameplay or regression checks"
+levels\train_dqn.py,"Both source-only DQN training workflows, including the prerequisite all-peg stage",Keep,"Required for final DQN training, gameplay or regression checks"
+levels\visualize_data.py,Shared board extraction and actual network-selected gameplay rendering,Keep,"Required for final DQN training, gameplay or regression checks"
+play.py,Simple two-DQN menu with source-training fallback,Keep,"Required for final DQN training, gameplay or regression checks"
+levels/dqn_all_pegs.py,Archived development code,Remove,"Required initial training, callbacks and settings consolidated into train_dqn.py; inference/evaluation retained in final modules."
+levels/dqn_shot_efficiency.py,Archived development code,Remove,Search evidence remains in results; final demonstration generation is now in dqn_eight_shot_experiment.py.
+levels/ppo_v4_further.py,Archived development code,Remove,PPO historical implementation/test; preserved notebook outputs can be read and code recovered from Git.
+levels/ppo_v4_improved.py,Archived development code,Remove,PPO historical implementation/test; preserved notebook outputs can be read and code recovered from Git.
+levels/ppo_v4_shot_order.py,Archived development code,Remove,PPO historical implementation/test; preserved notebook outputs can be read and code recovered from Git.
+levels/ppo_version4.py,Archived development code,Remove,PPO historical implementation/test; preserved notebook outputs can be read and code recovered from Git.
+levels/ppo_version5.py,Archived development code,Remove,PPO historical implementation/test; preserved notebook outputs can be read and code recovered from Git.
+levels/selected_models.py,Archived development code,Remove,Replaced by the two-DQN play.py menu.
+levels/test_dqn_all_pegs.py,Archived development code,Remove,"Required initial training, callbacks and settings consolidated into train_dqn.py; inference/evaluation retained in final modules."
+levels/test_dqn_shot_efficiency.py,Archived development code,Remove,Search evidence remains in results; final demonstration generation is now in dqn_eight_shot_experiment.py.
+levels/test_ppo_121_angles.py,Archived development code,Remove,PPO historical implementation/test; preserved notebook outputs can be read and code recovered from Git.
+levels/test_ppo_v4_further.py,Archived development code,Remove,PPO historical implementation/test; preserved notebook outputs can be read and code recovered from Git.
+levels/test_ppo_v4_improved.py,Archived development code,Remove,PPO historical implementation/test; preserved notebook outputs can be read and code recovered from Git.
+levels/test_ppo_v4_shot_order.py,Archived development code,Remove,PPO historical implementation/test; preserved notebook outputs can be read and code recovered from Git.
+levels/test_ppo_version4.py,Archived development code,Remove,PPO historical implementation/test; preserved notebook outputs can be read and code recovered from Git.
+levels/test_ppo_version5.py,Archived development code,Remove,PPO historical implementation/test; preserved notebook outputs can be read and code recovered from Git.
+levels/train_ppo.py,Archived development code,Remove,PPO historical implementation/test; preserved notebook outputs can be read and code recovered from Git.

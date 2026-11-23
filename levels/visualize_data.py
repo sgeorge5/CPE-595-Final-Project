@@ -144,7 +144,7 @@ def plot_gameplay(board, trajectory, frame_index, angle, shot_number,
         new_hits = sum(hit and not peg["is_hit"]
                        for hit, peg in zip(frame["is_hit"], board))
         status = " | Complete" if cleared == len(board) else ""
-        title = (f"PPO angle: {angle:+.0f}° | Shot {shot_number}\n"
+        title = (f"DQN angle: {angle:+.0f}° | Shot {shot_number}\n"
                  f"New hits: {new_hits} | Total cleared: {cleared}\n"
                  f"Pegs left: {len(board) - cleared} | Shots left: "
                  f"{config.max_shots - shot_number}{status}")
@@ -204,6 +204,44 @@ def record_gameplay(model, seed, config=CONFIG, actions=None, orange_peg_ids=Non
         done = terminated or truncated
     env.close()
     return shots, pd.DataFrame(rows)
+
+
+def demonstrate(model, config, label, seed=50042, show=True, output_dir=None):
+    """Render actual network-selected gameplay into a new local demonstration folder."""
+    import tempfile
+    import webbrowser
+    from urllib.request import pathname2url
+    from matplotlib.animation import FuncAnimation, PillowWriter
+
+    replay, table = record_gameplay(model, seed, config)
+    final = replay[-1]["info"]
+    cleared = final["pegs_cleared"] if config.goal == "all" else final["orange_cleared"]
+    target = 77 if config.goal == "all" else 25
+    print(table.to_string(index=False))
+    print(f"{label}: {cleared}/{target} pegs, {final['shots_used']} shots, success {final['success']}.")
+    if output_dir is None:
+        os.makedirs("results/source_playback", exist_ok=True)
+        output_dir = tempfile.mkdtemp(prefix="game_", dir="results/source_playback")
+    os.makedirs(output_dir, exist_ok=True)
+    table.to_csv(os.path.join(output_dir, "shots.csv"), index=False)
+    fig, ax = plt.subplots(figsize=(5, 5))
+    frames = [(i, int(j)) for i, shot in enumerate(replay)
+              for j in np.unique(np.linspace(0, len(shot["trajectory"]) - 1, 10, dtype=int))]
+
+    def draw(frame):
+        i, j = frame
+        shot = replay[i]
+        plot_gameplay(shot["board"], shot["trajectory"], j, shot["info"]["angle_degrees"], i + 1, config, ax=ax)
+        ax.set_title(label + "\n" + ax.get_title(), fontsize=9)
+
+    animation = FuncAnimation(fig, draw, frames=frames, interval=120)
+    path = os.path.join(output_dir, "replay.gif")
+    animation.save(path, writer=PillowWriter(fps=8), dpi=90)
+    plt.close(fig)
+    print(path)
+    if show:
+        webbrowser.open("file:" + pathname2url(os.path.abspath(path)))
+    return replay, table
 
 
 def export_data(output_dir=IMPROVED_RESULTS_DIR, seed=SEED, config=CONFIG):

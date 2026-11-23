@@ -1,6 +1,10 @@
 """Standard DQN training, measured checkpoints, and resumable experiment history."""
 import os
 import shutil
+import argparse
+import glob
+import numpy as np
+from stable_baselines3.common.utils import LinearSchedule
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -241,21 +245,238 @@ def train_agent(total_timesteps=DEFAULT_TIMESTEPS, seed=SEED, model_path=None,
     return model,data
 
 
-def main():
-    # Edit these simple settings for a new run. Existing results are protected.
-    from levels.config_rl import RLConfig
-    run_name = 'new_run'
-    resume = False
-    config = RLConfig(observation='compact')
-    settings = dict(DQN_SETTINGS)
-    settings['learning_rate'] = 0.0003
-    path = os.path.join(IMPROVED_MODELS_DIR, run_name, 'last_model.zip')
-    model, episodes = train_agent(config=config,dqn_settings=settings,model_path=path,
-        results_dir=os.path.join(IMPROVED_RESULTS_DIR, run_name),resume_from=path if resume else None)
-    record_experiment(run_name,config,model,episodes)
-    selection = select_best_experiment()
-    print('Total training shots:',model.num_timesteps,'Completed episodes:',len(episodes))
-    print('Best validation model:',selection['source_model'])
 
-if __name__ == '__main__':
+ALL_PEG_SETTINGS = {'learning_rate': 0.0003, 'gamma': 0.99, 'buffer_size': 20000, 'batch_size': 64, 'learning_starts': 1000, 'policy_kwargs': {'net_arch': [64, 64]}, 'train_freq': 4, 'gradient_steps': 1, 'target_update_interval': 500, 'exploration_initial_eps': 1.0, 'exploration_final_eps': 0.05, 'exploration_fraction': 0.6}
+
+class TrainingMonitor(Monitor):
+    """Keep the random board seed with its terminal transition for exact replay."""
+
+    def __init__(self, env, seed):
+        super().__init__(env)
+        self.boards = np.random.default_rng(seed)
+
+    def reset(self, **kwargs):
+        if kwargs.get("seed") is None:
+            kwargs["seed"] = int(self.boards.integers(1_000_000, 2**31))
+        self.board_seed = kwargs["seed"]
+        return super().reset(**kwargs)
+
+    def step(self, action):
+        observation, reward, done, truncated, info = super().step(action)
+        if info["success"]:
+            info["board_seed"] = self.board_seed
+            info["orange_peg_ids"] = " ".join(str(i) for i, peg in enumerate(self.env.pegs) if peg.isOrange)
+        return observation, reward, done, truncated, info
+
+
+class TrainingLog(BaseCallback):
+    def __init__(self):
+        super().__init__()
+        self.rows, self.shots = [], []
+
+    def _on_step(self):
+        info = self.locals["infos"][0]
+        self.shots.append(dict(action=int(self.locals["actions"][0]),
+                               shot=info["shots_used"], reward=float(self.locals["rewards"][0]),
+                               **{key: info[key] for key in ("angle_degrees", "new_pegs_cleared", "pegs_cleared",
+                                  "pegs_remaining", "shots_remaining", "success")}))
+        if "episode" in info:
+            row = dict(timesteps=self.num_timesteps, reward=info["episode"]["r"],
+                       **{key: info[key] for key in ("pegs_cleared", "shots_used", "success",
+                                                   "simulation_timeouts")})
+            self.rows.append(row)
+            self.shots = []
+        return True
+
+
+def write_csv(data, path):
+    temporary = path + ".tmp"
+    data.to_csv(temporary, index=False, na_rep="N/A")
+    os.replace(temporary, path)
+
+
+def checkpoint_step(path):
+    return int(os.path.basename(path).split("_")[1].split(".")[0])
+
+
+def insert_demonstration(model, transitions, copies=1):
+    for _ in range(copies):
+        for obs, action, reward, after, done in transitions:
+            model.replay_buffer.add(obs[None], after[None], np.array([action]),
+                                    np.array([reward]), np.array([done]), [{}])
+
+
+def clone_actions(model, transitions, updates=1000):
+    """Train Q-network action preferences using cross-entropy on eight observations."""
+    observations = torch.as_tensor(np.stack([t[0] for t in transitions]), device=model.device)
+    actions = torch.as_tensor([t[1] for t in transitions], device=model.device)
+    optimizer = torch.optim.Adam(model.q_net.parameters(), lr=0.001)
+    log = []
+    for update in range(updates):
+        logits = model.q_net(observations)
+        loss = torch.nn.functional.cross_entropy(logits, actions)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        if update % 100 == 0 or update == updates - 1:
+            log.append(dict(update=update + 1, loss=float(loss.detach()),
+                            correct=int((logits.argmax(dim=1) == actions).sum())))
+    model.q_net_target.load_state_dict(model.q_net.state_dict())
+    # Normal SB3 DQN learning continues with a fresh optimizer after supervised pretraining.
+    model.policy.optimizer = torch.optim.Adam(model.q_net.parameters(), lr=ALL_PEG_SETTINGS["learning_rate"])
+    return pd.DataFrame(log)
+
+
+class EpisodeLog(TrainingLog):
+    def __init__(self, transitions=None):
+        super().__init__()
+        self.transitions = transitions
+
+    def _on_step(self):
+        actions = [shot["action"] for shot in self.shots] + [int(self.locals["actions"][0])]
+        result = super()._on_step()
+        if "episode" in self.locals["infos"][0]:
+            self.rows[-1]["actions"] = " ".join(map(str, actions))
+        if self.transitions and self.num_timesteps % 32 == 0:
+            # Uniform replay sampling mixes these eight transitions with actual gameplay.
+            insert_demonstration(self.model, self.transitions)
+        return result
+
+
+def train_model_one(output_dir="models/source_only/model1", steps=50_000):
+    """Fresh orange-DQN training with the selected historical compact settings."""
+    from levels.config_rl import RLConfig
+    os.makedirs(output_dir, exist_ok=True)
+    settings = dict(DQN_SETTINGS, learning_rate=0.0003)
+    train_agent(steps, model_path=os.path.join(output_dir, "last_model.zip"),
+                results_dir=output_dir, config=RLConfig(observation="compact"),
+                dqn_settings=settings, verbose=0)
+    return os.path.join(output_dir, "best_model.zip")
+
+
+def train_initial_all_pegs(output_dir, steps=90_000):
+    """Recreate the prerequisite all-peg DQN stage from new random weights."""
+    from levels.dqn_eight_shot_experiment import all_pegs_config
+    if steps < 4 or steps % 4:
+        raise ValueError("Initial training steps must be positive and divisible by four.")
+    torch.set_num_threads(1)
+    os.makedirs(output_dir, exist_ok=True)
+    paths = sorted(glob.glob(os.path.join(output_dir, "checkpoint_*.zip")), key=checkpoint_step)
+    env = TrainingMonitor(PeggleEnv(all_pegs_config()), SEED)
+    try:
+        if paths:
+            model = DQN.load(paths[-1], env=env, device="cpu")
+            model.load_replay_buffer(os.path.splitext(paths[-1])[0] + ".pkl")
+            env.boards = np.random.default_rng(1_000_000 + SEED + model.num_timesteps)
+            model.get_env().seed(1_000_000 + SEED + model.num_timesteps)
+        else:
+            model = DQN("MlpPolicy", env, seed=SEED, device="cpu", **ALL_PEG_SETTINGS)
+        boundaries = sorted({steps, *range(10_000, steps, 10_000),
+                             *(s for s in (25_000, 50_000) if s < steps)})
+        log = TrainingLog()
+        for target in boundaries:
+            if target <= model.num_timesteps:
+                continue
+            model.exploration_schedule = LinearSchedule(1.0, 0.05, 60_000 / target)
+            begin = len(log.rows)
+            model.learn(target - model.num_timesteps, reset_num_timesteps=False,
+                        callback=log, log_interval=None)
+            path = os.path.join(output_dir, f"checkpoint_{model.num_timesteps}")
+            if os.path.exists(path + ".zip"):
+                raise FileExistsError(path)
+            model.save_replay_buffer(path + ".pkl")
+            model.save(path + ".zip")
+            write_csv(pd.DataFrame(log.rows[begin:]), path + "_episodes.csv")
+            print(f"Initial all-peg stage saved at {model.num_timesteps:,} shots.", flush=True)
+        return os.path.join(output_dir, f"checkpoint_{model.num_timesteps}.zip")
+    finally:
+        env.close()
+
+
+def train_model_two(output_dir="models/source_only/model2", base_steps=90_000,
+                    additional_steps=25_000, cloning_updates=1000, validation_games=50,
+                    interval=5000):
+    """Source-only initial stage, supervised pretraining, then standard DQN replay learning."""
+    from levels.dqn_eight_shot_experiment import CompletionReward, collect_demonstration, rank
+    from levels.evaluate import evaluate_model_two
+    if additional_steps < 4 or additional_steps % 4 or interval < 4 or interval % 4:
+        raise ValueError("Training interval and additional steps must be multiples of four.")
+    os.makedirs(output_dir, exist_ok=True)
+    best_path = os.path.join(output_dir, "best_model.zip")
+    # Existing completed source-only runs are reused without touching historical models.
+    if os.path.isfile(best_path):
+        return best_path
+    settings = dict(seed=SEED, base_steps=base_steps, additional_steps=additional_steps,
+                    cloning_updates=cloning_updates, validation_games=validation_games,
+                    validation_seed=47_042, checkpoint_interval=interval,
+                    replay_demo_copies=100, replay_demo_interval=32,
+                    terminal_bonus_per_unused_shot=20, **ALL_PEG_SETTINGS)
+    write_csv(pd.DataFrame([settings]), os.path.join(output_dir, "settings.csv"))
+    base_path = train_initial_all_pegs(os.path.join(output_dir, "initial_stage"), base_steps)
+    folder = os.path.join(output_dir, "demonstration_stage")
+    os.makedirs(folder, exist_ok=True)
+    transitions = collect_demonstration()
+    env = Monitor(CompletionReward())
+    torch.set_num_threads(1)
+    paths = sorted(glob.glob(os.path.join(folder, "checkpoint_*.zip")), key=checkpoint_step)
+    rows = []
+    scores_path = os.path.join(output_dir, "validation.csv")
+    if os.path.isfile(scores_path):
+        rows = pd.read_csv(scores_path).to_dict("records")
+    try:
+        if paths:
+            model = DQN.load(paths[-1], env=env, device="cpu")
+            model.load_replay_buffer(os.path.splitext(paths[-1])[0] + ".pkl")
+        else:
+            model = DQN.load(base_path, env=env, device="cpu")
+            model.replay_buffer.reset()
+            model.learning_starts = model.num_timesteps + 1000
+            cloning = clone_actions(model, transitions, updates=cloning_updates)
+            write_csv(cloning, os.path.join(output_dir, "supervised_updates.csv"))
+            insert_demonstration(model, transitions, copies=100)
+        model.get_env().seed(SEED + model.num_timesteps)
+        log = EpisodeLog(transitions)
+        targets = sorted({base_steps + additional_steps,
+                          *range(base_steps + interval, base_steps + additional_steps, interval)})
+        for target in targets:
+            path = os.path.join(folder, f"checkpoint_{target}.zip")
+            if target > model.num_timesteps:
+                begin = len(log.rows)
+                model.exploration_schedule = LinearSchedule(0.05, 0.05, 0.5)
+                model.learn(target - model.num_timesteps, callback=log,
+                            reset_num_timesteps=False, log_interval=None)
+                if os.path.isfile(path):
+                    raise FileExistsError(path)
+                model.save_replay_buffer(os.path.splitext(path)[0] + ".pkl")
+                model.save(path)
+                write_csv(pd.DataFrame(log.rows[begin:]), os.path.splitext(path)[0] + "_episodes.csv")
+            if not any(row["checkpoint"] == path for row in rows):
+                candidate = DQN.load(path, device="cpu")
+                score, _, _ = evaluate_model_two(candidate, episodes=validation_games, seed=47_042)
+                score.update(checkpoint=path, timesteps=target)
+                rows.append(score)
+                write_csv(pd.DataFrame(rows), scores_path)
+        chosen = max(rows, key=rank)
+        shutil.copyfile(chosen["checkpoint"], best_path)
+        write_csv(pd.DataFrame([chosen]), os.path.join(output_dir, "selected_model.csv"))
+        print(f"Selected {chosen['checkpoint']} using validation games.", flush=True)
+        return best_path
+    finally:
+        env.close()
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Train either final DQN from source.")
+    parser.add_argument("model", choices=["orange", "all"])
+    parser.add_argument("--output")
+    parser.add_argument("--steps", type=int, help="Model 1 training steps or Model 2 additional steps")
+    parser.add_argument("--base-steps", type=int, default=90_000)
+    args = parser.parse_args()
+    if args.model == "orange":
+        train_model_one(args.output or "models/source_only/model1", args.steps or 50_000)
+    else:
+        train_model_two(args.output or "models/source_only/model2", args.base_steps, args.steps or 25_000)
+
+
+if __name__ == "__main__":
     main()

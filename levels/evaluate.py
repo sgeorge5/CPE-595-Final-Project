@@ -208,41 +208,45 @@ def greedy_diagnostic(seeds=(30042,30043,30044), config=CONFIG, results_dir=IMPR
 
 
 def main():
-    selected = pd.read_csv(os.path.join(IMPROVED_RESULTS_DIR, 'selected_model.csv')).iloc[0]
-    config = RLConfig(observation=selected.observation,
-                      empty_shot_penalty=float(selected.empty_shot_penalty))
-    summary, _ = evaluate_agents(config=config,include_baselines=True)
-    print(summary.to_string(index=False))
+    import argparse
+    from play import load_game_mode
+    parser = argparse.ArgumentParser(description="Evaluate either final DQN in memory.")
+    parser.add_argument("model", choices=["orange", "all"])
+    parser.add_argument("--episodes", type=int, default=100)
+    args = parser.parse_args()
+    if args.episodes < 1:
+        parser.error("Use a positive number of episodes.")
+    model, config = load_game_mode("1" if args.model == "orange" else "2")
+    if args.model == "orange":
+        summary, _, _, _ = run_policy(model, episodes=args.episodes, config=config)
+    else:
+        summary, _, _ = evaluate_model_two(model, episodes=args.episodes)
+    print(pd.DataFrame([summary]).to_string(index=False))
+
+
+
+
+def evaluate_model_two(model, episodes=100, seed=93_042):
+    """One greedy game and a separate fixed-epsilon all-peg evaluation."""
+    from levels.dqn_eight_shot_experiment import play
+    greedy, greedy_shots = play(model)
+    games, shots = [], []
+    for current in range(seed, seed + episodes):
+        game, trace = play(model, current, sampled=True)
+        games.append(game)
+        shots.extend(trace)
+    data = pd.DataFrame(games)
+    wins = data[data.success]
+    summary = dict(greedy_pegs=greedy["pegs_cleared"], greedy_shots=greedy["shots_used"],
+                   greedy_win=greedy["success"], greedy_angles=greedy["angle_sequence"],
+                   greedy_reward=greedy["reward"], wins=len(wins), games=episodes,
+                   average_winning_shots=wins.shots_used.mean(), mean_pegs=data.pegs_cleared.mean(),
+                   min_pegs=data.pegs_cleared.min(), max_pegs=data.pegs_cleared.max(),
+                   average_shots=data.shots_used.mean(), wins_eight_or_less=int(wins.shots_used.le(8).sum()),
+                   wins_nine=int(wins.shots_used.eq(9).sum()), wins_ten=int(wins.shots_used.eq(10).sum()))
+    return summary, pd.DataFrame([greedy] + games), pd.DataFrame(greedy_shots + shots)
+
 
 if __name__ == '__main__':
     main()
-
-
-def summarize(episodes, shots):
-    data = pd.DataFrame(episodes)
-    wins = data[data.success]
-    result = {"strategy": data.strategy.iloc[0], "games": len(data),
-            "total_pegs": data.total_pegs.iloc[0], "shot_limit": data.shot_limit.iloc[0],
-            "avg_pegs_cleared": data.pegs_cleared.mean(),
-            "best_pegs_cleared": int(data.pegs_cleared.max()),
-            "clearance_pct": data.clearance_pct.mean(),
-            "avg_pegs_remaining": data.pegs_remaining.mean(),
-            "wins": len(wins), "completion_pct": 100 * data.success.mean(),
-            "avg_shots_success": wins.shots_used.mean(), "min_shots_success": wins.shots_used.min(),
-            "avg_shots_used": data.shots_used.mean(), "avg_reward": data.reward.mean(),
-            "distinct_angles": len({shot["action"] for shot in shots}),
-            "simulation_timeouts": data.simulation_timeouts.sum()}
-    if "free_balls_earned" in data:
-        result["fixed_shot_limit"] = False
-        for key in ("starting_balls", "balls_remaining", "free_balls_earned",
-                    "shots_earning_free_balls", "total_score"):
-            result["avg_" + key] = data[key].mean()
-    if "peg32_left" in data:
-        result.update(peg32_left_games=int(data.peg32_left.sum()),
-                      peg32_early_games=int(data.peg32_early.sum()),
-                      total_empty_shots=int(data.empty_shots.sum()),
-                      avg_empty_shots=data.empty_shots.mean())
-        for key in ("peg32_shot", "pegs_before_32", "other_pegs_with_32"):
-            result["avg_" + key] = pd.to_numeric(data[key]).mean()
-    return result
 
