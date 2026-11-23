@@ -1,0 +1,10 @@
+experiment,peg32_outcome,games,avg_final_clearance,wins
+D,Early hit,0,N/A,0
+D,Left uncleared,100,75.91,0
+D,Late hit,0,N/A,0
+control,Early hit,0,N/A,0
+control,Left uncleared,100,75.99,0
+control,Late hit,0,N/A,0
+F,Early hit,0,N/A,0
+F,Left uncleared,100,76.0,0
+F,Late hit,0,N/A,0

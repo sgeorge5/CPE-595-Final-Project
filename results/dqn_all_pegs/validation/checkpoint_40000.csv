@@ -1,0 +1,2 @@
+strategy,games,total_pegs,shot_limit,avg_pegs_cleared,best_pegs_cleared,clearance_pct,avg_pegs_remaining,wins,completion_pct,avg_shots_success,min_shots_success,avg_shots_used,avg_reward,distinct_angles,simulation_timeouts,model,checkpoint,timesteps,phase,epsilon,greedy_pegs,greedy_pct,greedy_shots,greedy_win,greedy_angles
+Epsilon-greedy,50,77,10,63.12,72,81.97402597402598,13.88,0,0.0,N/A,N/A,10.0,295.6,18,0,DQN Model 2,models/dqn_all_pegs\checkpoint_40000.zip,40000,validation,0.05,63,81.81818181818181,10,False,0 0 -18 -18 -60 -18 -18 -18 -18 -18

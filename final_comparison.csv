@@ -1,0 +1,4 @@
+model,algorithm,free_balls,inputs,greedy_pegs,greedy_shots,mean_pegs,wins,games,min_winning_shots,avg_winning_shots,average_shots,average_free_balls,method,seed_first,seed_last,source
+PPO V3,PPO,False,78,70,10,65.39,0,100,N/A,N/A,10.0,0.0,PPO sampled,50042,50141,results/ppo_all_pegs/versions/ppo_version3/sampled_checkpoint_episodes.csv
+PPO Improved D,PPO,True,155,76,11,75.9,0,100,N/A,N/A,11.14,1.14,PPO sampled,90042,90141,results/ppo_121_angles/final_comparison.csv
+DQN Model 2,DQN,False,78,77,10,74.71,73,100,10.0,10.0,10.0,0.0,Epsilon-greedy 0.05,91042,91141,results/dqn_all_pegs/dqn_final_summary.csv

@@ -1,0 +1,2 @@
+strategy,seed,total_pegs,shot_limit,pegs_cleared,clearance_pct,pegs_remaining,success,shots_used,reward,distinct_angles,simulation_timeouts,orange_peg_ids,action_seed,fixed_shot_limit,starting_balls,balls_remaining,free_balls_earned,shots_earning_free_balls,total_score,experiment,phase,checkpoint,timesteps
+PPO sampled,60042,77,10,76,98.7012987012987,1,False,11,376.0,6,0,5 6 12 15 17 20 23 28 36 38 39 40 41 42 43 44 49 50 52 54 66 70 72 73 74,60042,False,10,0,1,1,89550,B,final,models/ppo_v4_improved_B_checkpoints\checkpoint_125952.zip,125952

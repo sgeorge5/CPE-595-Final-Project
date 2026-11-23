@@ -1,0 +1,5 @@
+game,seed,checkpoint_step,angle_count,peg32_shot,angle_degrees,pegs_before,other_pegs_on_shot,pegs_hit_before_32_in_shot,first_hit_frame_32,same_angle_hits_32_alone,total_shots,free_balls,game_log,shot_log
+Improved B validation,41070.0,125952,21,6,30.0,18,29 30 65,29,175,False,10,1,results/ppo_v4_improved/gameplay/validation_win/game.csv,results/ppo_v4_improved/gameplay/validation_win/shots.csv
+PPO V5 validation,40107.0,91136,41,3,30.0,40,29 34,29,175,False,11,1,results/ppo_version5/gameplay/validation_win/game.csv,results/ppo_version5/gameplay/validation_win/shots.csv
+Improved D training 129717,N/A,129717,21,6,-6.0,14,3 20 31 43 62 65,43 62 65,575,False,11,2,results/ppo_v4_further/D/wins_training/win_129717.csv,results/ppo_v4_further/D/wins_training/win_129717_shots.csv
+Improved D training 141605,N/A,141605,21,8,-12.0,7,42 43,42 43,168,False,11,1,results/ppo_v4_further/D/wins_training/win_141605.csv,results/ppo_v4_further/D/wins_training/win_141605_shots.csv

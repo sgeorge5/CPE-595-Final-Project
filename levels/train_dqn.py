@@ -1,5 +1,5 @@
 """Standard DQN training, measured checkpoints, and resumable experiment history."""
-from pathlib import Path
+import os
 import shutil
 import matplotlib
 matplotlib.use('Agg')
@@ -11,8 +11,7 @@ from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.monitor import Monitor
 from levels.config_rl import (CONFIG, DEFAULT_TIMESTEPS, DQN_POLICY, DQN_SETTINGS, SEED,
     IMPROVED_MODELS_DIR, IMPROVED_RESULTS_DIR, CHECKPOINT_INTERVAL,
-    VALIDATION_EPISODES, VALIDATION_SEED, ORIGINAL_LEVEL1_MODEL_PATH, SMALL_MODEL_PATH,
-    RESULTS_DIR, SMALL_RESULTS_DIR, BEST_MODEL_PATH)
+    VALIDATION_EPISODES, VALIDATION_SEED, ORIGINAL_LEVEL1_MODEL_PATH, RESULTS_DIR, BEST_MODEL_PATH)
 from levels.peggle_env import PeggleEnv
 from levels.evaluate import run_policy
 
@@ -26,19 +25,20 @@ def save_checkpoint(model, model_path, results_dir, config, rows, eval_episodes,
     step = model.num_timesteps
     if any(int(row['timesteps']) == step for row in rows):
         return
-    checkpoint = model_path.parent / f'checkpoint_{step}.zip'
+    model_folder = os.path.dirname(model_path)
+    checkpoint = os.path.join(model_folder, f'checkpoint_{step}.zip')
     model.save(checkpoint)
     score, _, _, _ = run_policy(model, episodes=eval_episodes, seed=eval_seed, config=config)
     score.update(timesteps=step, checkpoint=str(checkpoint), validation_seed=eval_seed)
     previous_best = max((checkpoint_key(row) for row in rows), default=(-1,-1))
     if checkpoint_key(score) > previous_best:
-        shutil.copyfile(checkpoint, model_path.parent / 'best_model.zip')
-        model.save_replay_buffer(model_path.parent / 'best_model.pkl')
+        shutil.copyfile(checkpoint, os.path.join(model_folder, 'best_model.zip'))
+        model.save_replay_buffer(os.path.join(model_folder, 'best_model.pkl'))
     rows.append(score)
     best_index = max(range(len(rows)), key=lambda i: checkpoint_key(rows[i]))
     for i, row in enumerate(rows):
         row['is_best'] = i == best_index
-    pd.DataFrame(rows).to_csv(results_dir / 'checkpoint_evaluation.csv', index=False)
+    pd.DataFrame(rows).to_csv(os.path.join(results_dir, 'checkpoint_evaluation.csv'), index=False)
     print(f"Checkpoint {step}: clearance {score['orange_cleared_pct']:.1f}%, "
           f"wins {score['success_rate_pct']:.1f}%, angles {score['distinct_angles']}", flush=True)
 
@@ -73,7 +73,7 @@ class EpisodeLogger(BaseCallback):
 
 
 def plot_training(log_path=None, output_path=None):
-    log_path = IMPROVED_RESULTS_DIR/'training_episodes.csv' if log_path is None else log_path
+    log_path = os.path.join(IMPROVED_RESULTS_DIR, 'training_episodes.csv') if log_path is None else log_path
     data = pd.read_csv(log_path)
     fig, axes = plt.subplots(3,1,figsize=(9,8),sharex=True)
     for ax, column, label in zip(axes, ['episode_reward','success','orange_cleared_pct'],
@@ -114,10 +114,9 @@ def plot_checkpoints(csv_path, output_path=None):
 
 def load_training_model(path, env, warmup=200):
     """SB3 restores weights and optimizer; replay is a separate supported save file."""
-    path = Path(path)
     model = DQN.load(path, env=env, device='cpu')
-    replay = path.with_suffix('.pkl')
-    if replay.exists():
+    replay = os.path.splitext(path)[0] + '.pkl'
+    if os.path.exists(replay):
         model.load_replay_buffer(replay)
     else:
         print('No saved replay buffer: retaining weights/optimizer and collecting fresh experience.')
@@ -127,7 +126,7 @@ def load_training_model(path, env, warmup=200):
 
 def record_experiment(name, config, model, episodes):
     """One measured summary per experiment; detailed checkpoints retain its history."""
-    scores = pd.read_csv(IMPROVED_RESULTS_DIR/name/'checkpoint_evaluation.csv')
+    scores = pd.read_csv(os.path.join(IMPROVED_RESULTS_DIR, name, 'checkpoint_evaluation.csv'))
     best = scores[scores.is_best].iloc[0]
     row = {'experiment':name,'observation':config.observation,
         'input_size':model.observation_space.shape[0],'learning_rate':model.learning_rate,
@@ -136,8 +135,8 @@ def record_experiment(name, config, model, episodes):
         'validation_clearance_pct':best.orange_cleared_pct,
         'validation_win_rate_pct':best.success_rate_pct,
         'validation_distinct_angles':int(best.distinct_angles)}
-    path = IMPROVED_RESULTS_DIR/'experiments.csv'
-    previous = pd.read_csv(path) if path.exists() else pd.DataFrame()
+    path = os.path.join(IMPROVED_RESULTS_DIR, 'experiments.csv')
+    previous = pd.read_csv(path) if os.path.exists(path) else pd.DataFrame()
     if len(previous):
         previous = previous[previous.experiment != name]
     data = pd.concat([previous,pd.DataFrame([row])],ignore_index=True)
@@ -147,19 +146,19 @@ def record_experiment(name, config, model, episodes):
 
 def select_best_experiment():
     """Publish the validation winner; the separate final evaluation is never consulted."""
-    experiments = pd.read_csv(IMPROVED_RESULTS_DIR/'experiments.csv')
+    experiments = pd.read_csv(os.path.join(IMPROVED_RESULTS_DIR, 'experiments.csv'))
     selected = experiments.iloc[0]
     for _, row in experiments.iterrows():
         if (row.validation_clearance_pct,row.validation_win_rate_pct) > (
                 selected.validation_clearance_pct,selected.validation_win_rate_pct):
             selected = row
-    source = IMPROVED_MODELS_DIR/selected.experiment/'best_model.zip'
+    source = os.path.join(IMPROVED_MODELS_DIR, selected.experiment, 'best_model.zip')
     shutil.copyfile(source,BEST_MODEL_PATH)
-    shutil.copyfile(source.with_suffix('.pkl'),BEST_MODEL_PATH.with_suffix('.pkl'))
+    shutil.copyfile(os.path.splitext(source)[0] + '.pkl', os.path.splitext(BEST_MODEL_PATH)[0] + '.pkl')
     selection = selected.to_dict()
     selection['source_model'] = str(source)
     selection['published_model'] = str(BEST_MODEL_PATH)
-    pd.DataFrame([selection]).to_csv(IMPROVED_RESULTS_DIR/'selected_model.csv',index=False)
+    pd.DataFrame([selection]).to_csv(os.path.join(IMPROVED_RESULTS_DIR, 'selected_model.csv'),index=False)
     return selection
 
 
@@ -175,18 +174,19 @@ def train_agent(total_timesteps=DEFAULT_TIMESTEPS, seed=SEED, model_path=None,
     """
     if total_timesteps < 1 or checkpoint_interval < 1 or validation_episodes < 1:
         raise ValueError('Training and evaluation budgets must be positive.')
-    model_path = Path(IMPROVED_MODELS_DIR/'last_model.zip' if model_path is None else model_path)
-    folder = Path(IMPROVED_RESULTS_DIR if results_dir is None else results_dir)
-    if model_path.suffix != '.zip':
+    model_path = os.path.join(IMPROVED_MODELS_DIR, 'last_model.zip') if model_path is None else str(model_path)
+    folder = IMPROVED_RESULTS_DIR if results_dir is None else str(results_dir)
+    if os.path.splitext(model_path)[1] != '.zip':
         raise ValueError('Use a .zip model filename.')
-    if model_path.resolve() in (ORIGINAL_LEVEL1_MODEL_PATH.resolve(), SMALL_MODEL_PATH.resolve()):
+    if os.path.normcase(os.path.realpath(model_path)) == os.path.normcase(os.path.realpath(ORIGINAL_LEVEL1_MODEL_PATH)):
         raise ValueError('Preserve the original model: choose an improved experiment path.')
-    if folder.resolve() in (RESULTS_DIR.resolve(), SMALL_RESULTS_DIR.resolve()):
+    if os.path.normcase(os.path.realpath(folder)) in (os.path.normcase(os.path.realpath(RESULTS_DIR)),
+                                                         os.path.normcase(os.path.realpath('results'))):
         raise ValueError('Preserve the original results: choose an improved experiment folder.')
-    if resume_from is None and (model_path.exists() or (folder/'training_episodes.csv').exists()):
+    if resume_from is None and (os.path.exists(model_path) or os.path.exists(os.path.join(folder, 'training_episodes.csv'))):
         raise FileExistsError('Existing experiment: resume it or choose new model/results paths.')
-    model_path.parent.mkdir(parents=True,exist_ok=True)
-    folder.mkdir(parents=True,exist_ok=True)
+    os.makedirs(os.path.dirname(model_path) or '.', exist_ok=True)
+    os.makedirs(folder, exist_ok=True)
     settings = dict(DQN_SETTINGS if dqn_settings is None else dqn_settings)
     torch.set_num_threads(1)
     env = Monitor(PeggleEnv(config))
@@ -201,15 +201,15 @@ def train_agent(total_timesteps=DEFAULT_TIMESTEPS, seed=SEED, model_path=None,
         model.get_env().seed(seed + 1_000_000 + start_step)
     previous_rows, checkpoint_rows, settings_rows = [], [], []
     if resume_from is not None:
-        if (folder/'training_episodes.csv').exists():
-            previous_rows = pd.read_csv(folder/'training_episodes.csv').to_dict('records')
-        if (folder/'checkpoint_evaluation.csv').exists():
-            checkpoint_rows = pd.read_csv(folder/'checkpoint_evaluation.csv').to_dict('records')
+        if os.path.exists(os.path.join(folder, 'training_episodes.csv')):
+            previous_rows = pd.read_csv(os.path.join(folder, 'training_episodes.csv')).to_dict('records')
+        if os.path.exists(os.path.join(folder, 'checkpoint_evaluation.csv')):
+            checkpoint_rows = pd.read_csv(os.path.join(folder, 'checkpoint_evaluation.csv')).to_dict('records')
         if any(row['timesteps'] > start_step for row in previous_rows + checkpoint_rows):
             env.close()
             raise ValueError('History extends beyond this checkpoint. Use a new output folder to branch.')
-        if (folder/'training_settings.csv').exists():
-            settings_rows = pd.read_csv(folder/'training_settings.csv').to_dict('records')
+        if os.path.exists(os.path.join(folder, 'training_settings.csv')):
+            settings_rows = pd.read_csv(os.path.join(folder, 'training_settings.csv')).to_dict('records')
             last = settings_rows[-1]
             if (last['observation'] != config.observation or
                     float(last['empty_shot_penalty']) != config.empty_shot_penalty):
@@ -222,22 +222,22 @@ def train_agent(total_timesteps=DEFAULT_TIMESTEPS, seed=SEED, model_path=None,
         'batch_size':model.batch_size,'learning_starts':model.learning_starts,
         'exploration_fraction':model.exploration_fraction,'final_epsilon':model.exploration_final_eps,
         'network':'64 64','validation_seed':validation_seed,'validation_episodes':validation_episodes})
-    pd.DataFrame(settings_rows).to_csv(folder/'training_settings.csv',index=False)
+    pd.DataFrame(settings_rows).to_csv(os.path.join(folder, 'training_settings.csv'),index=False)
     callback = EpisodeLogger(previous_rows,checkpoint_rows,model_path,folder,config,
                              checkpoint_interval,validation_episodes,validation_seed)
     try:
         model.learn(total_timesteps=total_timesteps,callback=callback,
                     reset_num_timesteps=resume_from is None,log_interval=100)
         model.save(model_path)
-        model.save_replay_buffer(model_path.with_suffix('.pkl'))
+        model.save_replay_buffer(os.path.splitext(model_path)[0] + '.pkl')
         save_checkpoint(model,model_path,folder,config,callback.checkpoints,
                         validation_episodes,validation_seed)
     finally:
         env.close()
     data = pd.DataFrame(callback.rows,columns=EpisodeLogger.columns)
-    data.to_csv(folder/'training_episodes.csv',index=False)
-    plt.close(plot_training(folder/'training_episodes.csv',folder/'training_rewards.png'))
-    plt.close(plot_checkpoints(folder/'checkpoint_evaluation.csv',folder/'checkpoint_evaluation.png'))
+    data.to_csv(os.path.join(folder, 'training_episodes.csv'),index=False)
+    plt.close(plot_training(os.path.join(folder, 'training_episodes.csv'),os.path.join(folder, 'training_rewards.png')))
+    plt.close(plot_checkpoints(os.path.join(folder, 'checkpoint_evaluation.csv'),os.path.join(folder, 'checkpoint_evaluation.png')))
     return model,data
 
 
@@ -249,9 +249,9 @@ def main():
     config = RLConfig(observation='compact')
     settings = dict(DQN_SETTINGS)
     settings['learning_rate'] = 0.0003
-    path = IMPROVED_MODELS_DIR/run_name/'last_model.zip'
+    path = os.path.join(IMPROVED_MODELS_DIR, run_name, 'last_model.zip')
     model, episodes = train_agent(config=config,dqn_settings=settings,model_path=path,
-        results_dir=IMPROVED_RESULTS_DIR/run_name,resume_from=path if resume else None)
+        results_dir=os.path.join(IMPROVED_RESULTS_DIR, run_name),resume_from=path if resume else None)
     record_experiment(run_name,config,model,episodes)
     selection = select_best_experiment()
     print('Total training shots:',model.num_timesteps,'Completed episodes:',len(episodes))

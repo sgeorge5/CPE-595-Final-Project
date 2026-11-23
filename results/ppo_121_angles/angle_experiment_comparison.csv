@@ -1,0 +1,4 @@
+model,angles,spacing_degrees,avg_pegs_cleared,wins,source
+Version 4,21,6,71.2,0,Published V4–V5 comparison (100 games)
+Version 5,41,3,64.65,0,Published V4–V5 comparison (100 games)
+PPO — 121-Angle Resolution,121,1,65.27,0,New held-out comparison (100 games)

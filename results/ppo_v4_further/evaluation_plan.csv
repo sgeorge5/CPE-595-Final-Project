@@ -1,0 +1,2 @@
+diagnostic_first_seed,validation_first_seed,final_first_seed,games_per_set,starting_timestep,total_target,additional_steps,checkpoint_interval,selection,menu_tie
+31042,42042,70042,100,125952,225792,99840,10000,"highest validation wins, fewer average shots in wins, higher sampled clearance, earliest checkpoint on exact tie",retain Improved B; C before D if new candidates tie

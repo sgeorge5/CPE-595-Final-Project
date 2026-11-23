@@ -1,6 +1,6 @@
 """Read PegglePy's level coordinates and plot the original and training boards."""
 
-from pathlib import Path
+import os
 
 import matplotlib
 matplotlib.use("Agg")
@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 
 from levels.config_rl import (
-    CONFIG, PEGGLE_ROOT, IMPROVED_RESULTS_DIR, SEED, ensure_directories, load_level_coordinates
+    CONFIG, PEGGLE_ROOT, IMPROVED_RESULTS_DIR, SEED, load_level_coordinates
 )
 from levels.peggle_env import PeggleEnv
 from levels.evaluate import model_observation
@@ -32,9 +32,11 @@ def original_level_data(level_name="Level 1.lvl"):
 
 
 def level_inventory():
-    return pd.DataFrame([{"level": path.name, "peg_count": len(original_level_data(path.name))}
-                         for path in sorted((PEGGLE_ROOT / "levels").glob("*.lvl"),
-                                            key=lambda p: int(p.stem.split()[-1]))])
+    level_dir = os.path.join(PEGGLE_ROOT, "levels")
+    filenames = [name for name in os.listdir(level_dir) if name.endswith(".lvl")]
+    filenames.sort(key=lambda name: int(os.path.splitext(name)[0].split()[-1]))
+    return pd.DataFrame([{"level": name, "peg_count": len(original_level_data(name))}
+                         for name in filenames])
 
 
 def plot_board(records=None, path=None, config=CONFIG, ax=None):
@@ -51,14 +53,11 @@ def plot_board(records=None, path=None, config=CONFIG, ax=None):
         fig = ax.figure
     for color, display_color in (("orange", "#ed8b22"), ("blue", "#2786c4")):
         subset = board[(board.color == color) & board.is_visible]
-        ax.scatter(subset.x, subset.y, s=90 if len(board) > 15 else 220,
+        ax.scatter(subset.x, subset.y, s=90,
                    c=display_color, edgecolors="black", linewidths=0.5,
                    label=f"{color.title()} ({len(subset)})")
         hit = subset[subset.is_hit]
         ax.scatter(hit.x, hit.y, marker="x", s=30, c="black")
-        if len(board) <= 15:
-            for peg in subset.itertuples():
-                ax.annotate(str(peg.peg_id), (peg.x, peg.y), ha="center", va="center", color="white", fontsize=9)
     ax.scatter([config.width / 2], [config.height / 25], marker="v", c="black", s=70, label="Launcher")
     ax.set(xlim=(0, config.width), ylim=(config.height, 0), xlabel="x (pixels)", ylabel="y (pixels)",
            title=f"{len(board)}-peg board: {(board.color == 'orange').sum()} orange targets")
@@ -140,11 +139,30 @@ def plot_gameplay(board, trajectory, frame_index, angle, shot_number,
                                  ("Ball", "black", "o"),
                                  ("Hit peg", "black", "x")):
         ax.plot([], [], marker=marker, color=color, linestyle="none", label=label)
-    ax.set(xlim=(0, config.width), ylim=(config.height, 0),
-           xlabel="x (pixels)", ylabel="y (pixels)",
-           title=f"DQN angle: {angle:+.0f}\N{DEGREE SIGN} from downward vertical\n"
+    if config.goal == "all":
+        cleared = sum(frame["is_hit"])
+        new_hits = sum(hit and not peg["is_hit"]
+                       for hit, peg in zip(frame["is_hit"], board))
+        status = " | Complete" if cleared == len(board) else ""
+        title = (f"PPO angle: {angle:+.0f}° | Shot {shot_number}\n"
+                 f"New hits: {new_hits} | Total cleared: {cleared}\n"
+                 f"Pegs left: {len(board) - cleared} | Shots left: "
+                 f"{config.max_shots - shot_number}{status}")
+        if config.free_balls:
+            version = 5 if config.n_actions == 41 else 4
+            agent = "PPO (121 angles)" if config.n_actions == 121 else f"PPO Version {version}"
+            title = (f"{agent} | Shot {frame['shots_used']} | Angle {angle:+.0f}°\n"
+                     f"New hits: {new_hits} | Cleared: {cleared}/{len(board)}\n"
+                     f"Shot score: {frame['shot_score']:,} | Free balls: {frame['shot_free_balls']}\n"
+                     f"Balls left: {frame['balls_remaining']} | Total free balls: {frame['free_balls_earned']}\n"
+                     f"Total shots fired: {frame['shots_used']}{status}")
+    else:
+        title = (f"DQN angle: {angle:+.0f}° from downward vertical\n"
                  f"Shot {shot_number} | New orange hits: {new_orange_hits}\n"
                  f"Orange left: {orange_remaining} | Shots left: {config.max_shots - shot_number}")
+    ax.set(xlim=(0, config.width), ylim=(config.height, 0),
+           xlabel="x (pixels)", ylabel="y (pixels)",
+           title=title)
     ax.set_aspect("equal")
     ax.tick_params(labelsize=8)
     ax.title.set_fontsize(10)
@@ -155,47 +173,58 @@ def plot_gameplay(board, trajectory, frame_index, angle, shot_number,
     return fig
 
 
-def record_gameplay(model, seed, config=CONFIG):
+def record_gameplay(model, seed, config=CONFIG, actions=None, orange_peg_ids=None):
     """Play one real episode; keep each shot's actual trajectory and result."""
     env = PeggleEnv(config, record_trajectory=True)
-    env.reset(seed=seed)
+    options = None if orange_peg_ids is None else {"orange_peg_ids": orange_peg_ids}
+    obs, _ = env.reset(seed=seed, options=options)
     shots, rows = [], []
     done = False
     while not done:
         board = env.board_records()
-        action, _ = model.predict(model_observation(env, model), deterministic=True)
-        _, reward, terminated, truncated, info = env.step(int(action))
+        if actions is not None:
+            action = actions[len(shots)]
+        elif config.goal == "all":
+            action, _ = model.predict(obs, deterministic=True)
+        else:
+            action, _ = model.predict(model_observation(env, model), deterministic=True)
+        obs, reward, terminated, truncated, info = env.step(int(action))
         shots.append({"board": board, "trajectory": env.trajectory, "info": info})
         rows.append({"shot": info["shots_used"], "angle_degrees": info["angle_degrees"],
                      "new_orange_cleared": info["new_orange_cleared"],
                      "orange_remaining": info["orange_remaining"],
                      "shots_remaining": info["shots_remaining"], "reward": reward})
+        if config.goal == "all":
+            for key in ("new_pegs_cleared", "pegs_cleared", "pegs_remaining", "success"):
+                rows[-1][key] = info[key]
+        if config.free_balls:
+            for key in ("starting_balls", "balls_remaining", "free_balls_earned",
+                        "shots_earning_free_balls", "shot_free_balls", "shot_score", "total_score"):
+                rows[-1][key] = info[key]
         done = terminated or truncated
     env.close()
     return shots, pd.DataFrame(rows)
 
 
 def export_data(output_dir=IMPROVED_RESULTS_DIR, seed=SEED, config=CONFIG):
-    output_dir = Path(output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
+    os.makedirs(output_dir, exist_ok=True)
     env = PeggleEnv(config)
     env.reset(seed=seed)
     board = pd.DataFrame(env.board_records())
     env.reset()  # Continue the seeded generator; do not reseed each game.
     second = pd.DataFrame(env.board_records())
-    board.to_csv(output_dir / "board_data.csv", index=False)
-    second.to_csv(output_dir / "board_arrangement_2.csv", index=False)
+    board.to_csv(os.path.join(output_dir, "board_data.csv"), index=False)
+    second.to_csv(os.path.join(output_dir, "board_arrangement_2.csv"), index=False)
     original = original_level_data()
-    original.to_csv(output_dir / "original_level_data.csv", index=False)
-    level_inventory().to_csv(output_dir / "level_inventory.csv", index=False)
-    plt.close(plot_board(board, output_dir / "board_visualization.png", config=config))
-    plt.close(plot_arrangements(board, second, output_dir / "random_arrangements.png", config))
-    plt.close(plot_original_board(original, output_dir / "original_board_visualization.png"))
+    original.to_csv(os.path.join(output_dir, "original_level_data.csv"), index=False)
+    level_inventory().to_csv(os.path.join(output_dir, "level_inventory.csv"), index=False)
+    plt.close(plot_board(board, os.path.join(output_dir, "board_visualization.png"), config=config))
+    plt.close(plot_arrangements(board, second, os.path.join(output_dir, "random_arrangements.png"), config))
+    plt.close(plot_original_board(original, os.path.join(output_dir, "original_board_visualization.png")))
     env.close()
     return board, original
 
 
 if __name__ == "__main__":
-    ensure_directories()
     board, original = export_data()
     print(f"Extracted {len(original)} original coordinates; exported the {len(board)}-peg RL board to {IMPROVED_RESULTS_DIR}")

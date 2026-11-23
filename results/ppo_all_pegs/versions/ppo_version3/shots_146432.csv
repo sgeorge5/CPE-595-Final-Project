@@ -1,0 +1,11 @@
+strategy,seed,action,shot,angle_degrees,new_pegs_cleared,pegs_cleared,pegs_remaining,shots_remaining,reward,success,shot_timed_out
+PPO,42,10,1,0.0,26,26,51,9,128.0,False,False
+PPO,42,10,2,0.0,12,38,39,8,58.0,False,False
+PPO,42,0,3,-60.0,11,49,28,7,53.0,False,False
+PPO,42,7,4,-18.0,7,56,21,6,33.0,False,False
+PPO,42,7,5,-18.0,2,58,19,5,8.0,False,False
+PPO,42,7,6,-18.0,4,62,15,4,18.0,False,False
+PPO,42,7,7,-18.0,3,65,12,3,13.0,False,False
+PPO,42,0,8,-60.0,4,69,8,2,18.0,False,False
+PPO,42,7,9,-18.0,0,69,8,1,-2.0,False,False
+PPO,42,7,10,-18.0,0,69,8,0,-2.0,False,False

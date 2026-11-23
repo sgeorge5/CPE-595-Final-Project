@@ -1,0 +1,7 @@
+state_id,experiment,seed,balls_remaining,angles_tested,successful_angles,angles,hits_in_21,hits_in_41
+1,A,31042,1,121,0,,0,0
+2,A,31043,1,121,0,,0,0
+3,A,31044,1,121,0,,0,0
+12,B,31044,1,121,0,,0,0
+17,B,31050,1,121,0,,0,0
+18,B,31057,1,121,0,,0,0

@@ -1,0 +1,2 @@
+timesteps,reward,pegs_cleared,shots_used,success,simulation_timeouts,model,phase,strategy,seed,orange_peg_ids,actions,angle_sequence
+93850,465.0,77,10,True,0,DQN Model 2,training,Training exploration,822474681,0 3 7 8 9 12 14 19 33 35 36 38 40 42 44 47 49 54 57 58 59 63 66 67 74,10 16 16 7 11 0 7 0 7 6,0 36 36 -18 6 -60 -18 -60 -18 -24

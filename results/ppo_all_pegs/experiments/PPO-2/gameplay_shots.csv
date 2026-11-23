@@ -1,0 +1,11 @@
+shot,angle_degrees,shots_remaining,reward,new_pegs_cleared,pegs_cleared,pegs_remaining,success
+1,-18.0,9,48.0,10,10,67,False
+2,-18.0,8,133.0,27,37,40,False
+3,0.0,7,38.0,8,45,32,False
+4,0.0,6,28.0,6,51,26,False
+5,-42.0,5,18.0,4,55,22,False
+6,-60.0,4,23.0,5,60,17,False
+7,-24.0,3,8.0,2,62,15,False
+8,-24.0,2,3.0,1,63,14,False
+9,-18.0,1,33.0,7,70,7,False
+10,60.0,0,-2.0,0,70,7,False

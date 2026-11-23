@@ -1,0 +1,2 @@
+model_path,selected_timestep,strategy,seed,pegs_cleared,pegs_remaining,shots_used,success
+models/ppo_version3_best.zip,105472,PPO sampled,50088,74,3,10,False

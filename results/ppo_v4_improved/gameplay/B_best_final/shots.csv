@@ -1,0 +1,12 @@
+strategy,seed,action,shot,angle_degrees,new_pegs_cleared,pegs_cleared,pegs_remaining,shots_remaining,reward,success,shot_timed_out,starting_balls,balls_remaining,free_balls_earned,shots_earning_free_balls,shot_free_balls,shot_score,total_score,action_seed,hit_colors,orange_remaining,experiment,phase,checkpoint,timesteps
+PPO sampled,60042,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60042,blue orange blue blue blue orange orange blue blue orange,21,B,final,models/ppo_v4_improved_B_checkpoints\checkpoint_125952.zip,125952
+PPO sampled,60042,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,35910,40510,60042,blue blue blue blue blue orange blue blue blue blue orange blue orange blue blue blue orange blue blue orange orange orange blue orange blue blue blue,13,B,final,models/ppo_v4_improved_B_checkpoints\checkpoint_125952.zip,125952
+PPO sampled,60042,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,14400,54910,60042,blue blue blue blue orange orange orange orange blue blue blue blue,9,B,final,models/ppo_v4_improved_B_checkpoints\checkpoint_125952.zip,125952
+PPO sampled,60042,0,4,-60.0,3,52,25,7,13.0,False,False,10,7,1,1,0,1890,56800,60042,orange orange blue,7,B,final,models/ppo_v4_improved_B_checkpoints\checkpoint_125952.zip,125952
+PPO sampled,60042,8,5,-12.0,11,63,14,6,53.0,False,False,10,6,1,1,0,15950,72750,60042,orange blue blue blue blue blue blue orange blue blue blue,5,B,final,models/ppo_v4_improved_B_checkpoints\checkpoint_125952.zip,125952
+PPO sampled,60042,7,6,-18.0,4,67,10,5,18.0,False,False,10,5,1,1,0,2600,75350,60042,orange blue blue blue,4,B,final,models/ppo_v4_improved_B_checkpoints\checkpoint_125952.zip,125952
+PPO sampled,60042,7,7,-18.0,4,71,6,4,26.0,False,False,10,4,1,1,0,12400,87750,60042,orange orange orange blue,1,B,final,models/ppo_v4_improved_B_checkpoints\checkpoint_125952.zip,125952
+PPO sampled,60042,13,8,18.0,2,73,4,3,12.0,False,False,10,3,1,1,0,400,88150,60042,blue blue,1,B,final,models/ppo_v4_improved_B_checkpoints\checkpoint_125952.zip,125952
+PPO sampled,60042,3,9,-42.0,0,73,4,2,-2.0,False,False,10,2,1,1,0,0,88150,60042,,1,B,final,models/ppo_v4_improved_B_checkpoints\checkpoint_125952.zip,125952
+PPO sampled,60042,0,10,-60.0,2,75,2,1,12.0,False,False,10,1,1,1,0,400,88550,60042,blue blue,1,B,final,models/ppo_v4_improved_B_checkpoints\checkpoint_125952.zip,125952
+PPO sampled,60042,15,11,30.0,1,76,1,0,5.0,False,False,10,0,1,1,0,1000,89550,60042,orange,0,B,final,models/ppo_v4_improved_B_checkpoints\checkpoint_125952.zip,125952

@@ -1,0 +1,6 @@
+experiment,main_change,actual_timesteps,best_timestep,shot_limit,deterministic_pegs_cleared,deterministic_shots,completion_pct,sampled_games,sampled_avg_pegs,sampled_best_pegs,sampled_completion_pct
+PPO-0,Original selected PPO checkpoint,25088,15360,10,64,10,0.0,30,59.833333333333336,70.0,0.0
+PPO-1,Continue with original settings and reward,50176,45568,10,65,10,0.0,30,63.1,71.0,0.0
+PPO-2,Entropy coefficient 0.02 (PPO-1 control),50176,45568,10,69,10,0.0,30,61.7,70.0,0.0
+PPO-3,Extra -3 reward for zero-peg shots (PPO-2 control),50176,40448,10,67,10,0.0,30,63.3,73.0,0.0
+PPO-4,Fresh 15-shot feasibility run,25088,25088,15,67,15,0.0,30,63.86666666666667,71.0,0.0

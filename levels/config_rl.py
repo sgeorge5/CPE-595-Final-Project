@@ -1,22 +1,18 @@
-"""Settings for Level 1 with random oranges, plus the original small board."""
+"""Level 1 settings for DQN and PPO."""
 
+import os
 import pickle
-from pathlib import Path
 
 import numpy as np
 
 # Run the notebook or scripts from the Final Project folder.
-ROOT = Path(".")
-PEGGLE_ROOT = Path("local/PegglePy-main")
-MODELS_DIR = Path("models")
-RESULTS_DIR = Path("results/level1_random")
-MODEL_PATH = Path("models/dqn_level1_random.zip")
-SMALL_RESULTS_DIR = Path("results")
-SMALL_MODEL_PATH = Path("models/dqn_orange.zip")
-ORIGINAL_LEVEL1_MODEL_PATH = MODEL_PATH
-IMPROVED_MODELS_DIR = Path("models/level1_improved")
-IMPROVED_RESULTS_DIR = Path("results/level1_improved")
-BEST_MODEL_PATH = IMPROVED_MODELS_DIR / "best_model.zip"
+PEGGLE_ROOT = "local/PegglePy-main"
+MODELS_DIR = "models"
+RESULTS_DIR = "results/level1_random"
+ORIGINAL_LEVEL1_MODEL_PATH = "models/dqn_level1_random.zip"
+IMPROVED_MODELS_DIR = "models/level1_improved"
+IMPROVED_RESULTS_DIR = "results/level1_improved"
+BEST_MODEL_PATH = "models/level1_improved/best_model.zip"
 VALIDATION_SEED = 20_042
 TEST_SEED = 50_042
 CHECKPOINT_INTERVAL = 5_000
@@ -25,6 +21,29 @@ VALIDATION_EPISODES = 10
 SEED = 42
 DEFAULT_TIMESTEPS = 10_000
 DEFAULT_EVAL_EPISODES = 100
+PPO_MAX_SHOTS = 10
+PPO_TIMESTEPS = 10_000
+PPO_MODEL_PATH = "models/ppo_all_pegs_level1.zip"
+PPO_RESULTS_DIR = "results/ppo_all_pegs"
+PPO_VERSIONS_DIR = "results/ppo_all_pegs/versions"
+PPO_V4_RESULTS_DIR = "results/ppo_version4"
+PPO_V4_MODEL_PATH = "models/ppo_version4_best.zip"
+PPO_V4_IMPROVED_DIR = "results/ppo_v4_improved"
+PPO_V4_FURTHER_DIR = "results/ppo_v4_further"
+PPO_V4_SHOT_ORDER_DIR = "results/ppo_v4_improved_F"
+PPO_V5_RESULTS_DIR = "results/ppo_version5"
+PPO_V5_MODEL_PATH = "models/ppo_version5_best.zip"
+PPO_SETTINGS = {
+    "learning_rate": 0.0003,
+    "gamma": 0.99,
+    "n_steps": 512,
+    "batch_size": 64,
+    "n_epochs": 10,
+    "ent_coef": 0.01,
+    "policy_kwargs": {"net_arch": [64, 64]},
+}
+PPO_V4_SETTINGS = dict(PPO_SETTINGS, ent_coef=0.02)
+PPO_V5_SETTINGS = dict(PPO_V4_SETTINGS)
 
 # DQN settings are Python values, shared by the script and notebook.
 DQN_POLICY = "MlpPolicy"
@@ -44,21 +63,6 @@ DQN_SETTINGS = {
 }
 
 
-# The original ten-peg experiment remains available with RLConfig(board="small").
-FIXED_BOARD = (
-    (420.0, 300.0, "orange"),
-    (600.0, 420.0, "orange"),
-    (800.0, 300.0, "orange"),
-    (230.0, 440.0, "blue"),
-    (350.0, 550.0, "blue"),
-    (500.0, 620.0, "blue"),
-    (690.0, 600.0, "blue"),
-    (900.0, 500.0, "blue"),
-    (1000.0, 650.0, "blue"),
-    (600.0, 720.0, "blue"),
-)
-
-
 class _CoordinateUnpickler(pickle.Unpickler):
     """The bundled level files should contain coordinates, not executable objects."""
 
@@ -68,11 +72,12 @@ class _CoordinateUnpickler(pickle.Unpickler):
 
 def load_level_coordinates(level_name="Level 1.lvl", center=True, width=1200, height=900):
     """Keep archive order and apply only PegglePy loadData's normal translation."""
-    level_dir = (PEGGLE_ROOT / "levels").resolve()
-    path = (level_dir / level_name).resolve()
-    if path.parent != level_dir or path.suffix != ".lvl":
+    level_dir = os.path.realpath(os.path.join(PEGGLE_ROOT, "levels"))
+    path = os.path.realpath(os.path.join(level_dir, level_name))
+    if (os.path.normcase(os.path.dirname(path)) != os.path.normcase(level_dir)
+            or os.path.splitext(path)[1] != ".lvl"):
         raise ValueError("Choose a bundled .lvl filename.")
-    with path.open("rb") as level_file:
+    with open(path, "rb") as level_file:
         positions = np.asarray(_CoordinateUnpickler(level_file).load(), dtype=float)
     if (positions.ndim != 2 or positions.shape[1] != 2 or len(positions) == 0
             or not np.isfinite(positions).all()):
@@ -86,37 +91,43 @@ def load_level_coordinates(level_name="Level 1.lvl", center=True, width=1200, he
 class RLConfig:
     """A group of named settings, accessed as CONFIG.width, CONFIG.max_shots, etc."""
 
-    def __init__(self, max_shots=10, board="level1", observation="full", empty_shot_penalty=0):
+    def __init__(self, max_shots=10, observation="full", empty_shot_penalty=0, goal="orange",
+                 free_balls=False, n_actions=21, endgame_bonus=False, ppo_completion_bonus=100,
+                 early_peg_bonus=False):
         # Board and action settings.
         self.width = 1200
         self.height = 900
         self.max_shots = max_shots
-        self.n_actions = 21
+        self.n_actions = n_actions
         self.min_angle = -60.0
         self.max_angle = 60.0
-        self.board = board
-        if observation not in ("full", "compact"):
+        if goal not in ("orange", "all"):
+            raise ValueError('goal must be "orange" or "all".')
+        self.goal = goal
+        self.free_balls = free_balls
+        self.endgame_bonus = endgame_bonus
+        self.early_peg_bonus = early_peg_bonus
+        if endgame_bonus and (goal != "all" or not free_balls or n_actions != 21):
+            raise ValueError("The endgame bonus is reserved for the PPO V4 experiment.")
+        if ppo_completion_bonus != 100 and not endgame_bonus:
+            raise ValueError("A custom completion bonus requires the PPO V4 endgame reward.")
+        if early_peg_bonus and not endgame_bonus:
+            raise ValueError("The early peg bonus requires the PPO V4 endgame reward.")
+        if free_balls and goal != "all":
+            raise ValueError("Free balls are only available for PPO's all-peg objective.")
+        if goal == "all":
+            observation = "color_hits" if free_balls else "hits"
+        elif observation not in ("full", "compact"):
             raise ValueError('observation must be "full" or "compact".')
         self.observation = observation
-        self.features_per_peg = 4 if observation == "full" else 2
-        if board == "level1":
-            self.coordinates = load_level_coordinates(width=self.width, height=self.height)
-            if len(self.coordinates) != 77:
-                raise ValueError("Expected all 77 pegs from the original Level 1.")
-            self.n_orange = 25  # PegglePy local/peg.py: createPegColors.
-            self.random_oranges = True
-            self.model_path = MODEL_PATH
-            self.results_dir = RESULTS_DIR
-        elif board == "small":
-            self.coordinates = np.array([(x, y) for x, y, color in FIXED_BOARD])
-            self.n_orange = sum(color == "orange" for x, y, color in FIXED_BOARD)
-            self.random_oranges = False
-            # Optional new small-board runs must not overwrite the old experiment.
-            self.model_path = Path("models/dqn_small_board.zip")
-            self.results_dir = Path("results/small_board")
-        else:
-            raise ValueError('board must be "level1" or "small".')
+        self.features_per_peg = {"full": 4, "compact": 2, "hits": 1, "color_hits": 2}[observation]
+        self.coordinates = load_level_coordinates(width=self.width, height=self.height)
+        if len(self.coordinates) != 77:
+            raise ValueError("Expected all 77 pegs from the original Level 1.")
+        self.n_orange = 25  # PegglePy local/peg.py: createPegColors.
         self.n_pegs = len(self.coordinates)
+        # Each peg can score once; at most three free balls per scoring shot.
+        self.ball_observation_scale = max_shots + 3 * self.n_pegs if free_balls else max_shots
 
         # Physics defaults from PegglePy, used by the headless adapter.
         self.launch_force = 5.0
@@ -136,6 +147,10 @@ class RLConfig:
         self.completion_bonus = 25.0
         self.shot_penalty = 1.0
         self.empty_shot_penalty = empty_shot_penalty
+        if goal == "all":
+            self.peg_reward = 5.0
+            self.shot_penalty = 2.0
+            self.completion_bonus = float(ppo_completion_bonus)
 
         self.validate()
         self.angles_degrees = np.linspace(
@@ -158,9 +173,3 @@ class RLConfig:
             raise ValueError("Every fixed peg must fit inside the board.")
 
 CONFIG = RLConfig()
-SMALL_CONFIG = RLConfig(board="small")
-
-
-def ensure_directories():
-    MODELS_DIR.mkdir(parents=True, exist_ok=True)
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)

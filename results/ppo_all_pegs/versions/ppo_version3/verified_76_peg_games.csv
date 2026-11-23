@@ -1,0 +1,5 @@
+checkpoint,timesteps,evaluation,seed,shot_limit,shots_used,pegs_cleared,pegs_remaining,angles_degrees,provenance
+models/ppo_version3_best_checkpoints/checkpoint_96768.zip,96768,Sampled (deterministic=False),50048,10,10,76,1,"0, 0, -60, -18, -54, -60, -24, -18, -18, 36",Reproduced from saved checkpoint and original evaluation seed
+models/ppo_version3_best_checkpoints/checkpoint_100352.zip,100352,Sampled (deterministic=False),50048,10,10,76,1,"0, 0, -60, -18, -54, -60, -24, -18, -18, 36",Reproduced from saved checkpoint and original evaluation seed
+models/ppo_version3_best_checkpoints/checkpoint_110592.zip,110592,Sampled (deterministic=False),50048,10,10,76,1,"0, 0, -60, -18, -54, -60, -24, -18, -18, 36",Reproduced from saved checkpoint and original evaluation seed
+models/ppo_version3_best_checkpoints/checkpoint_150016.zip,150016,Sampled (deterministic=False),50048,10,10,76,1,"0, 0, -60, -18, -54, -60, -24, -18, -18, 36",Reproduced from saved checkpoint and original evaluation seed

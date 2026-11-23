@@ -1,3 +1,4 @@
+import os
 import sys
 
 import numpy as np
@@ -5,11 +6,11 @@ import pandas as pd
 import pytest
 import torch
 from gymnasium.utils.env_checker import check_env as gym_check_env
-from stable_baselines3 import DQN
+from stable_baselines3 import DQN, PPO
 from stable_baselines3.common.env_checker import check_env as sb3_check_env
 
 from levels.config_rl import (
-    CONFIG, FIXED_BOARD, ROOT, RLConfig, SMALL_CONFIG, load_level_coordinates
+    CONFIG, RLConfig, load_level_coordinates
 )
 from levels.peggle_env import PeggleEnv
 from levels.visualize_data import original_level_data, level_inventory, plot_board, plot_gameplay, record_gameplay
@@ -51,25 +52,13 @@ def test_full_shot_and_reward_accounting():
 
 
 def test_physical_hit_not_rewarded_twice():
-    env = PeggleEnv(SMALL_CONFIG)
+    env = PeggleEnv()
     env.reset(seed=42)
-    _, first_reward, _, _, first = env.step(10)
+    _, first_reward, _, _, first = env.step(17)
     assert first["new_orange_cleared"] >= 1 and first_reward >= 9
-    _, second_reward, _, _, second = env.step(10)
+    _, second_reward, _, _, second = env.step(17)
     assert second["new_orange_cleared"] == 0 and second_reward == -1
     assert second["orange_cleared"] == first["orange_cleared"]
-
-
-def test_success_bonus_and_terminal_guard():
-    env = PeggleEnv(SMALL_CONFIG)
-    env.reset(seed=42)
-    env.pegs[0].isHit = env.pegs[2].isHit = True
-    _, reward, terminated, truncated, info = env.step(10)
-    assert terminated and not truncated and info["success"]
-    assert info["new_orange_cleared"] == 1 and reward == 34
-    assert any(not p.isHit and p.color == "blue" for p in env.pegs)
-    with pytest.raises(RuntimeError):
-        env.step(10)
 
 
 def test_budget_exhaustion():
@@ -132,7 +121,7 @@ def test_upstream_data_and_no_graphical_side_effects():
     assert not data.initial_is_hit.any()
     assert "local.config" not in sys.modules
     assert "pygame" not in sys.modules
-    assert not (ROOT / "user.cfg").exists()
+    assert not os.path.exists("user.cfg")
 
 
 def test_dqn_updates_weights_and_save_load(tmp_path):
@@ -145,8 +134,8 @@ def test_dqn_updates_weights_and_save_load(tmp_path):
     model.learn(total_timesteps=64)
     assert model._n_updates > 0
     assert any(not torch.equal(before[k], v) for k, v in model.q_net.state_dict().items())
-    model.save(tmp_path / "compatibility.zip")
-    restored = DQN.load(tmp_path / "compatibility.zip", device="cpu")
+    model.save(os.path.join(tmp_path, "compatibility.zip"))
+    restored = DQN.load(os.path.join(tmp_path, "compatibility.zip"), device="cpu")
     assert restored.observation_space.shape == (309,)
     assert restored.action_space.n == 21
     obs, _ = env.reset(seed=42)
@@ -155,13 +144,13 @@ def test_dqn_updates_weights_and_save_load(tmp_path):
 
 
 def test_training_and_evaluation_artifacts(tmp_path):
-    path = tmp_path / "dqn_level1_random.zip"
+    path = os.path.join(tmp_path, "dqn_level1_random.zip")
     model, training_log = train_agent(32, model_path=path, results_dir=tmp_path, verbose=0)
-    assert path.exists() and len(training_log) > 0
+    assert os.path.exists(path) and len(training_log) > 0
     assert model.num_timesteps == 32
     summary, episodes = evaluate_agents(path, episodes=3, results_dir=tmp_path)
     assert len(episodes) == 6 and list(summary.agent) == ["DQN", "Random"]
-    saved = pd.read_csv(tmp_path / "evaluation_episodes.csv")
+    saved = pd.read_csv(os.path.join(tmp_path, "evaluation_episodes.csv"))
     assert saved.orange_initial.eq(25).all()
     assert saved.orange_cleared.between(0, 25).all()
     assert saved.shots_used.between(1, 10).all()
@@ -174,19 +163,21 @@ def test_training_and_evaluation_artifacts(tmp_path):
         assert (np.isnan(row.avg_shots_success) if successful.empty else
                 row.avg_shots_success == pytest.approx(successful.shots_used.mean()))
     # Evaluation also accepts a trained Python object, without reading a file.
-    in_memory, _ = evaluate_agents(tmp_path / "missing.zip", episodes=3,
+    in_memory, _ = evaluate_agents(os.path.join(tmp_path, "missing.zip"), episodes=3,
                                     results_dir=tmp_path, model=model)
     pd.testing.assert_frame_equal(summary, in_memory)
+    ppo = PPO("MlpPolicy", PeggleEnv(RLConfig(goal="all")), device="cpu", n_steps=64)
     with pytest.raises(ValueError, match="Model input size"):
-        evaluate_agents(model=model, config=SMALL_CONFIG, episodes=1, results_dir=tmp_path)
-    pairs = pd.read_csv(tmp_path / "evaluation_arrangements.csv").pivot(
+        evaluate_agents(model=ppo, episodes=1, results_dir=tmp_path)
+    ppo.get_env().close()
+    pairs = pd.read_csv(os.path.join(tmp_path, "evaluation_arrangements.csv")).pivot(
         index="episode", columns="agent", values="orange_peg_ids")
     assert pairs.DQN.equals(pairs.Random)
     assert pairs.DQN.nunique() == 3
-    assert not list(tmp_path.glob("*.json"))
-    assert not (tmp_path / "training.monitor.csv").exists()
+    assert not any(name.endswith(".json") for name in os.listdir(tmp_path))
+    assert not os.path.exists(os.path.join(tmp_path, "training.monitor.csv"))
     for name in ("training_rewards.png", "dqn_vs_random.png"):
-        assert (tmp_path / name).stat().st_size > 1000
+        assert os.path.getsize(os.path.join(tmp_path, name)) > 1000
 
 
 def test_level1_coordinates_match_original_game_translation():
@@ -199,6 +190,29 @@ def test_level1_coordinates_match_original_game_translation():
     for seed in (42, 43, 44):
         env.reset(seed=seed)
         np.testing.assert_array_equal([(p.pos.x, p.pos.y) for p in env.pegs], expected)
+
+
+def test_level_loader_stays_in_bundled_level_directory(tmp_path, monkeypatch):
+    import pickle
+    from levels import config_rl
+
+    level_dir = os.path.join(tmp_path, "levels")
+    os.makedirs(level_dir)
+    monkeypatch.setattr(config_rl, "PEGGLE_ROOT", str(tmp_path))
+    with open(os.path.join(tmp_path, "outside.lvl"), "wb") as file:
+        pickle.dump([(100, 200)], file)
+    with pytest.raises(ValueError, match="bundled"):
+        load_level_coordinates("../outside.lvl")
+    with pytest.raises(ValueError, match="bundled"):
+        load_level_coordinates("wrong_extension.txt")
+    with open(os.path.join(level_dir, "invalid.lvl"), "wb") as file:
+        pickle.dump([(float("inf"), 200)], file)
+    with pytest.raises(ValueError, match="finite"):
+        load_level_coordinates("invalid.lvl")
+    with open(os.path.join(level_dir, "objects.lvl"), "wb") as file:
+        pickle.dump(object(), file)
+    with pytest.raises(pickle.UnpicklingError, match="primitive coordinates"):
+        load_level_coordinates("objects.lvl")
 
 
 def test_random_arrangements_and_seeded_sequence():
@@ -266,17 +280,6 @@ def test_full_level_success_bonus_and_no_double_reward():
         env.step(10)
 
 
-def test_optional_small_board_keeps_original_task():
-    env = PeggleEnv(SMALL_CONFIG)
-    first, info = env.reset(seed=42)
-    second, _ = env.reset(seed=99)
-    np.testing.assert_array_equal(first, second)
-    assert first.shape == (41,) and info["orange_initial"] == 3
-    assert [(p.pos.x, p.pos.y, p.color) for p in env.pegs] == list(FIXED_BOARD)
-    _, reward, done, _, info = env.step(9)
-    assert done and info["success"] and reward == 54
-
-
 def test_trajectory_and_visualizations_use_current_states():
     import matplotlib.pyplot as plt
     from matplotlib.colors import to_rgba
@@ -310,7 +313,7 @@ def test_trajectory_and_visualizations_use_current_states():
 
 def test_only_resolved_contact_is_marked_hit():
     # One swept segment detects two pegs, but the first bounce prevents the second hit.
-    config = RLConfig(board="small")
+    config = RLConfig()
     config.gravity = 0
     config.launch_force = config.max_ball_velocity = 100
     config.max_frames_per_shot = 1
@@ -341,14 +344,13 @@ def test_compact_observation_preserves_changing_state():
 
 def test_empty_shot_penalty_and_full_reward_formula():
     for penalty in (0, 5):
-        cfg = RLConfig(board="small", empty_shot_penalty=penalty)
+        cfg = RLConfig(empty_shot_penalty=penalty)
         env = PeggleEnv(cfg)
         env.reset(seed=42)
-        _, reward, _, _, info = env.step(0)
+        _, reward, _, _, info = env.step(17)
+        assert info["new_orange_cleared"] == 1 and reward == 9
+        _, reward, _, _, info = env.step(17)
         assert info["new_orange_cleared"] == 0 and reward == -1 - penalty
-        env.reset(seed=42)
-        _, reward, done, _, info = env.step(9)
-        assert done and info["success"] and reward == 54  # No empty-shot penalty on success.
 
 
 def test_checkpoint_resume_retains_weights_optimizer_replay_and_history(tmp_path):
@@ -358,7 +360,7 @@ def test_checkpoint_resume_retains_weights_optimizer_replay_and_history(tmp_path
     cfg = RLConfig(observation="compact")
     settings = dict(DQN_SETTINGS)
     settings.update(learning_starts=16, learning_rate=0.0003)
-    path = tmp_path / "last_model.zip"
+    path = os.path.join(tmp_path, "last_model.zip")
     model, history = train_agent(64, config=cfg, dqn_settings=settings,
         model_path=path, results_dir=tmp_path, checkpoint_interval=32,
         validation_episodes=1, verbose=0)
@@ -370,19 +372,22 @@ def test_checkpoint_resume_retains_weights_optimizer_replay_and_history(tmp_path
         assert torch.equal(value, old_weights[key])
     assert restored.policy.optimizer.state_dict()["state"]  # Adam's learned moments restored.
     restored.get_env().close()
-    saved_checkpoint = (tmp_path / "checkpoint_64.zip").read_bytes()
+    checkpoint_path = os.path.join(tmp_path, "checkpoint_64.zip")
+    with open(checkpoint_path, "rb") as file:
+        saved_checkpoint = file.read()
     continued, full_history = train_agent(64, config=cfg, resume_from=path,
         model_path=path, results_dir=tmp_path, checkpoint_interval=32,
         validation_episodes=1, verbose=0)
     assert continued.num_timesteps == 128 and continued._n_updates > model._n_updates
     assert continued.replay_buffer.size() == 128
-    assert (tmp_path / "checkpoint_64.zip").read_bytes() == saved_checkpoint
+    with open(checkpoint_path, "rb") as file:
+        assert file.read() == saved_checkpoint
     pd.testing.assert_frame_equal(history, full_history.iloc[:len(history)].reset_index(drop=True))
     assert full_history.timesteps.is_monotonic_increasing
-    scores = pd.read_csv(tmp_path / "checkpoint_evaluation.csv")
+    scores = pd.read_csv(os.path.join(tmp_path, "checkpoint_evaluation.csv"))
     selected = scores[scores.is_best].iloc[0]
     assert checkpoint_key(selected) == max(checkpoint_key(row) for _, row in scores.iterrows())
-    best = DQN.load(tmp_path / "best_model.zip", device="cpu")
+    best = DQN.load(os.path.join(tmp_path, "best_model.zip"), device="cpu")
     checkpoint = DQN.load(selected.checkpoint, device="cpu")
     for key, value in best.q_net.state_dict().items():
         assert torch.equal(value, checkpoint.q_net.state_dict()[key])
@@ -394,15 +399,15 @@ def test_all_baselines_share_boards_and_current_reward_rules(tmp_path):
     compact = RLConfig(observation="compact", empty_shot_penalty=5)
     model = DQN("MlpPolicy", PeggleEnv(compact), seed=42, device="cpu", buffer_size=128)
     old = DQN("MlpPolicy", PeggleEnv(), seed=42, device="cpu", buffer_size=128)
-    old.save(tmp_path / "old.zip")
+    old.save(os.path.join(tmp_path, "old.zip"))
     summary, episodes = evaluate_agents(model=model, episodes=2, config=compact,
-        results_dir=tmp_path, include_baselines=True, original_model_path=tmp_path / "old.zip")
+        results_dir=tmp_path, include_baselines=True, original_model_path=os.path.join(tmp_path, "old.zip"))
     assert set(summary.agent) == {"DQN", "Random", "Straight down", "Original DQN"}
-    arrangements = pd.read_csv(tmp_path / "evaluation_arrangements.csv").pivot(
+    arrangements = pd.read_csv(os.path.join(tmp_path, "evaluation_arrangements.csv")).pivot(
         index="episode", columns="agent", values="orange_peg_ids")
     for agent in arrangements:
         assert arrangements[agent].equals(arrangements.DQN)
-    shots = pd.read_csv(tmp_path / "evaluation_shots.csv")
+    shots = pd.read_csv(os.path.join(tmp_path, "evaluation_shots.csv"))
     expected = 10 * shots.new_orange_cleared - 1 - 5 * shots.new_orange_cleared.eq(0)
     expected += 25 * shots.orange_remaining.eq(0)
     np.testing.assert_array_equal(shots.reward, expected)
@@ -462,6 +467,161 @@ def test_recorded_gameplay_matches_policy_evaluation():
         final = shot["trajectory"][-1]
         assert not final["ball_alive"]
         assert len(final["is_hit"]) == 77
+
+
+def test_ppo_goal_and_observation_keep_dqn_defaults():
+    orange = PeggleEnv(RLConfig(observation="compact"))
+    all_pegs = PeggleEnv(RLConfig(goal="all"))
+    orange_obs, _ = orange.reset(seed=42)
+    obs, info = all_pegs.reset(seed=42)
+    assert orange.config.goal == "orange" and orange_obs.shape == (155,)
+    assert obs.shape == (78,) and obs.dtype == np.float32
+    assert orange.action_space == all_pegs.action_space
+    assert all_pegs.action_space.n == 21 and info["pegs_remaining"] == 77
+    assert obs[:-1].sum() == 0 and obs[-1] == 1
+    different_colors, _ = all_pegs.reset(seed=43)
+    np.testing.assert_array_equal(obs, different_colors)
+
+    for env in (orange, all_pegs):
+        for peg in env.pegs:
+            peg.isHit = peg.isOrange
+    assert orange._info()["success"]
+    assert not all_pegs._info()["success"]
+
+
+def test_ppo_color_independent_reward_and_no_double_count():
+    env = PeggleEnv(RLConfig(goal="all", max_shots=2))
+    for color in ("orange", "blue"):
+        env.reset(seed=42)
+        # Isolate one peg on the launcher line and leave one unreachable on the left.
+        for peg in env.pegs:
+            peg.isHit = True
+        target = next(peg for peg in env.pegs if peg.color == color)
+        other = next(peg for peg in env.pegs if peg is not target)
+        target.isHit = other.isHit = False
+        target.pos = env.Vector(600, 300)
+        other.pos = env.Vector(100, 300)
+        obs, reward, terminated, _, info = env.step(10)
+        assert info["new_pegs_cleared"] == 1 and reward == 3
+        assert not terminated and info["pegs_remaining"] == 1
+        assert obs[:-1].sum() == 76 and obs[-1] == 0.5
+        obs, reward, terminated, truncated, info = env.step(10)
+        assert info["new_pegs_cleared"] == 0 and reward == -2
+        assert terminated and not truncated and not info["success"]
+        assert obs[-1] == 0 and info["terminal_reason"] == "shot_budget"
+
+
+def test_ppo_ends_at_last_hit_and_adds_completion_bonus():
+    env = PeggleEnv(RLConfig(goal="all"), record_trajectory=True)
+    env.reset(seed=42)
+    for peg in env.pegs:
+        peg.isHit = True
+    peg = env.pegs[0]
+    peg.isHit = False
+    peg.pos = env.Vector(600, 300)
+    obs, reward, terminated, truncated, info = env.step(10)
+    assert terminated and not truncated and info["success"]
+    assert info["new_pegs_cleared"] == 1 and info["pegs_cleared"] == 77
+    assert info["terminal_reason"] == "success" and reward == 103
+    assert info["shots_remaining"] == 9 and obs[:-1].sum() == 77
+    assert not peg.isVisible and not info["shot_timed_out"]
+    assert env.trajectory[-1]["y"] == pytest.approx(263)
+    assert not env.trajectory[-1]["ball_alive"]
+
+
+def test_ppo_empty_shot_penalty_changes_only_empty_shot_rewards():
+    original = PeggleEnv(RLConfig(goal="all"))
+    penalized = PeggleEnv(RLConfig(goal="all", empty_shot_penalty=3))
+    original.reset(seed=42)
+    penalized.reset(seed=42)
+    empty_shots = 0
+    for _ in range(5):
+        obs, reward, done, truncated, info = original.step(17)
+        next_obs, revised, next_done, next_truncated, next_info = penalized.step(17)
+        np.testing.assert_array_equal(obs, next_obs)
+        assert (done, truncated, info) == (next_done, next_truncated, next_info)
+        empty = info["new_pegs_cleared"] == 0
+        empty_shots += empty
+        assert revised == reward - 3 * empty
+    assert 0 < empty_shots < 5
+
+
+def test_ppo_training_checkpoint_and_model_selection_menu(tmp_path, monkeypatch, capsys):
+    from levels.config_rl import BEST_MODEL_PATH, PPO_SETTINGS
+    from levels.train_ppo import train_ppo, checkpoint_score, play_episode
+    from play import load_game_mode, main
+
+    path = os.path.join(tmp_path, "ppo_all.zip")
+    config = RLConfig(goal="all", max_shots=2)
+    settings = dict(PPO_SETTINGS, n_steps=64, n_epochs=1)
+    model, history = train_ppo(60, config, path, tmp_path, settings)
+    assert model.num_timesteps == 64 and len(history) == 32
+    checkpoints = pd.read_csv(os.path.join(tmp_path, "checkpoint_evaluation.csv"))
+    assert checkpoints.is_best.sum() == 1
+    assert os.path.isfile(os.path.join(tmp_path, "ppo_all_checkpoints", checkpoints.iloc[0].checkpoint))
+    assert checkpoint_score({"completion_pct": 100, "avg_shots_success": 8}) > checkpoint_score(
+        {"completion_pct": 100, "avg_shots_success": 9})
+    assert checkpoint_score({"completion_pct": 100, "avg_shots_success": 9}) > checkpoint_score(
+        {"completion_pct": 0, "clearance_pct": 99})
+
+    loaded, ppo_config = load_game_mode("2", ppo_path=path, ppo_results=tmp_path)
+    assert isinstance(loaded, PPO) and loaded.observation_space.shape == (78,)
+    assert ppo_config.goal == "all" and ppo_config.max_shots == 2
+    measured, trace = play_episode(ppo_config, "PPO", loaded)
+    _, replay = record_gameplay(loaded, 42, ppo_config, actions=[s["action"] for s in trace])
+    assert measured["pegs_cleared"] == replay.iloc[-1].pegs_cleared
+
+    continued_folder = os.path.join(tmp_path, "continued")
+    continued_path = os.path.join(continued_folder, "ppo_all.zip")
+    continued, continued_history = train_ppo(128, config, continued_path, continued_folder,
+        dict(settings, ent_coef=0.02), resume_from=path, experiment="continued")
+    continued_settings = pd.read_csv(os.path.join(continued_folder, "training_settings.csv")).iloc[0]
+    assert continued.num_timesteps == 128 and continued.ent_coef == 0.02
+    assert continued_history.timesteps.min() > 64
+    assert continued_settings.starting_timesteps == continued_settings.actual_additional_timesteps == 64
+
+    # The published checkpoint demonstrates compatibility with Model 1.
+    if os.path.exists(BEST_MODEL_PATH):
+        dqn, dqn_config = load_game_mode("1")
+        _, table = record_gameplay(dqn, 50119, dqn_config)
+        assert table.iloc[-1].orange_remaining == 0 and len(table) == 7
+    with pytest.raises(ValueError, match="enter 1 or 2"):
+        load_game_mode("invalid")
+    choices = iter(["invalid", "2"])
+    prompts = []
+
+    def choose(prompt):
+        prompts.append(prompt)
+        return next(choices)
+
+    monkeypatch.setattr("builtins.input", choose)
+    monkeypatch.setattr("play.load_game_mode", lambda choice: load_game_mode(
+        choice, ppo_path=path, ppo_results=tmp_path))
+    main()
+    assert "Please enter 1 or 2" in prompts[1]
+    assert "PPO cleared" in capsys.readouterr().out
+
+
+def test_saved_ppo_versions_match_reported_deterministic_games():
+    from levels.config_rl import PPO_VERSIONS_DIR
+    from levels.train_ppo import play_episode
+
+    path = os.path.join(PPO_VERSIONS_DIR, "version_comparison.csv")
+    if not os.path.isfile(path):
+        pytest.skip("The saved PPO comparison is not available.")
+    versions = pd.read_csv(path)
+    assert len(versions) == 3 and versions.shot_limit.eq(10).all()
+    for row in versions.itertuples():
+        model = PPO.load(row.model_path, device="cpu")
+        assert model.observation_space.shape == (78,) and model.action_space.n == 21
+        assert model.num_timesteps == row.selected_timestep
+        episode, trace = play_episode(RLConfig(goal="all"), "PPO", model, seed=50042)
+        assert episode["pegs_cleared"] == row.deterministic_pegs
+        assert episode["shots_used"] == row.deterministic_shots
+        logged = pd.read_csv(os.path.join(row.results_dir, "evaluation_shots.csv"))
+        logged = logged[logged.strategy == "PPO"]
+        np.testing.assert_array_equal(logged.action, [shot["action"] for shot in trace])
+        np.testing.assert_array_equal(logged.pegs_remaining, [shot["pegs_remaining"] for shot in trace])
 
 
 if __name__ == "__main__":

@@ -1,0 +1,6 @@
+version,inputs,starting_balls,free_balls,total_timesteps,selected_timestep,deterministic_pegs,deterministic_shots,deterministic_free_balls,sampled_mean,sampled_wins,sampled_mean_shots,sampled_mean_free_balls,sampled_min_shots_success,angles,main_change
+Version 1,78,10,False,25088,15360,64.0,10.0,0.0,59.42,0,10.0,0.0,N/A,21,Initial PPO
+Version 2,78,10,False,50176,45568,69.0,10.0,0.0,61.58,0,10.0,0.0,N/A,21,Increased entropy
+Version 3,78,10,False,150016,105472,70.0,10.0,0.0,65.39,0,10.0,0.0,N/A,21,Longer training
+Version 4,155,10,True,100352,100352,74.0,11.0,1.0,71.2,0,11.02,1.02,N/A,21,Free-ball scoring
+Version 5,155,10,True,100352,91136,56.0,10.0,0.0,64.65,0,10.3,0.3,N/A,41,More shooting angles

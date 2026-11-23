@@ -1,0 +1,2 @@
+model,strategy,seed,orange_peg_ids,actions,pegs_cleared,shots_used,success
+PPO V3,Greedy,50042,2 6 7 10 13 14 17 27 28 31 32 34 36 41 42 45 47 48 50 58 59 61 65 69 76,10 10 0 7 1 7 7 7 1 1,70,10,False

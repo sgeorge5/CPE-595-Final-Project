@@ -1,0 +1,4 @@
+version,model_path,results_dir,main_change,total_training_timesteps,selected_timestep,shot_limit,deterministic_pegs,deterministic_shots,completion_pct,avg_shots_success,sampled_games,sampled_mean,sampled_clearance_pct,sampled_remaining,sampled_best,sampled_wins,sampled_avg_shots_success,sampled_min_shots_success
+Version 1,models/ppo_version1.zip,results/ppo_all_pegs/versions\version1,Initial PPO,25088,15360,10,64,10,0.0,N/A,100,59.42,77.16883116883119,17.58,72,0,N/A,N/A
+Version 2,models/ppo_version2.zip,results/ppo_all_pegs/versions\version2,Entropy 0.02,50176,45568,10,69,10,0.0,N/A,100,61.58,79.97402597402598,15.42,72,0,N/A,N/A
+Version 3,models/ppo_version3_best.zip,results/ppo_all_pegs/versions\ppo_version3,"Longer training, entropy 0.02",150016,105472,10,70,10,0.0,N/A,100,65.39,84.92207792207793,11.61,74,0,N/A,N/A

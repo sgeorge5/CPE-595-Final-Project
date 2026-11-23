@@ -1,0 +1,11 @@
+strategy,seed,action,shot,angle_degrees,new_pegs_cleared,pegs_cleared,pegs_remaining,shots_remaining,reward,success,shot_timed_out,starting_balls,balls_remaining,free_balls_earned,shots_earning_free_balls,shot_free_balls,shot_score,total_score,action_seed,hit_colors,orange_remaining
+PPO,50042,38,1,54.0,18,18,59,9,88.0,False,False,10,9,0,0,0,12960,12960,50042,orange orange orange blue blue blue orange blue blue blue blue blue orange blue blue orange blue blue,19
+PPO,50042,38,2,54.0,19,37,40,8,93.0,False,False,10,8,0,0,0,23560,36520,50042,orange blue blue blue blue blue orange orange blue blue blue blue blue orange orange blue blue orange orange,12
+PPO,50042,17,3,-9.0,7,44,33,7,33.0,False,False,10,7,0,0,0,6230,42750,50042,blue orange blue blue orange orange blue,9
+PPO,50042,33,4,39.0,2,46,31,6,8.0,False,False,10,6,0,0,0,120,42870,50042,blue blue,9
+PPO,50042,14,5,-18.0,6,52,25,5,28.0,False,False,10,5,0,0,0,1080,43950,50042,blue blue blue blue blue blue,9
+PPO,50042,14,6,-18.0,3,55,22,4,13.0,False,False,10,4,0,0,0,1890,45840,50042,orange blue orange,7
+PPO,50042,14,7,-18.0,2,57,20,3,8.0,False,False,10,3,0,0,0,1100,46940,50042,orange blue,6
+PPO,50042,14,8,-18.0,0,57,20,2,-2.0,False,False,10,2,0,0,0,0,46940,50042,,6
+PPO,50042,14,9,-18.0,0,57,20,1,-2.0,False,False,10,1,0,0,0,0,46940,50042,,6
+PPO,50042,14,10,-18.0,0,57,20,0,-2.0,False,False,10,0,0,0,0,0,46940,50042,,6

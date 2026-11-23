@@ -1,0 +1,4 @@
+model,free_balls,shot_rule,greedy_pegs,greedy_shots,mean_pegs,wins,games,completion_pct,minimum_winning_shots,average_shots,stochastic_method,test_seeds
+PPO V3,False,Ten-shot maximum,70,10,65.82,0,100,0.0,N/A,10.0,PPO sampled,91042–91141
+PPO Improved D,True,Ten starting balls,76,11,75.9,0,100,0.0,N/A,11.14,PPO sampled,90042–90141
+DQN Model 2,False,Ten-shot maximum,77,10,73.8,60,100,60.0,10.0,10.0,Epsilon-greedy,92042–92141

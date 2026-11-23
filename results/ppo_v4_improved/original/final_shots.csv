@@ -1,0 +1,1117 @@
+strategy,seed,action,shot,angle_degrees,new_pegs_cleared,pegs_cleared,pegs_remaining,shots_remaining,reward,success,shot_timed_out,starting_balls,balls_remaining,free_balls_earned,shots_earning_free_balls,shot_free_balls,shot_score,total_score,action_seed,hit_colors,orange_remaining,experiment,phase,checkpoint,timesteps
+PPO,50042,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,50042,orange blue blue blue orange orange blue blue blue blue,22,original,final_deterministic,models/ppo_version4_best.zip,100352
+PPO,50042,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,32940,36640,50042,blue blue blue orange orange orange blue blue blue blue blue blue blue blue blue blue orange orange orange blue blue blue orange blue orange blue blue,14,original,final_deterministic,models/ppo_version4_best.zip,100352
+PPO,50042,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,9360,46000,50042,blue blue blue orange blue orange blue blue blue blue blue orange,11,original,final_deterministic,models/ppo_version4_best.zip,100352
+PPO,50042,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,20240,66240,50042,blue blue blue blue orange blue blue orange orange orange orange,6,original,final_deterministic,models/ppo_version4_best.zip,100352
+PPO,50042,7,5,-18.0,7,67,10,6,33.0,False,False,10,6,1,1,0,23100,89340,50042,orange orange orange blue blue orange blue,2,original,final_deterministic,models/ppo_version4_best.zip,100352
+PPO,50042,8,6,-12.0,3,70,7,5,13.0,False,False,10,5,1,1,0,900,90240,50042,blue blue blue,2,original,final_deterministic,models/ppo_version4_best.zip,100352
+PPO,50042,0,7,-60.0,2,72,5,4,8.0,False,False,10,4,1,1,0,400,90640,50042,blue blue,2,original,final_deterministic,models/ppo_version4_best.zip,100352
+PPO,50042,0,8,-60.0,1,73,4,3,3.0,False,False,10,3,1,1,0,100,90740,50042,blue,2,original,final_deterministic,models/ppo_version4_best.zip,100352
+PPO,50042,7,9,-18.0,1,74,3,2,3.0,False,False,10,2,1,1,0,1000,91740,50042,orange,1,original,final_deterministic,models/ppo_version4_best.zip,100352
+PPO,50042,15,10,30.0,0,74,3,1,-2.0,False,False,10,1,1,1,0,0,91740,50042,,1,original,final_deterministic,models/ppo_version4_best.zip,100352
+PPO,50042,15,11,30.0,0,74,3,0,-2.0,False,False,10,0,1,1,0,0,91740,50042,,1,original,final_deterministic,models/ppo_version4_best.zip,100352
+PPO sampled,60042,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60042,blue orange blue blue blue orange orange blue blue orange,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60042,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,35910,40510,60042,blue blue blue blue blue orange blue blue blue blue orange blue orange blue blue blue orange blue blue orange orange orange blue orange blue blue blue,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60042,7,3,-18.0,9,46,31,8,43.0,False,False,10,8,1,1,0,10080,50590,60042,blue blue blue orange orange orange blue orange blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60042,0,4,-60.0,9,55,22,7,43.0,False,False,10,7,1,1,0,15930,66520,60042,blue blue blue blue orange orange orange blue orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60042,13,5,18.0,4,59,18,6,18.0,False,False,10,6,1,1,0,2600,69120,60042,blue blue blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60042,15,6,30.0,2,61,16,5,8.0,False,False,10,5,1,1,0,200,69320,60042,blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60042,5,7,-30.0,0,61,16,4,-2.0,False,False,10,4,1,1,0,0,69320,60042,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60042,8,8,-12.0,3,64,13,3,13.0,False,False,10,3,1,1,0,450,69770,60042,blue blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60042,3,9,-42.0,0,64,13,2,-2.0,False,False,10,2,1,1,0,0,69770,60042,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60042,15,10,30.0,2,66,11,1,8.0,False,False,10,1,1,1,0,2100,71870,60042,blue orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60042,19,11,54.0,3,69,8,0,13.0,False,False,10,0,1,1,0,3600,75470,60042,blue blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60043,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60043,blue blue blue blue blue orange orange orange blue blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60043,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,33480,37180,60043,orange blue orange blue blue orange blue blue blue blue orange blue blue blue blue blue blue orange blue orange orange blue blue blue blue orange blue,14,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60043,7,3,-18.0,9,46,31,8,43.0,False,False,10,8,1,1,0,6480,43660,60043,blue blue blue orange blue orange blue orange blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60043,8,4,-12.0,7,53,24,7,33.0,False,False,10,7,1,1,0,7070,50730,60043,blue orange blue blue orange blue orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60043,7,5,-18.0,8,61,16,6,38.0,False,False,10,6,1,1,0,7840,58570,60043,blue blue blue orange blue blue blue orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60043,7,6,-18.0,2,63,14,5,8.0,False,False,10,5,1,1,0,200,58770,60043,blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60043,0,7,-60.0,3,66,11,4,13.0,False,False,10,4,1,1,0,3150,61920,60043,blue orange orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60043,16,8,36.0,1,67,10,3,3.0,False,False,10,3,1,1,0,1000,62920,60043,orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60043,13,9,18.0,0,67,10,2,-2.0,False,False,10,2,1,1,0,0,62920,60043,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60043,0,10,-60.0,3,70,7,1,13.0,False,False,10,1,1,1,0,6300,69220,60043,blue orange orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60043,7,11,-18.0,0,70,7,0,-2.0,False,False,10,0,1,1,0,0,69220,60043,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60044,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60044,orange blue blue orange blue blue orange blue orange blue,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60044,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,41850,46450,60044,blue orange blue blue blue blue blue blue orange orange orange blue blue orange blue blue orange orange blue blue orange blue blue orange blue blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60044,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,5040,51490,60044,blue blue orange blue blue blue blue blue blue blue blue blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60044,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,15070,66560,60044,blue blue blue blue orange orange blue blue orange blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60044,0,5,-60.0,3,63,14,6,13.0,False,False,10,6,1,1,0,1680,68240,60044,blue blue orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60044,13,6,18.0,5,68,9,5,23.0,False,False,10,5,1,1,0,5750,73990,60044,blue blue orange orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60044,15,7,30.0,1,69,8,4,3.0,False,False,10,4,1,1,0,50,74040,60044,blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60044,0,8,-60.0,2,71,6,3,8.0,False,False,10,3,1,1,0,2100,76140,60044,blue orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60044,1,9,-54.0,0,71,6,2,-2.0,False,False,10,2,1,1,0,0,76140,60044,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60044,3,10,-42.0,0,71,6,1,-2.0,False,False,10,1,1,1,0,0,76140,60044,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60044,0,11,-60.0,0,71,6,0,-2.0,False,False,10,0,1,1,0,0,76140,60044,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60045,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,1900,1900,60045,blue blue blue blue blue blue orange blue blue blue,24,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60045,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,42390,44290,60045,orange blue blue blue blue blue blue orange blue orange blue orange blue orange blue orange blue blue orange blue blue blue orange orange orange blue orange,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60045,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,14400,58690,60045,orange orange blue blue blue blue orange blue blue orange blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60045,0,4,-60.0,3,52,25,7,13.0,False,False,10,7,1,1,0,270,58960,60045,blue blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60045,0,5,-60.0,4,56,21,6,18.0,False,False,10,6,1,1,0,1560,60520,60045,blue blue orange blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60045,20,6,60.0,1,57,20,5,3.0,False,False,10,5,1,1,0,30,60550,60045,blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60045,11,7,6.0,5,62,15,4,23.0,False,False,10,4,1,1,0,4450,65000,60045,blue blue blue orange orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60045,10,8,0.0,1,63,14,3,3.0,False,False,10,3,1,1,0,500,65500,60045,orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60045,5,9,-30.0,0,63,14,2,-2.0,False,False,10,2,1,1,0,0,65500,60045,,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60045,5,10,-30.0,0,63,14,1,-2.0,False,False,10,1,1,1,0,0,65500,60045,,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60045,8,11,-12.0,1,64,13,0,3.0,False,False,10,0,1,1,0,50,65550,60045,blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60046,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,5500,5500,60046,orange blue blue blue orange blue orange orange blue orange,20,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60046,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,46440,51940,60046,blue orange blue orange orange blue blue orange orange blue blue blue blue orange orange blue orange blue blue blue blue blue blue blue blue blue orange,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60046,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,9720,61660,60046,blue blue blue blue blue blue blue blue blue orange orange blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60046,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,14740,76400,60046,orange blue blue orange blue blue blue blue blue blue orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60046,7,5,-18.0,7,67,10,6,33.0,False,False,10,6,1,1,0,8750,85150,60046,blue blue orange blue blue blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60046,13,6,18.0,1,68,9,5,3.0,False,False,10,5,1,1,0,50,85200,60046,blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60046,15,7,30.0,1,69,8,4,3.0,False,False,10,4,1,1,0,50,85250,60046,blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60046,15,8,30.0,0,69,8,3,-2.0,False,False,10,3,1,1,0,0,85250,60046,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60046,13,9,18.0,2,71,6,2,8.0,False,False,10,2,1,1,0,200,85450,60046,blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60046,3,10,-42.0,0,71,6,1,-2.0,False,False,10,1,1,1,0,0,85450,60046,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60046,13,11,18.0,0,71,6,0,-2.0,False,False,10,0,1,1,0,0,85450,60046,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60047,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60047,blue blue blue orange blue blue orange orange orange blue,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60047,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,41310,45910,60047,orange blue blue blue blue blue blue orange blue blue blue orange orange blue orange blue blue blue orange blue orange blue blue blue blue orange orange,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60047,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,9120,55030,60047,blue blue blue orange blue orange blue blue blue blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60047,15,4,30.0,4,53,24,7,18.0,False,False,10,7,1,1,0,3720,58750,60047,blue orange orange orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60047,8,5,-12.0,2,55,22,6,8.0,False,False,10,6,1,1,0,120,58870,60047,blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60047,13,6,18.0,4,59,18,5,18.0,False,False,10,5,1,1,0,2360,61230,60047,blue blue blue orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60047,0,7,-60.0,3,62,15,4,13.0,False,False,10,4,1,1,0,3150,64380,60047,orange blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60047,0,8,-60.0,4,66,11,3,18.0,False,False,10,3,1,1,0,4800,69180,60047,blue blue orange blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60047,8,9,-12.0,4,70,7,2,18.0,False,False,10,2,1,1,0,5200,74380,60047,blue orange blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60047,0,10,-60.0,3,73,4,1,13.0,False,False,10,1,1,1,0,6300,80680,60047,blue orange orange,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60047,10,11,0.0,0,73,4,0,-2.0,False,False,10,0,1,1,0,0,80680,60047,,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60048,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60048,orange blue blue blue blue orange blue orange blue blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60048,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,65610,69310,60048,blue blue blue blue orange blue orange orange orange orange orange blue blue orange blue blue orange blue orange orange blue blue orange orange blue blue orange,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60048,7,3,-18.0,9,46,31,8,43.0,False,False,10,8,1,1,0,11880,81190,60048,orange blue blue blue blue orange orange blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60048,7,4,-18.0,8,54,23,7,38.0,False,False,10,7,1,1,0,10400,91590,60048,blue blue blue orange blue blue orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60048,0,5,-60.0,9,63,14,6,43.0,False,False,10,6,1,1,0,22050,113640,60048,blue blue blue blue blue orange blue orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60048,8,6,-12.0,0,63,14,5,-2.0,False,False,10,5,1,1,0,0,113640,60048,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60048,13,7,18.0,2,65,12,4,8.0,False,False,10,4,1,1,0,400,114040,60048,blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60048,4,8,-36.0,0,65,12,3,-2.0,False,False,10,3,1,1,0,0,114040,60048,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60048,3,9,-42.0,0,65,12,2,-2.0,False,False,10,2,1,1,0,0,114040,60048,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60048,8,10,-12.0,0,65,12,1,-2.0,False,False,10,1,1,1,0,0,114040,60048,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60048,16,11,36.0,1,66,11,0,3.0,False,False,10,0,1,1,0,1000,115040,60048,orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60049,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,6400,6400,60049,orange orange orange blue blue orange blue orange blue orange,19,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60049,4,2,-36.0,16,26,51,8,78.0,False,False,10,8,0,0,0,16320,22720,60049,orange blue orange blue blue blue blue blue blue orange blue orange orange blue orange blue,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60049,7,3,-18.0,15,41,36,7,73.0,False,False,10,7,0,0,0,7200,29920,60049,blue blue blue blue blue blue blue blue blue orange blue blue blue blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60049,7,4,-18.0,13,54,23,6,63.0,False,False,10,6,0,0,0,21190,51110,60049,blue orange orange blue blue blue blue orange orange blue orange blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60049,7,5,-18.0,4,58,19,5,18.0,False,False,10,5,0,0,0,4320,55430,60049,blue orange blue orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60049,0,6,-60.0,1,59,18,4,3.0,False,False,10,4,0,0,0,500,55930,60049,orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60049,18,7,48.0,2,61,16,3,8.0,False,False,10,3,0,0,0,200,56130,60049,blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60049,7,8,-18.0,0,61,16,2,-2.0,False,False,10,2,0,0,0,0,56130,60049,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60049,20,9,60.0,0,61,16,1,-2.0,False,False,10,1,0,0,0,0,56130,60049,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60049,3,10,-42.0,0,61,16,0,-2.0,False,False,10,0,0,0,0,0,56130,60049,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60050,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60050,blue orange blue blue orange blue orange blue blue blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60050,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,49950,53650,60050,orange orange blue orange blue blue orange blue orange blue orange blue blue orange orange orange blue blue blue blue blue blue orange blue blue blue orange,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60050,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,7080,60730,60050,blue blue blue blue orange blue blue blue blue blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60050,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,17710,78440,60050,blue blue blue blue blue orange orange blue orange blue orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60050,13,5,18.0,4,64,13,6,18.0,False,False,10,6,1,1,0,2600,81040,60050,blue orange blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60050,0,6,-60.0,2,66,11,5,8.0,False,False,10,5,1,1,0,200,81240,60050,blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60050,0,7,-60.0,1,67,10,4,3.0,False,False,10,4,1,1,0,500,81740,60050,orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60050,15,8,30.0,1,68,9,3,3.0,False,False,10,3,1,1,0,50,81790,60050,blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60050,0,9,-60.0,3,71,6,2,13.0,False,False,10,2,1,1,0,3600,85390,60050,orange blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60050,5,10,-30.0,0,71,6,1,-2.0,False,False,10,1,1,1,0,0,85390,60050,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60050,8,11,-12.0,3,74,3,0,13.0,False,False,10,0,1,1,0,3600,88990,60050,blue blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60051,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60051,blue blue blue blue orange blue blue blue orange orange,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60051,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,38610,42310,60051,blue blue blue blue orange blue orange orange blue blue orange blue blue blue orange blue blue orange blue orange blue blue orange blue orange blue blue,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60051,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,17400,59710,60051,orange blue orange blue blue blue blue blue orange blue orange orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60051,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,22990,82700,60051,blue blue orange blue orange blue blue orange blue blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60051,11,5,6.0,2,62,15,6,8.0,False,False,10,6,1,1,0,200,82900,60051,blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60051,0,6,-60.0,3,65,12,5,13.0,False,False,10,5,1,1,0,3300,86200,60051,blue blue orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60051,7,7,-18.0,3,68,9,4,13.0,False,False,10,4,1,1,0,3600,89800,60051,blue blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60051,20,8,60.0,0,68,9,3,-2.0,False,False,10,3,1,1,0,0,89800,60051,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60051,13,9,18.0,1,69,8,2,3.0,False,False,10,2,1,1,0,100,89900,60051,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60051,0,10,-60.0,1,70,7,1,3.0,False,False,10,1,1,1,0,1000,90900,60051,orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60051,13,11,18.0,0,70,7,0,-2.0,False,False,10,0,1,1,0,0,90900,60051,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60052,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60052,blue blue blue blue blue blue orange orange orange orange,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60052,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,25110,29710,60052,blue orange blue blue blue blue orange blue blue orange orange blue blue orange blue blue blue blue blue blue blue blue blue blue orange blue blue,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60052,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,15120,44830,60052,orange blue orange blue orange blue blue blue orange orange blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60052,3,4,-42.0,3,52,25,7,13.0,False,False,10,7,1,1,0,270,45100,60052,blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60052,0,5,-60.0,3,55,22,6,13.0,False,False,10,6,1,1,0,1080,46180,60052,blue orange blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60052,15,6,30.0,4,59,18,5,18.0,False,False,10,5,1,1,0,2640,48820,60052,orange orange blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60052,0,7,-60.0,0,59,18,4,-2.0,False,False,10,4,1,1,0,0,48820,60052,,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60052,8,8,-12.0,2,61,16,3,8.0,False,False,10,3,1,1,0,1100,49920,60052,orange blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60052,13,9,18.0,4,65,12,2,18.0,False,False,10,2,1,1,0,2600,52520,60052,blue orange blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60052,0,10,-60.0,0,65,12,1,-2.0,False,False,10,1,1,1,0,0,52520,60052,,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60052,0,11,-60.0,0,65,12,0,-2.0,False,False,10,0,1,1,0,0,52520,60052,,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60053,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,6400,6400,60053,orange orange blue orange orange blue orange blue blue orange,19,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60053,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,31050,37450,60053,blue orange blue blue blue blue blue blue blue orange blue blue blue blue orange blue blue blue blue blue orange orange blue blue blue blue orange,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60053,7,3,-18.0,9,46,31,8,43.0,False,False,10,8,1,1,0,7380,44830,60053,blue blue orange blue blue blue orange blue orange,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60053,7,4,-18.0,8,54,23,7,38.0,False,False,10,7,1,1,0,4080,48910,60053,blue blue blue orange blue blue blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60053,0,5,-60.0,9,63,14,6,43.0,False,False,10,6,1,1,0,11880,60790,60053,orange blue orange blue blue blue orange blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60053,0,6,-60.0,3,66,11,5,13.0,False,False,10,5,1,1,0,1800,62590,60053,blue orange blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60053,15,7,30.0,3,69,8,4,13.0,False,False,10,4,1,1,0,1800,64390,60053,orange blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60053,13,8,18.0,2,71,6,3,8.0,False,False,10,3,1,1,0,2100,66490,60053,blue orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60053,7,9,-18.0,0,71,6,2,-2.0,False,False,10,2,1,1,0,0,66490,60053,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60053,3,10,-42.0,0,71,6,1,-2.0,False,False,10,1,1,1,0,0,66490,60053,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60053,7,11,-18.0,0,71,6,0,-2.0,False,False,10,0,1,1,0,0,66490,60053,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60054,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,1900,1900,60054,blue blue blue blue blue blue orange blue blue blue,24,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60054,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,42930,44830,60054,blue blue blue blue blue blue orange blue blue blue orange orange blue orange orange blue blue orange blue orange orange orange blue blue orange blue orange,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60054,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,7200,52030,60054,blue blue blue orange blue blue blue blue blue orange blue blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60054,0,4,-60.0,3,52,25,7,13.0,False,False,10,7,1,1,0,180,52210,60054,blue blue blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60054,3,5,-42.0,4,56,21,6,18.0,False,False,10,6,1,1,0,1480,53690,60054,blue blue orange blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60054,8,6,-12.0,5,61,16,5,23.0,False,False,10,5,1,1,0,3450,57140,60054,orange orange blue blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60054,7,7,-18.0,2,63,14,4,8.0,False,False,10,4,1,1,0,660,57800,60054,orange blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60054,0,8,-60.0,0,63,14,3,-2.0,False,False,10,3,1,1,0,0,57800,60054,,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60054,7,9,-18.0,2,65,12,2,8.0,False,False,10,2,1,1,0,1100,58900,60054,orange blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60054,15,10,30.0,2,67,10,1,8.0,False,False,10,1,1,1,0,1100,60000,60054,blue orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60054,3,11,-42.0,0,67,10,0,-2.0,False,False,10,0,1,1,0,0,60000,60054,,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60055,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60055,blue blue blue blue orange orange blue orange blue orange,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60055,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,36720,41320,60055,orange orange blue blue blue orange blue blue blue blue orange blue blue orange blue blue blue orange blue blue blue orange blue orange blue blue blue,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60055,7,3,-18.0,9,46,31,8,43.0,False,False,10,8,1,1,0,10170,51490,60055,orange orange blue blue orange blue blue orange blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60055,8,4,-12.0,7,53,24,7,33.0,False,False,10,7,1,1,0,3360,54850,60055,blue blue blue orange blue blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60055,13,5,18.0,8,61,16,6,38.0,False,False,10,6,1,1,0,4080,58930,60055,orange blue blue blue blue blue blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60055,15,6,30.0,2,63,14,5,8.0,False,False,10,5,1,1,0,120,59050,60055,blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60055,0,7,-60.0,0,63,14,4,-2.0,False,False,10,4,1,1,0,0,59050,60055,,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60055,15,8,30.0,1,64,13,3,3.0,False,False,10,3,1,1,0,30,59080,60055,blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60055,8,9,-12.0,1,65,12,2,3.0,False,False,10,2,1,1,0,30,59110,60055,blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60055,13,10,18.0,2,67,10,1,8.0,False,False,10,1,1,1,0,2000,61110,60055,orange orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60055,13,11,18.0,0,67,10,0,-2.0,False,False,10,0,1,1,0,0,61110,60055,,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60056,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60056,blue orange blue blue blue blue blue blue orange blue,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60056,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,59400,62200,60056,blue orange blue blue orange blue blue orange orange orange orange blue blue orange blue orange blue orange orange blue blue orange blue blue blue orange orange,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60056,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,10800,73000,60056,blue orange orange blue blue blue blue blue blue blue blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60056,0,4,-60.0,3,52,25,7,13.0,False,False,10,7,1,1,0,1080,74080,60056,blue blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60056,8,5,-12.0,11,63,14,6,53.0,False,False,10,6,1,1,0,15730,89810,60056,blue orange blue blue blue orange blue blue blue blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60056,7,6,-18.0,4,67,10,5,18.0,False,False,10,5,1,1,0,2600,92410,60056,blue blue blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60056,13,7,18.0,1,68,9,4,3.0,False,False,10,4,1,1,0,50,92460,60056,blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60056,7,8,-18.0,3,71,6,3,13.0,False,False,10,3,1,1,0,3300,95760,60056,blue blue orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60056,15,9,30.0,1,72,5,2,3.0,False,False,10,2,1,1,0,1000,96760,60056,orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60056,0,10,-60.0,2,74,3,1,8.0,False,False,10,1,1,1,0,2200,98960,60056,orange blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60056,3,11,-42.0,0,74,3,0,-2.0,False,False,10,0,1,1,0,0,98960,60056,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60057,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60057,orange blue orange orange blue blue orange blue blue blue,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60057,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,36990,41590,60057,blue orange blue blue blue blue orange orange blue blue orange blue blue blue orange blue orange orange blue blue blue orange blue blue blue blue blue,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60057,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,7200,48790,60057,orange blue blue blue blue orange blue blue blue blue blue blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60057,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,15510,64300,60057,orange blue blue blue orange blue orange blue blue blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60057,15,5,30.0,4,64,13,6,18.0,False,False,10,6,1,1,0,4240,68540,60057,blue blue orange orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60057,4,6,-36.0,0,64,13,5,-2.0,False,False,10,5,1,1,0,0,68540,60057,,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60057,13,7,18.0,2,66,11,4,8.0,False,False,10,4,1,1,0,200,68740,60057,blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60057,8,8,-12.0,5,71,6,3,23.0,False,False,10,3,1,1,0,13250,81990,60057,blue orange orange orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60057,18,9,48.0,0,71,6,2,-2.0,False,False,10,2,1,1,0,0,81990,60057,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60057,8,10,-12.0,0,71,6,1,-2.0,False,False,10,1,1,1,0,0,81990,60057,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60057,0,11,-60.0,3,74,3,0,13.0,False,False,10,0,1,1,0,900,82890,60057,blue blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60058,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60058,orange orange blue orange blue blue blue orange blue blue,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60058,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,35640,40240,60058,blue blue orange blue orange blue orange blue blue blue blue orange blue blue blue orange blue blue blue blue blue orange blue blue blue orange orange,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60058,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,7200,47440,60058,orange blue blue orange blue blue blue blue blue blue blue blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60058,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,20680,68120,60058,orange orange blue blue blue blue blue orange orange blue orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60058,7,5,-18.0,7,67,10,6,33.0,False,False,10,6,1,1,0,8750,76870,60058,blue orange blue blue blue blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60058,13,6,18.0,1,68,9,5,3.0,False,False,10,5,1,1,0,50,76920,60058,blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60058,0,7,-60.0,2,70,7,4,8.0,False,False,10,4,1,1,0,200,77120,60058,blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60058,7,8,-18.0,3,73,4,3,13.0,False,False,10,3,1,1,0,6300,83420,60058,orange orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60058,9,9,-6.0,0,73,4,2,-2.0,False,False,10,2,1,1,0,0,83420,60058,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60058,15,10,30.0,1,74,3,1,3.0,False,False,10,1,1,1,0,1000,84420,60058,orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60058,16,11,36.0,0,74,3,0,-2.0,False,False,10,0,1,1,0,0,84420,60058,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60059,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60059,blue orange blue blue orange blue blue blue orange orange,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60059,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,41580,46180,60059,blue blue blue blue blue blue orange blue orange blue blue orange orange blue orange blue blue orange blue orange blue blue orange blue blue orange blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60059,15,3,30.0,4,41,36,8,18.0,False,False,10,8,1,1,0,1040,47220,60059,orange blue blue blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60059,0,4,-60.0,12,53,24,7,58.0,False,False,10,7,1,1,0,17280,64500,60059,orange blue blue orange blue blue blue blue blue orange blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60059,0,5,-60.0,3,56,21,6,13.0,False,False,10,6,1,1,0,1740,66240,60059,blue orange blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60059,10,6,0.0,11,67,10,6,53.0,False,False,10,6,2,2,1,28600,94840,60059,blue blue orange blue blue orange orange blue blue blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60059,13,7,18.0,2,69,8,5,8.0,False,False,10,5,2,2,0,400,95240,60059,blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60059,3,8,-42.0,0,69,8,4,-2.0,False,False,10,4,2,2,0,0,95240,60059,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60059,0,9,-60.0,0,69,8,3,-2.0,False,False,10,3,2,2,0,0,95240,60059,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60059,13,10,18.0,2,71,6,2,8.0,False,False,10,2,2,2,0,400,95640,60059,blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60059,0,11,-60.0,0,71,6,1,-2.0,False,False,10,1,2,2,0,0,95640,60059,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60059,20,12,60.0,0,71,6,0,-2.0,False,False,10,0,2,2,0,0,95640,60059,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60060,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60060,orange blue blue orange orange blue blue blue blue blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60060,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,44280,47980,60060,orange blue blue orange blue blue orange blue blue orange blue orange blue blue blue orange orange orange orange blue blue blue blue blue blue orange blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60060,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,18720,66700,60060,orange blue blue blue blue blue orange blue orange orange orange blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60060,6,4,-24.0,11,60,17,7,53.0,False,False,10,7,1,1,0,20680,87380,60060,blue orange blue blue blue blue orange blue blue blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60060,7,5,-18.0,8,68,9,6,38.0,False,False,10,6,1,1,0,19600,106980,60060,blue blue blue orange blue blue orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60060,5,6,-30.0,0,68,9,5,-2.0,False,False,10,5,1,1,0,0,106980,60060,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60060,5,7,-30.0,0,68,9,4,-2.0,False,False,10,4,1,1,0,0,106980,60060,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60060,0,8,-60.0,3,71,6,3,13.0,False,False,10,3,1,1,0,900,107880,60060,blue blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60060,13,9,18.0,0,71,6,2,-2.0,False,False,10,2,1,1,0,0,107880,60060,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60060,0,10,-60.0,0,71,6,1,-2.0,False,False,10,1,1,1,0,0,107880,60060,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60060,15,11,30.0,1,72,5,0,3.0,False,False,10,0,1,1,0,1000,108880,60060,orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60061,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60061,orange blue orange blue blue blue orange blue orange blue,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60061,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,31320,35920,60061,orange blue orange blue orange blue blue blue blue blue blue blue blue blue blue orange orange blue blue orange blue blue blue orange blue blue blue,14,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60061,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,13080,49000,60061,orange blue blue blue orange orange blue blue orange blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60061,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,12540,61540,60061,blue blue blue blue blue orange blue orange blue blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60061,13,5,18.0,4,64,13,6,18.0,False,False,10,6,1,1,0,2600,64140,60061,orange blue blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60061,3,6,-42.0,0,64,13,5,-2.0,False,False,10,5,1,1,0,0,64140,60061,,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60061,0,7,-60.0,2,66,11,4,8.0,False,False,10,4,1,1,0,1100,65240,60061,blue orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60061,13,8,18.0,2,68,9,3,8.0,False,False,10,3,1,1,0,1100,66340,60061,orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60061,18,9,48.0,0,68,9,2,-2.0,False,False,10,2,1,1,0,0,66340,60061,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60061,0,10,-60.0,1,69,8,1,3.0,False,False,10,1,1,1,0,50,66390,60061,blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60061,13,11,18.0,0,69,8,0,-2.0,False,False,10,0,1,1,0,0,66390,60061,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60062,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60062,blue blue blue blue blue blue blue orange blue orange,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60062,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,46980,49780,60062,blue blue orange blue orange orange orange orange blue orange blue blue blue orange blue orange orange blue blue blue blue blue orange blue blue orange blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60062,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,9480,59260,60062,blue orange orange blue blue blue blue blue blue blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60062,8,4,-12.0,11,60,17,8,53.0,False,False,10,8,2,2,1,28270,87530,60062,orange orange blue blue blue orange blue orange orange blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60062,7,5,-18.0,7,67,10,7,33.0,False,False,10,7,2,2,0,15750,103280,60062,blue blue blue blue blue orange orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60062,7,6,-18.0,4,71,6,6,18.0,False,False,10,6,2,2,0,5200,108480,60062,blue blue orange blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60062,8,7,-12.0,0,71,6,5,-2.0,False,False,10,5,2,2,0,0,108480,60062,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60062,3,8,-42.0,0,71,6,4,-2.0,False,False,10,4,2,2,0,0,108480,60062,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60062,5,9,-30.0,0,71,6,3,-2.0,False,False,10,3,2,2,0,0,108480,60062,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60062,3,10,-42.0,0,71,6,2,-2.0,False,False,10,2,2,2,0,0,108480,60062,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60062,8,11,-12.0,0,71,6,1,-2.0,False,False,10,1,2,2,0,0,108480,60062,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60062,13,12,18.0,1,72,5,0,3.0,False,False,10,0,2,2,0,100,108580,60062,blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60063,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,6400,6400,60063,orange blue blue orange orange orange blue orange orange blue,19,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60063,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,67230,73630,60063,blue blue orange blue blue blue blue orange orange blue orange blue orange orange orange orange blue blue blue blue orange blue orange blue blue orange blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60063,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,7560,81190,60063,blue blue blue blue blue orange blue blue blue blue blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60063,7,4,-18.0,12,61,16,7,58.0,False,False,10,7,1,1,0,23400,104590,60063,orange blue blue blue blue orange blue orange blue blue blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60063,13,5,18.0,4,65,12,6,18.0,False,False,10,6,1,1,0,8600,113190,60063,blue orange blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60063,15,6,30.0,2,67,10,5,8.0,False,False,10,5,1,1,0,400,113590,60063,blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60063,13,7,18.0,0,67,10,4,-2.0,False,False,10,4,1,1,0,0,113590,60063,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60063,14,8,24.0,0,67,10,3,-2.0,False,False,10,3,1,1,0,0,113590,60063,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60063,0,9,-60.0,3,70,7,2,13.0,False,False,10,2,1,1,0,3600,117190,60063,orange blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60063,0,10,-60.0,0,70,7,1,-2.0,False,False,10,1,1,1,0,0,117190,60063,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60063,15,11,30.0,1,71,6,0,3.0,False,False,10,0,1,1,0,100,117290,60063,blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60064,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60064,blue blue blue orange blue blue blue blue blue orange,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60064,7,2,-18.0,27,37,40,8,133.0,False,False,10,8,0,0,0,24300,27100,60064,blue blue blue blue blue blue orange orange blue blue blue orange orange blue orange blue orange orange blue blue blue blue blue blue blue blue blue,16,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60064,0,3,-60.0,12,49,28,7,58.0,False,False,10,7,0,0,0,11520,38620,60064,orange blue blue orange blue blue blue orange blue blue orange blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60064,8,4,-12.0,11,60,17,6,53.0,False,False,10,6,0,0,0,14080,52700,60064,orange blue blue blue orange blue blue orange blue blue orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60064,15,5,30.0,4,64,13,5,18.0,False,False,10,5,0,0,0,3520,56220,60064,blue orange orange blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60064,7,6,-18.0,6,70,7,4,28.0,False,False,10,4,0,0,0,7200,63420,60064,blue orange orange blue blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60064,0,7,-60.0,3,73,4,3,13.0,False,False,10,3,0,0,0,6150,69570,60064,blue orange orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60064,15,8,30.0,1,74,3,2,3.0,False,False,10,2,0,0,0,100,69670,60064,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60064,15,9,30.0,0,74,3,1,-2.0,False,False,10,1,0,0,0,0,69670,60064,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60064,14,10,24.0,0,74,3,0,-2.0,False,False,10,0,0,0,0,0,69670,60064,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60065,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60065,blue blue blue blue blue blue orange blue blue orange,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60065,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,48060,50860,60065,blue orange blue orange blue orange orange blue orange orange orange orange blue blue orange blue blue orange blue blue blue orange blue blue blue blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60065,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,19080,69940,60065,blue orange blue orange orange orange blue blue blue orange blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60065,7,4,-18.0,12,61,16,8,58.0,False,False,10,8,2,2,1,34920,104860,60065,blue blue orange blue orange blue blue blue blue orange orange blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60065,0,5,-60.0,3,64,13,7,13.0,False,False,10,7,2,2,0,900,105760,60065,blue blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60065,1,6,-54.0,0,64,13,6,-2.0,False,False,10,6,2,2,0,0,105760,60065,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60065,11,7,6.0,0,64,13,5,-2.0,False,False,10,5,2,2,0,0,105760,60065,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60065,15,8,30.0,2,66,11,4,8.0,False,False,10,4,2,2,0,400,106160,60065,blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60065,2,9,-48.0,0,66,11,3,-2.0,False,False,10,3,2,2,0,0,106160,60065,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60065,3,10,-42.0,5,71,6,2,23.0,False,False,10,2,2,2,0,7000,113160,60065,blue blue blue blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60065,13,11,18.0,1,72,5,1,3.0,False,False,10,1,2,2,0,100,113260,60065,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60065,3,12,-42.0,0,72,5,0,-2.0,False,False,10,0,2,2,0,0,113260,60065,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60066,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60066,orange blue blue blue orange orange blue orange blue blue,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60066,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,42930,47530,60066,blue blue orange orange blue orange blue blue orange orange blue blue orange blue blue orange blue blue blue orange blue blue blue blue orange blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60066,7,3,-18.0,9,46,31,8,43.0,False,False,10,8,1,1,0,11160,58690,60066,orange blue orange blue orange blue orange blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60066,10,4,0.0,8,54,23,7,38.0,False,False,10,7,1,1,0,23440,82130,60066,orange blue orange orange blue orange blue orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60066,0,5,-60.0,9,63,14,6,43.0,False,False,10,6,1,1,0,8100,90230,60066,blue blue blue blue blue blue blue blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60066,3,6,-42.0,0,63,14,5,-2.0,False,False,10,5,1,1,0,0,90230,60066,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60066,15,7,30.0,4,67,10,4,18.0,False,False,10,4,1,1,0,5200,95430,60066,blue orange blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60066,8,8,-12.0,3,70,7,3,13.0,False,False,10,3,1,1,0,900,96330,60066,blue blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60066,2,9,-48.0,2,72,5,2,8.0,False,False,10,2,1,1,0,400,96730,60066,blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60066,15,10,30.0,1,73,4,1,3.0,False,False,10,1,1,1,0,1000,97730,60066,orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60066,8,11,-12.0,0,73,4,0,-2.0,False,False,10,0,1,1,0,0,97730,60066,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60067,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,5500,5500,60067,blue orange blue blue orange orange orange blue orange blue,20,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60067,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,52920,58420,60067,blue blue orange blue blue blue blue orange blue orange orange blue orange blue blue orange blue orange blue blue orange blue blue blue blue orange orange,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60067,7,3,-18.0,9,46,31,8,43.0,False,False,10,8,1,1,0,4860,63280,60067,blue blue blue blue orange blue blue blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60067,8,4,-12.0,7,53,24,7,33.0,False,False,10,7,1,1,0,5250,68530,60067,blue blue blue orange blue blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60067,10,5,0.0,3,56,21,6,13.0,False,False,10,6,1,1,0,3090,71620,60067,blue orange orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60067,0,6,-60.0,6,62,15,5,28.0,False,False,10,5,1,1,0,10800,82420,60067,blue blue orange orange blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60067,13,7,18.0,2,64,13,4,8.0,False,False,10,4,1,1,0,2200,84620,60067,orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60067,8,8,-12.0,1,65,12,3,3.0,False,False,10,3,1,1,0,1000,85620,60067,orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60067,0,9,-60.0,3,68,9,2,13.0,False,False,10,2,1,1,0,900,86520,60067,blue blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60067,20,10,60.0,0,68,9,1,-2.0,False,False,10,1,1,1,0,0,86520,60067,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60067,7,11,-18.0,2,70,7,0,8.0,False,False,10,0,1,1,0,400,86920,60067,blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60068,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60068,blue orange blue blue blue orange blue orange blue orange,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60068,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,28080,32680,60068,blue blue blue blue orange blue orange orange orange blue blue blue orange orange blue blue blue blue blue blue blue blue blue blue blue blue blue,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60068,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,14880,47560,60068,blue orange orange orange blue blue blue blue blue orange blue orange,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60068,0,4,-60.0,3,52,25,7,13.0,False,False,10,7,1,1,0,1080,48640,60068,orange blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60068,16,5,36.0,8,60,17,6,38.0,False,False,10,6,1,1,0,10480,59120,60068,blue blue orange orange orange blue blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60068,7,6,-18.0,5,65,12,5,23.0,False,False,10,5,1,1,0,1250,60370,60068,blue blue blue blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60068,9,7,-6.0,2,67,10,4,8.0,False,False,10,4,1,1,0,1100,61470,60068,blue orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60068,9,8,-6.0,0,67,10,3,-2.0,False,False,10,3,1,1,0,0,61470,60068,,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60068,0,9,-60.0,0,67,10,2,-2.0,False,False,10,2,1,1,0,0,61470,60068,,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60068,19,10,54.0,2,69,8,1,8.0,False,False,10,1,1,1,0,1100,62570,60068,blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60068,0,11,-60.0,0,69,8,0,-2.0,False,False,10,0,1,1,0,0,62570,60068,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60069,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,5500,5500,60069,blue blue orange blue orange orange blue orange blue orange,20,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60069,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,40230,45730,60069,blue blue orange blue blue blue orange orange orange blue blue blue blue orange blue blue blue blue blue orange orange blue blue blue blue orange blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60069,10,3,0.0,8,45,32,8,38.0,False,False,10,8,1,1,0,5120,50850,60069,blue orange blue blue blue orange blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60069,0,4,-60.0,9,54,23,7,43.0,False,False,10,7,1,1,0,2430,53280,60069,blue blue blue blue blue blue blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60069,0,5,-60.0,5,59,18,6,23.0,False,False,10,6,1,1,0,3450,56730,60069,blue blue orange blue orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60069,15,6,30.0,2,61,16,5,8.0,False,False,10,5,1,1,0,660,57390,60069,orange blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60069,10,7,0.0,5,66,11,4,23.0,False,False,10,4,1,1,0,7900,65290,60069,blue orange orange orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60069,13,8,18.0,1,67,10,3,3.0,False,False,10,3,1,1,0,1000,66290,60069,orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60069,13,9,18.0,2,69,8,2,8.0,False,False,10,2,1,1,0,2200,68490,60069,blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60069,7,10,-18.0,1,70,7,1,3.0,False,False,10,1,1,1,0,100,68590,60069,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60069,0,11,-60.0,0,70,7,0,-2.0,False,False,10,0,1,1,0,0,68590,60069,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60070,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60070,blue orange orange blue orange blue blue blue blue orange,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60070,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,35910,40510,60070,blue blue orange blue blue blue orange orange blue blue blue blue blue blue blue orange blue blue orange blue orange blue blue orange blue blue orange,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60070,7,3,-18.0,9,46,31,8,43.0,False,False,10,8,1,1,0,3240,43750,60070,blue blue blue blue blue blue blue orange blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60070,8,4,-12.0,7,53,24,7,33.0,False,False,10,7,1,1,0,4480,48230,60070,blue orange orange blue blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60070,13,5,18.0,8,61,16,6,38.0,False,False,10,6,1,1,0,8400,56630,60070,orange blue blue blue orange orange blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60070,13,6,18.0,2,63,14,5,8.0,False,False,10,5,1,1,0,1060,57690,60070,blue orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60070,18,7,48.0,1,64,13,4,3.0,False,False,10,4,1,1,0,50,57740,60070,blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60070,13,8,18.0,0,64,13,3,-2.0,False,False,10,3,1,1,0,0,57740,60070,,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60070,8,9,-12.0,1,65,12,2,3.0,False,False,10,2,1,1,0,50,57790,60070,blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60070,11,10,6.0,0,65,12,1,-2.0,False,False,10,1,1,1,0,0,57790,60070,,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60070,17,11,42.0,1,66,11,0,3.0,False,False,10,0,1,1,0,50,57840,60070,blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60071,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60071,blue blue blue blue blue orange orange blue blue blue,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60071,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,39960,42760,60071,blue blue blue orange blue orange orange blue blue orange blue blue blue blue orange blue blue blue blue orange orange blue blue orange blue orange orange,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60071,14,3,24.0,2,39,38,8,8.0,False,False,10,8,1,1,0,440,43200,60071,orange blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60071,0,4,-60.0,12,51,26,7,58.0,False,False,10,7,1,1,0,8520,51720,60071,blue blue blue blue blue blue orange blue blue blue orange blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60071,7,5,-18.0,7,58,19,6,33.0,False,False,10,6,1,1,0,5250,56970,60071,blue orange blue blue blue blue orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60071,13,6,18.0,2,60,17,5,8.0,False,False,10,5,1,1,0,660,57630,60071,orange blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60071,11,7,6.0,0,60,17,4,-2.0,False,False,10,4,1,1,0,0,57630,60071,,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60071,10,8,0.0,1,61,16,3,3.0,False,False,10,3,1,1,0,500,58130,60071,orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60071,20,9,60.0,1,62,15,2,3.0,False,False,10,2,1,1,0,500,58630,60071,orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60071,13,10,18.0,0,62,15,1,-2.0,False,False,10,1,1,1,0,0,58630,60071,,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60071,0,11,-60.0,2,64,13,0,8.0,False,False,10,0,1,1,0,1100,59730,60071,blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60072,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60072,orange blue orange blue orange orange blue blue blue blue,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60072,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,46170,50770,60072,blue blue blue orange orange blue blue orange blue orange blue blue blue orange blue blue blue blue orange orange blue orange blue orange blue orange blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60072,7,3,-18.0,9,46,31,8,43.0,False,False,10,8,1,1,0,16470,67240,60072,blue orange orange orange orange blue blue orange blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60072,12,4,12.0,1,47,30,7,3.0,False,False,10,7,1,1,0,50,67290,60072,blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60072,7,5,-18.0,8,55,22,6,38.0,False,False,10,6,1,1,0,6800,74090,60072,blue orange blue blue blue blue blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60072,0,6,-60.0,9,64,13,5,43.0,False,False,10,5,1,1,0,18000,92090,60072,blue blue blue orange blue orange blue blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60072,13,7,18.0,2,66,11,4,8.0,False,False,10,4,1,1,0,2200,94290,60072,blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60072,15,8,30.0,3,69,8,3,13.0,False,False,10,3,1,1,0,900,95190,60072,blue blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60072,0,9,-60.0,3,72,5,2,13.0,False,False,10,2,1,1,0,900,96090,60072,blue blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60072,12,10,12.0,1,73,4,1,3.0,False,False,10,1,1,1,0,100,96190,60072,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60072,9,11,-6.0,0,73,4,0,-2.0,False,False,10,0,1,1,0,0,96190,60072,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60073,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60073,orange blue blue orange blue blue blue blue blue orange,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60073,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,49680,53380,60073,orange orange blue orange blue blue blue blue blue orange blue orange blue orange orange blue orange orange blue blue blue orange blue blue orange blue blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60073,16,3,36.0,8,45,32,8,38.0,False,False,10,8,1,1,0,6080,59460,60073,blue blue orange blue blue blue orange blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60073,13,4,18.0,4,49,28,7,18.0,False,False,10,7,1,1,0,2640,62100,60073,blue orange blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60073,0,5,-60.0,5,54,23,6,23.0,False,False,10,6,1,1,0,3100,65200,60073,blue blue blue blue orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60073,5,6,-30.0,3,57,20,5,13.0,False,False,10,5,1,1,0,450,65650,60073,blue blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60073,16,7,36.0,1,58,19,4,3.0,False,False,10,4,1,1,0,50,65700,60073,blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60073,8,8,-12.0,4,62,15,3,18.0,False,False,10,3,1,1,0,2600,68300,60073,blue orange blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60073,13,9,18.0,2,64,13,2,8.0,False,False,10,2,1,1,0,200,68500,60073,blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60073,8,10,-12.0,4,68,9,1,18.0,False,False,10,1,1,1,0,2600,71100,60073,blue orange blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60073,15,11,30.0,0,68,9,0,-2.0,False,False,10,0,1,1,0,0,71100,60073,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60074,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,5500,5500,60074,orange orange orange orange orange blue blue blue blue blue,20,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60074,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,54810,60310,60074,blue blue orange blue orange orange orange blue blue orange orange blue orange blue blue orange blue blue blue blue orange blue orange blue blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60074,7,3,-18.0,9,46,31,8,43.0,False,False,10,8,1,1,0,13950,74260,60074,blue orange blue orange blue orange blue blue orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60074,10,4,0.0,8,54,23,7,38.0,False,False,10,7,1,1,0,10400,84660,60074,blue orange orange blue blue blue blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60074,8,5,-12.0,2,56,21,6,8.0,False,False,10,6,1,1,0,200,84860,60074,blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60074,8,6,-12.0,5,61,16,5,23.0,False,False,10,5,1,1,0,16000,100860,60074,orange orange blue blue orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60074,0,7,-60.0,6,67,10,4,28.0,False,False,10,4,1,1,0,3600,104460,60074,blue blue blue blue blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60074,0,8,-60.0,5,72,5,3,23.0,False,False,10,3,1,1,0,7000,111460,60074,orange blue blue blue blue,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60074,3,9,-42.0,0,72,5,2,-2.0,False,False,10,2,1,1,0,0,111460,60074,,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60074,3,10,-42.0,0,72,5,1,-2.0,False,False,10,1,1,1,0,0,111460,60074,,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60074,15,11,30.0,0,72,5,0,-2.0,False,False,10,0,1,1,0,0,111460,60074,,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60075,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60075,orange orange orange blue blue blue blue blue blue blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60075,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,65340,69040,60075,blue orange blue orange blue orange orange blue blue orange blue blue orange orange blue orange blue orange blue blue orange blue blue orange orange blue orange,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60075,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,17400,86440,60075,blue blue blue orange blue orange blue orange blue blue blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60075,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,6050,92490,60075,blue blue blue blue blue blue blue blue blue blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60075,15,5,30.0,4,64,13,6,18.0,False,False,10,6,1,1,0,2600,95090,60075,blue blue blue orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60075,8,6,-12.0,5,69,8,5,23.0,False,False,10,5,1,1,0,3500,98590,60075,blue blue blue orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60075,13,7,18.0,2,71,6,4,8.0,False,False,10,4,1,1,0,2100,100690,60075,blue orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60075,3,8,-42.0,0,71,6,3,-2.0,False,False,10,3,1,1,0,0,100690,60075,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60075,0,9,-60.0,3,74,3,2,13.0,False,False,10,2,1,1,0,3600,104290,60075,orange blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60075,15,10,30.0,1,75,2,1,3.0,False,False,10,1,1,1,0,100,104390,60075,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60075,8,11,-12.0,0,75,2,0,-2.0,False,False,10,0,1,1,0,0,104390,60075,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60076,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60076,blue blue blue orange orange blue blue blue blue blue,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60076,7,2,-18.0,27,37,40,8,133.0,False,False,10,8,0,0,0,21870,24670,60076,blue blue orange blue orange blue orange blue blue orange blue blue blue blue blue blue blue blue orange orange blue blue blue blue blue blue blue,17,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60076,0,3,-60.0,12,49,28,7,58.0,False,False,10,7,0,0,0,12360,37030,60076,blue orange orange blue orange orange blue orange blue blue blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60076,8,4,-12.0,11,60,17,6,53.0,False,False,10,6,0,0,0,17050,54080,60076,blue blue orange blue orange orange blue orange orange blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60076,0,5,-60.0,3,63,14,5,13.0,False,False,10,5,0,0,0,1680,55760,60076,blue blue orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60076,6,6,-24.0,1,64,13,4,3.0,False,False,10,4,0,0,0,50,55810,60076,blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60076,0,7,-60.0,1,65,12,3,3.0,False,False,10,3,0,0,0,50,55860,60076,blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60076,5,8,-30.0,0,65,12,2,-2.0,False,False,10,2,0,0,0,0,55860,60076,,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60076,7,9,-18.0,2,67,10,1,8.0,False,False,10,1,0,0,0,2000,57860,60076,orange orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60076,0,10,-60.0,3,70,7,0,13.0,False,False,10,0,0,0,0,3600,61460,60076,orange blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60077,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,1900,1900,60077,blue blue blue blue blue orange blue blue blue blue,24,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60077,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,34020,35920,60077,blue orange orange orange blue blue orange orange blue orange blue orange blue blue orange blue blue blue orange blue blue blue blue blue blue blue blue,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60077,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,18600,54520,60077,blue blue blue orange orange orange orange orange orange blue blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60077,8,4,-12.0,11,60,17,8,53.0,False,False,10,8,2,2,1,25300,79820,60077,orange blue blue orange blue blue blue orange blue orange orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60077,0,5,-60.0,3,63,14,7,13.0,False,False,10,7,2,2,0,6150,85970,60077,blue orange orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60077,7,6,-18.0,4,67,10,6,18.0,False,False,10,6,2,2,0,5200,91170,60077,orange blue blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60077,13,7,18.0,1,68,9,5,3.0,False,False,10,5,2,2,0,100,91270,60077,blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60077,8,8,-12.0,2,70,7,4,8.0,False,False,10,4,2,2,0,400,91670,60077,blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60077,0,9,-60.0,1,71,6,3,3.0,False,False,10,3,2,2,0,100,91770,60077,blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60077,7,10,-18.0,1,72,5,2,3.0,False,False,10,2,2,2,0,1000,92770,60077,orange,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60077,16,11,36.0,2,74,3,1,8.0,False,False,10,1,2,2,0,400,93170,60077,blue blue,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60077,13,12,18.0,2,76,1,0,8.0,False,False,10,0,2,2,0,400,93570,60077,blue blue,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60078,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60078,blue orange blue blue blue blue blue orange blue orange,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60078,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,32670,36370,60078,orange blue blue orange blue blue blue orange blue blue blue blue blue blue blue orange blue blue orange blue orange blue blue orange blue orange blue,14,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60078,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,7200,43570,60078,blue blue blue blue blue blue orange orange blue blue blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60078,15,4,30.0,4,53,24,7,18.0,False,False,10,7,1,1,0,2200,45770,60078,orange blue orange blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60078,0,5,-60.0,3,56,21,6,13.0,False,False,10,6,1,1,0,1890,47660,60078,orange orange blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60078,5,6,-30.0,3,59,18,5,13.0,False,False,10,5,1,1,0,270,47930,60078,blue blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60078,8,7,-12.0,2,61,16,4,8.0,False,False,10,4,1,1,0,1600,49530,60078,orange orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60078,7,8,-18.0,4,65,12,3,18.0,False,False,10,3,1,1,0,2600,52130,60078,orange blue blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60078,8,9,-12.0,6,71,6,2,28.0,False,False,10,2,1,1,0,16500,68630,60078,blue orange orange blue orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60078,3,10,-42.0,0,71,6,1,-2.0,False,False,10,1,1,1,0,0,68630,60078,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60078,8,11,-12.0,0,71,6,0,-2.0,False,False,10,0,1,1,0,0,68630,60078,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60079,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60079,blue orange blue blue blue orange blue blue blue orange,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60079,7,2,-18.0,27,37,40,8,133.0,False,False,10,8,0,0,0,17010,20710,60079,blue orange blue blue blue blue blue blue blue blue blue blue blue blue orange blue orange blue blue blue orange blue blue blue blue blue blue,18,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60079,0,3,-60.0,12,49,28,7,58.0,False,False,10,7,0,0,0,13200,33910,60079,orange blue blue orange orange orange blue blue blue orange orange blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60079,8,4,-12.0,11,60,17,6,53.0,False,False,10,6,0,0,0,14190,48100,60079,blue orange blue orange blue blue blue blue orange orange blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60079,7,5,-18.0,7,67,10,5,33.0,False,False,10,5,0,0,0,13510,61610,60079,blue orange orange blue blue orange orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60079,10,6,0.0,5,72,5,4,23.0,False,False,10,4,0,0,0,16000,77610,60079,orange blue orange blue orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60079,7,7,-18.0,0,72,5,3,-2.0,False,False,10,3,0,0,0,0,77610,60079,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60079,2,8,-48.0,0,72,5,2,-2.0,False,False,10,2,0,0,0,0,77610,60079,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60079,15,9,30.0,1,73,4,1,3.0,False,False,10,1,0,0,0,100,77710,60079,blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60079,1,10,-54.0,0,73,4,0,-2.0,False,False,10,0,0,0,0,0,77710,60079,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60080,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,5500,5500,60080,blue blue orange blue blue orange blue orange orange orange,20,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60080,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,40500,46000,60080,blue blue orange orange blue orange blue blue blue blue orange blue orange blue blue blue orange blue orange orange blue blue blue blue blue blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60080,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,18840,64840,60080,blue blue orange blue blue orange orange blue orange orange blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60080,7,4,-18.0,12,61,16,8,58.0,False,False,10,8,2,2,1,37200,102040,60080,orange blue orange blue blue orange blue orange blue blue blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60080,13,5,18.0,4,65,12,7,18.0,False,False,10,7,2,2,0,5200,107240,60080,blue blue blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60080,0,6,-60.0,3,68,9,6,13.0,False,False,10,6,2,2,0,6300,113540,60080,orange blue orange,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60080,0,7,-60.0,0,68,9,5,-2.0,False,False,10,5,2,2,0,0,113540,60080,,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60080,5,8,-30.0,2,70,7,4,8.0,False,False,10,4,2,2,0,400,113940,60080,blue blue,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60080,0,9,-60.0,0,70,7,3,-2.0,False,False,10,3,2,2,0,0,113940,60080,,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60080,15,10,30.0,2,72,5,2,8.0,False,False,10,2,2,2,0,400,114340,60080,blue blue,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60080,0,11,-60.0,0,72,5,1,-2.0,False,False,10,1,2,2,0,0,114340,60080,,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60080,5,12,-30.0,0,72,5,0,-2.0,False,False,10,0,2,2,0,0,114340,60080,,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60081,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60081,blue blue blue blue blue blue blue blue orange orange,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60081,7,2,-18.0,27,37,40,8,133.0,False,False,10,8,0,0,0,21870,24670,60081,blue orange blue blue orange blue blue blue blue blue blue orange blue blue orange blue blue blue blue blue orange blue blue blue blue orange blue,17,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60081,0,3,-60.0,12,49,28,7,58.0,False,False,10,7,0,0,0,7800,32470,60081,blue orange blue blue orange blue blue blue blue blue orange blue,14,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60081,8,4,-12.0,11,60,17,6,53.0,False,False,10,6,0,0,0,11440,43910,60081,blue blue blue blue orange blue blue blue orange orange orange,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60081,0,5,-60.0,3,63,14,5,13.0,False,False,10,5,0,0,0,1080,44990,60081,orange blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60081,0,6,-60.0,1,64,13,4,3.0,False,False,10,4,0,0,0,30,45020,60081,blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60081,6,7,-24.0,1,65,12,3,3.0,False,False,10,3,0,0,0,300,45320,60081,orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60081,8,8,-12.0,7,72,5,2,33.0,False,False,10,2,0,0,0,20510,65830,60081,blue orange orange orange orange orange blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60081,13,9,18.0,0,72,5,1,-2.0,False,False,10,1,0,0,0,0,65830,60081,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60081,0,10,-60.0,2,74,3,0,8.0,False,False,10,0,0,0,0,2200,68030,60081,blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60082,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,6400,6400,60082,orange orange blue orange blue blue orange orange orange blue,19,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60082,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,35910,42310,60082,blue blue blue orange blue blue blue blue blue blue orange blue blue orange blue blue blue blue blue blue orange orange orange orange blue blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60082,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,12480,54790,60082,blue blue orange blue orange blue blue blue orange blue blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60082,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,19910,74700,60082,blue blue blue blue orange blue blue orange blue orange orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60082,8,5,-12.0,5,65,12,6,23.0,False,False,10,6,1,1,0,8500,83200,60082,blue blue orange orange blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60082,5,6,-30.0,0,65,12,5,-2.0,False,False,10,5,1,1,0,0,83200,60082,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60082,0,7,-60.0,3,68,9,4,13.0,False,False,10,4,1,1,0,900,84100,60082,blue blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60082,4,8,-36.0,0,68,9,3,-2.0,False,False,10,3,1,1,0,0,84100,60082,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60082,13,9,18.0,1,69,8,2,3.0,False,False,10,2,1,1,0,100,84200,60082,blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60082,8,10,-12.0,0,69,8,1,-2.0,False,False,10,1,1,1,0,0,84200,60082,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60082,13,11,18.0,2,71,6,0,8.0,False,False,10,0,1,1,0,400,84600,60082,blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60083,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,7300,7300,60083,blue orange blue orange orange orange orange blue orange orange,18,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60083,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,56970,64270,60083,blue blue blue blue orange blue orange blue blue blue orange blue orange orange blue orange blue blue blue blue orange blue orange orange blue blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60083,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,10800,75070,60083,blue blue blue blue blue blue blue blue orange blue blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60083,16,4,36.0,8,57,20,7,38.0,False,False,10,7,1,1,0,21440,96510,60083,blue orange blue orange blue blue orange orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60083,0,5,-60.0,3,60,17,6,13.0,False,False,10,6,1,1,0,900,97410,60083,blue blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60083,15,6,30.0,5,65,12,5,23.0,False,False,10,5,1,1,0,7000,104410,60083,orange blue blue blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60083,3,7,-42.0,2,67,10,4,8.0,False,False,10,4,1,1,0,400,104810,60083,blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60083,8,8,-12.0,5,72,5,3,23.0,False,False,10,3,1,1,0,7000,111810,60083,blue blue orange blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60083,0,9,-60.0,3,75,2,2,13.0,False,False,10,2,1,1,0,3600,115410,60083,blue orange blue,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60083,3,10,-42.0,0,75,2,1,-2.0,False,False,10,1,1,1,0,0,115410,60083,,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60083,15,11,30.0,0,75,2,0,-2.0,False,False,10,0,1,1,0,0,115410,60083,,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60084,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60084,blue blue blue orange blue blue orange blue blue blue,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60084,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,40500,43300,60084,orange blue orange blue blue blue blue blue orange blue orange blue blue orange blue orange blue blue blue blue orange orange blue orange orange blue blue,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60084,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,11160,54460,60084,blue orange blue orange blue blue orange blue blue blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60084,15,4,30.0,4,53,24,7,18.0,False,False,10,7,1,1,0,3720,58180,60084,orange blue orange orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60084,5,5,-30.0,3,56,21,6,13.0,False,False,10,6,1,1,0,1680,59860,60084,blue blue orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60084,15,6,30.0,1,57,20,5,3.0,False,False,10,5,1,1,0,500,60360,60084,orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60084,7,7,-18.0,11,68,9,4,53.0,False,False,10,4,1,1,0,22000,82360,60084,blue blue blue orange blue blue blue blue blue orange blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60084,9,8,-6.0,3,71,6,3,13.0,False,False,10,3,1,1,0,3600,85960,60084,blue orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60084,15,9,30.0,0,71,6,2,-2.0,False,False,10,2,1,1,0,0,85960,60084,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60084,0,10,-60.0,0,71,6,1,-2.0,False,False,10,1,1,1,0,0,85960,60084,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60084,3,11,-42.0,0,71,6,0,-2.0,False,False,10,0,1,1,0,0,85960,60084,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60085,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,5500,5500,60085,blue orange orange orange blue blue orange orange blue blue,20,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60085,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,62910,68410,60085,orange orange blue blue blue orange orange blue blue blue orange orange orange orange blue blue blue orange orange blue blue blue blue blue blue orange blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60085,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,17400,85810,60085,orange orange blue blue blue blue blue orange blue blue blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60085,9,4,-6.0,6,55,22,7,28.0,False,False,10,7,1,1,0,4500,90310,60085,blue blue blue blue blue orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60085,7,5,-18.0,10,65,12,7,48.0,False,False,10,7,2,2,1,29000,119310,60085,blue orange blue blue blue blue blue orange blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60085,8,6,-12.0,1,66,11,6,3.0,False,False,10,6,2,2,0,100,119410,60085,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60085,0,7,-60.0,0,66,11,5,-2.0,False,False,10,5,2,2,0,0,119410,60085,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60085,8,8,-12.0,7,73,4,4,33.0,False,False,10,4,2,2,0,11200,130610,60085,blue blue blue orange blue blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60085,0,9,-60.0,0,73,4,3,-2.0,False,False,10,3,2,2,0,0,130610,60085,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60085,0,10,-60.0,0,73,4,2,-2.0,False,False,10,2,2,2,0,0,130610,60085,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60085,8,11,-12.0,0,73,4,1,-2.0,False,False,10,1,2,2,0,0,130610,60085,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60085,16,12,36.0,0,73,4,0,-2.0,False,False,10,0,2,2,0,0,130610,60085,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60086,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60086,orange blue blue blue blue orange orange blue blue blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60086,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,50220,53920,60086,blue orange blue orange blue blue blue orange orange orange orange blue orange blue orange blue blue orange orange blue blue blue blue orange blue blue blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60086,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,10320,64240,60086,blue blue blue blue orange blue blue blue orange blue blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60086,9,4,-6.0,6,55,22,7,28.0,False,False,10,7,1,1,0,4320,68560,60086,blue blue orange orange blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60086,0,5,-60.0,3,58,19,6,13.0,False,False,10,6,1,1,0,3090,71650,60086,blue orange orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60086,5,6,-30.0,3,61,16,5,13.0,False,False,10,5,1,1,0,1800,73450,60086,blue orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60086,10,7,0.0,5,66,11,4,23.0,False,False,10,4,1,1,0,11500,84950,60086,orange blue orange blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60086,13,8,18.0,2,68,9,3,8.0,False,False,10,3,1,1,0,400,85350,60086,blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60086,10,9,0.0,0,68,9,2,-2.0,False,False,10,2,1,1,0,0,85350,60086,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60086,8,10,-12.0,3,71,6,1,13.0,False,False,10,1,1,1,0,3600,88950,60086,orange blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60086,15,11,30.0,1,72,5,0,3.0,False,False,10,0,1,1,0,100,89050,60086,blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60087,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60087,blue orange blue blue orange orange orange blue blue blue,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60087,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,36180,40780,60087,blue blue blue orange blue orange orange blue orange orange blue blue blue blue blue blue blue blue blue orange blue blue orange blue blue orange blue,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60087,15,3,30.0,4,41,36,8,18.0,False,False,10,8,1,1,0,1040,41820,60087,blue blue orange blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60087,7,4,-18.0,9,50,27,7,43.0,False,False,10,7,1,1,0,11160,52980,60087,blue orange orange blue orange blue blue blue orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60087,6,5,-24.0,7,57,20,6,33.0,False,False,10,6,1,1,0,3360,56340,60087,blue blue blue blue blue orange blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60087,5,6,-30.0,3,60,17,5,13.0,False,False,10,5,1,1,0,270,56610,60087,blue blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60087,8,7,-12.0,4,64,13,4,18.0,False,False,10,4,1,1,0,4240,60850,60087,blue blue orange orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60087,7,8,-18.0,2,66,11,3,8.0,False,False,10,3,1,1,0,200,61050,60087,blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60087,13,9,18.0,4,70,7,2,18.0,False,False,10,2,1,1,0,2600,63650,60087,blue blue blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60087,13,10,18.0,2,72,5,1,8.0,False,False,10,1,1,1,0,200,63850,60087,blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60087,7,11,-18.0,0,72,5,0,-2.0,False,False,10,0,1,1,0,0,63850,60087,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60088,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,1900,1900,60088,blue blue blue blue blue orange blue blue blue blue,24,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60088,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,26730,28630,60088,blue orange orange blue blue blue blue orange blue blue blue orange blue blue orange blue blue blue blue orange blue blue orange blue blue orange blue,16,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60088,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,11520,40150,60088,orange orange blue blue blue blue blue blue blue blue orange orange,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60088,15,4,30.0,4,53,24,7,18.0,False,False,10,7,1,1,0,2160,42310,60088,blue orange blue orange,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60088,8,5,-12.0,2,55,22,6,8.0,False,False,10,6,1,1,0,120,42430,60088,blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60088,0,6,-60.0,3,58,19,5,13.0,False,False,10,5,1,1,0,1890,44320,60088,blue orange orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60088,8,7,-12.0,4,62,15,4,18.0,False,False,10,4,1,1,0,5320,49640,60088,orange blue orange orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60088,8,8,-12.0,0,62,15,3,-2.0,False,False,10,3,1,1,0,0,49640,60088,,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60088,0,9,-60.0,3,65,12,2,13.0,False,False,10,2,1,1,0,1800,51440,60088,orange blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60088,16,10,36.0,2,67,10,1,8.0,False,False,10,1,1,1,0,2200,53640,60088,orange blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60088,5,11,-30.0,2,69,8,0,8.0,False,False,10,0,1,1,0,2200,55840,60088,blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60089,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,5500,5500,60089,blue blue orange orange blue blue orange blue orange orange,20,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60089,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,41310,46810,60089,orange blue blue blue blue orange orange blue orange orange blue blue blue blue blue blue orange blue blue blue blue orange blue blue blue blue orange,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60089,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,18720,65530,60089,blue blue blue blue blue orange orange orange orange blue blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60089,9,4,-6.0,6,55,22,7,28.0,False,False,10,7,1,1,0,4260,69790,60089,blue blue orange blue blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60089,8,5,-12.0,1,56,21,6,3.0,False,False,10,6,1,1,0,50,69840,60089,blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60089,10,6,0.0,6,62,15,5,28.0,False,False,10,5,1,1,0,12900,82740,60089,blue blue orange orange blue orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60089,0,7,-60.0,3,65,12,4,13.0,False,False,10,4,1,1,0,3600,86340,60089,blue orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60089,0,8,-60.0,0,65,12,3,-2.0,False,False,10,3,1,1,0,0,86340,60089,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60089,10,9,0.0,0,65,12,2,-2.0,False,False,10,2,1,1,0,0,86340,60089,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60089,13,10,18.0,2,67,10,1,8.0,False,False,10,1,1,1,0,2200,88540,60089,blue orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60089,0,11,-60.0,0,67,10,0,-2.0,False,False,10,0,1,1,0,0,88540,60089,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60090,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,6400,6400,60090,orange orange blue orange blue orange blue blue orange orange,19,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60090,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,38070,44470,60090,orange blue blue blue orange blue blue blue blue blue blue orange orange orange blue blue orange blue blue blue orange blue blue blue blue blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60090,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,16080,60550,60090,orange orange blue blue blue blue blue orange blue orange blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60090,0,4,-60.0,3,52,25,7,13.0,False,False,10,7,1,1,0,270,60820,60090,blue blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60090,7,5,-18.0,7,59,18,6,33.0,False,False,10,6,1,1,0,6650,67470,60090,blue blue blue blue orange blue orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60090,9,6,-6.0,5,64,13,5,23.0,False,False,10,5,1,1,0,3500,70970,60090,blue blue orange blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60090,0,7,-60.0,2,66,11,4,8.0,False,False,10,4,1,1,0,1100,72070,60090,orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60090,14,8,24.0,2,68,9,3,8.0,False,False,10,3,1,1,0,2200,74270,60090,orange blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60090,7,9,-18.0,2,70,7,2,8.0,False,False,10,2,1,1,0,2200,76470,60090,blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60090,13,10,18.0,2,72,5,1,8.0,False,False,10,1,1,1,0,400,76870,60090,blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60090,7,11,-18.0,0,72,5,0,-2.0,False,False,10,0,1,1,0,0,76870,60090,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60091,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60091,blue blue orange blue blue orange blue blue blue blue,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60091,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,35100,37900,60091,orange blue orange blue blue blue blue orange blue blue blue orange orange blue blue blue blue blue blue blue blue orange orange orange orange blue blue,14,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60091,7,3,-18.0,9,46,31,8,43.0,False,False,10,8,1,1,0,6480,44380,60091,blue blue orange orange orange blue blue blue blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60091,9,4,-6.0,1,47,30,7,3.0,False,False,10,7,1,1,0,20,44400,60091,blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60091,8,5,-12.0,6,53,24,6,28.0,False,False,10,6,1,1,0,2640,47040,60091,blue orange blue blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60091,0,6,-60.0,6,59,18,5,28.0,False,False,10,5,1,1,0,8760,55800,60091,orange blue orange blue orange orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60091,15,7,30.0,4,63,14,4,18.0,False,False,10,4,1,1,0,2600,58400,60091,blue orange blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60091,13,8,18.0,2,65,12,3,8.0,False,False,10,3,1,1,0,1100,59500,60091,orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60091,13,9,18.0,2,67,10,2,8.0,False,False,10,2,1,1,0,2100,61600,60091,blue orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60091,15,10,30.0,1,68,9,1,3.0,False,False,10,1,1,1,0,1000,62600,60091,orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60091,19,11,54.0,0,68,9,0,-2.0,False,False,10,0,1,1,0,0,62600,60091,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60092,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60092,blue orange blue blue orange blue orange orange blue blue,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60092,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,25650,30250,60092,blue blue blue blue orange orange blue blue blue orange blue blue blue blue orange blue blue blue blue blue blue orange orange blue blue blue blue,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60092,8,3,-12.0,14,51,26,8,68.0,False,False,10,8,1,1,0,18060,48310,60092,orange orange blue orange blue blue blue blue blue blue orange blue orange blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60092,7,4,-18.0,6,57,20,7,28.0,False,False,10,7,1,1,0,1080,49390,60092,blue blue blue blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60092,6,5,-24.0,3,60,17,6,13.0,False,False,10,6,1,1,0,270,49660,60092,blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60092,9,6,-6.0,1,61,16,5,3.0,False,False,10,5,1,1,0,30,49690,60092,blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60092,13,7,18.0,1,62,15,4,3.0,False,False,10,4,1,1,0,30,49720,60092,blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60092,15,8,30.0,4,66,11,3,18.0,False,False,10,3,1,1,0,3720,53440,60092,orange orange orange blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60092,15,9,30.0,1,67,10,2,3.0,False,False,10,2,1,1,0,500,53940,60092,orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60092,6,10,-24.0,0,67,10,1,-2.0,False,False,10,1,1,1,0,0,53940,60092,,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60092,15,11,30.0,0,67,10,0,-2.0,False,False,10,0,1,1,0,0,53940,60092,,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60093,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,1900,1900,60093,blue blue blue blue blue blue blue blue orange blue,24,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60093,7,2,-18.0,27,37,40,8,133.0,False,False,10,8,0,0,0,19440,21340,60093,blue blue blue orange blue blue blue blue blue orange blue blue blue blue blue blue orange blue blue orange blue blue blue blue orange blue blue,19,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60093,0,3,-60.0,12,49,28,7,58.0,False,False,10,7,0,0,0,9360,30700,60093,orange blue blue blue blue blue orange orange blue orange orange blue,14,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60093,16,4,36.0,8,57,20,6,38.0,False,False,10,6,0,0,0,14560,45260,60093,orange blue orange orange orange orange orange orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60093,8,5,-12.0,5,62,15,5,23.0,False,False,10,5,0,0,0,5550,50810,60093,blue blue orange blue orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60093,0,6,-60.0,3,65,12,4,13.0,False,False,10,4,0,0,0,450,51260,60093,blue blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60093,0,7,-60.0,4,69,8,3,18.0,False,False,10,3,0,0,0,2600,53860,60093,orange blue blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60093,10,8,0.0,1,70,7,2,3.0,False,False,10,2,0,0,0,50,53910,60093,blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60093,0,9,-60.0,2,72,5,1,8.0,False,False,10,1,0,0,0,2100,56010,60093,blue orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60093,20,10,60.0,0,72,5,0,-2.0,False,False,10,0,0,0,0,0,56010,60093,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60094,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,1900,1900,60094,blue blue blue blue orange blue blue blue blue blue,24,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60094,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,47520,49420,60094,blue blue blue blue orange orange blue blue orange blue orange blue orange blue blue blue blue orange blue orange orange blue orange blue orange orange orange,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60094,16,3,36.0,8,45,32,8,38.0,False,False,10,8,1,1,0,7520,56940,60094,blue orange orange blue blue blue orange blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60094,0,4,-60.0,5,50,27,7,23.0,False,False,10,7,1,1,0,5900,62840,60094,blue orange orange orange blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60094,7,5,-18.0,5,55,22,6,23.0,False,False,10,6,1,1,0,1250,64090,60094,blue blue blue blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60094,8,6,-12.0,6,61,16,5,28.0,False,False,10,5,1,1,0,4500,68590,60094,blue blue orange blue blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60094,10,7,0.0,1,62,15,4,3.0,False,False,10,4,1,1,0,50,68640,60094,blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60094,8,8,-12.0,1,63,14,3,3.0,False,False,10,3,1,1,0,50,68690,60094,blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60094,15,9,30.0,1,64,13,2,3.0,False,False,10,2,1,1,0,50,68740,60094,blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60094,2,10,-48.0,1,65,12,1,3.0,False,False,10,1,1,1,0,50,68790,60094,blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60094,10,11,0.0,4,69,8,0,18.0,False,False,10,0,1,1,0,6400,75190,60094,orange blue blue orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60095,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60095,blue blue blue blue orange orange blue blue orange blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60095,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,28080,31780,60095,blue blue blue blue blue orange blue blue blue orange blue blue blue orange blue blue orange blue orange blue orange blue orange blue blue blue blue,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60095,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,9360,41140,60095,orange blue blue blue blue blue blue orange blue orange blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60095,13,4,18.0,4,53,24,7,18.0,False,False,10,7,1,1,0,4400,45540,60095,orange orange orange orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60095,0,5,-60.0,3,56,21,6,13.0,False,False,10,6,1,1,0,1080,46620,60095,orange blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60095,7,6,-18.0,7,63,14,5,33.0,False,False,10,5,1,1,0,11480,58100,60095,blue blue blue orange blue orange orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60095,7,7,-18.0,2,65,12,4,8.0,False,False,10,4,1,1,0,200,58300,60095,blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60095,13,8,18.0,2,67,10,3,8.0,False,False,10,3,1,1,0,200,58500,60095,blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60095,0,9,-60.0,2,69,8,2,8.0,False,False,10,2,1,1,0,2100,60600,60095,blue orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60095,15,10,30.0,2,71,6,1,8.0,False,False,10,1,1,1,0,400,61000,60095,blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60095,13,11,18.0,0,71,6,0,-2.0,False,False,10,0,1,1,0,0,61000,60095,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60096,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60096,blue blue blue orange blue blue orange blue orange blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60096,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,49410,53110,60096,orange orange blue orange blue blue blue orange orange blue orange blue blue blue blue orange blue blue blue orange blue blue orange orange blue orange blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60096,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,23880,76990,60096,orange orange blue orange blue blue orange orange blue blue blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60096,19,4,54.0,3,52,25,7,13.0,False,False,10,7,1,1,0,3150,80140,60096,orange orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60096,7,5,-18.0,12,64,13,7,58.0,False,False,10,7,2,2,1,35400,115540,60096,blue orange blue blue blue blue blue blue blue blue orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60096,15,6,30.0,2,66,11,6,8.0,False,False,10,6,2,2,0,400,115940,60096,blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60096,3,7,-42.0,0,66,11,5,-2.0,False,False,10,5,2,2,0,0,115940,60096,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60096,0,8,-60.0,3,69,8,4,13.0,False,False,10,4,2,2,0,900,116840,60096,blue blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60096,18,9,48.0,0,69,8,3,-2.0,False,False,10,3,2,2,0,0,116840,60096,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60096,13,10,18.0,2,71,6,2,8.0,False,False,10,2,2,2,0,2200,119040,60096,blue orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60096,5,11,-30.0,2,73,4,1,8.0,False,False,10,1,2,2,0,400,119440,60096,blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60096,11,12,6.0,0,73,4,0,-2.0,False,False,10,0,2,2,0,0,119440,60096,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60097,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60097,blue orange blue blue orange blue orange orange blue blue,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60097,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,25650,30250,60097,blue orange blue blue blue blue blue blue blue blue blue blue blue orange blue orange blue orange blue blue blue orange orange blue blue blue blue,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60097,16,3,36.0,8,45,32,8,38.0,False,False,10,8,1,1,0,5600,35850,60097,blue blue orange blue orange orange blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60097,8,4,-12.0,7,52,25,7,33.0,False,False,10,7,1,1,0,4410,40260,60097,orange blue blue orange blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60097,8,5,-12.0,3,55,22,6,13.0,False,False,10,6,1,1,0,1080,41340,60097,orange blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60097,15,6,30.0,6,61,16,5,28.0,False,False,10,5,1,1,0,1080,42420,60097,blue blue blue blue blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60097,3,7,-42.0,2,63,14,4,8.0,False,False,10,4,1,1,0,660,43080,60097,orange blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60097,15,8,30.0,1,64,13,3,3.0,False,False,10,3,1,1,0,300,43380,60097,orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60097,13,9,18.0,2,66,11,2,8.0,False,False,10,2,1,1,0,1100,44480,60097,orange blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60097,3,10,-42.0,0,66,11,1,-2.0,False,False,10,1,1,1,0,0,44480,60097,,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60097,5,11,-30.0,3,69,8,0,13.0,False,False,10,0,1,1,0,3150,47630,60097,orange orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60098,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60098,blue blue orange blue blue blue blue blue orange orange,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60098,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,32670,36370,60098,blue blue blue blue blue orange blue blue blue blue orange orange blue orange blue blue blue orange blue orange blue blue blue orange blue blue orange,14,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60098,7,3,-18.0,9,46,31,8,43.0,False,False,10,8,1,1,0,11700,48070,60098,orange orange orange blue blue orange blue orange blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60098,8,4,-12.0,7,53,24,7,33.0,False,False,10,7,1,1,0,5250,53320,60098,orange blue blue orange blue blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60098,7,5,-18.0,8,61,16,6,38.0,False,False,10,6,1,1,0,6480,59800,60098,blue blue orange blue blue blue blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60098,7,6,-18.0,2,63,14,5,8.0,False,False,10,5,1,1,0,200,60000,60098,blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60098,5,7,-30.0,2,65,12,4,8.0,False,False,10,4,1,1,0,2000,62000,60098,orange orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60098,0,8,-60.0,3,68,9,3,13.0,False,False,10,3,1,1,0,6300,68300,60098,orange orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60098,0,9,-60.0,3,71,6,2,13.0,False,False,10,2,1,1,0,900,69200,60098,blue blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60098,11,10,6.0,1,72,5,1,3.0,False,False,10,1,1,1,0,100,69300,60098,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60098,3,11,-42.0,0,72,5,0,-2.0,False,False,10,0,1,1,0,0,69300,60098,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60099,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60099,blue orange blue blue orange blue orange blue blue blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60099,7,2,-18.0,27,37,40,8,133.0,False,False,10,8,0,0,0,19440,23140,60099,orange blue blue orange blue blue blue blue orange blue blue blue blue orange blue blue blue blue blue blue orange blue blue blue blue blue blue,17,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60099,7,3,-18.0,9,46,31,7,43.0,False,False,10,7,0,0,0,3420,26560,60099,blue blue blue blue blue orange blue orange blue,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60099,0,4,-60.0,9,55,22,6,43.0,False,False,10,6,0,0,0,8100,34660,60099,orange blue orange blue blue orange blue orange blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60099,8,5,-12.0,3,58,19,5,13.0,False,False,10,5,0,0,0,180,34840,60099,blue blue blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60099,15,6,30.0,4,62,15,4,18.0,False,False,10,4,0,0,0,2640,37480,60099,orange blue blue orange,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60099,11,7,6.0,3,65,12,3,13.0,False,False,10,3,0,0,0,1080,38560,60099,blue orange blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60099,13,8,18.0,4,69,8,2,18.0,False,False,10,2,0,0,0,1560,40120,60099,blue orange blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60099,15,9,30.0,1,70,7,1,3.0,False,False,10,1,0,0,0,500,40620,60099,orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60099,10,10,0.0,3,73,4,0,13.0,False,False,10,0,0,0,0,6000,46620,60099,orange orange orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60100,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,6400,6400,60100,orange blue orange blue blue orange orange orange blue orange,19,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60100,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,31320,37720,60100,blue orange blue blue blue blue blue blue blue blue blue blue orange blue orange blue blue blue blue orange blue blue orange blue blue blue orange,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60100,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,10680,48400,60100,blue blue blue blue orange blue blue orange blue blue orange blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60100,15,4,30.0,4,53,24,7,18.0,False,False,10,7,1,1,0,2640,51040,60100,orange orange blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60100,0,5,-60.0,3,56,21,6,13.0,False,False,10,6,1,1,0,1080,52120,60100,blue blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60100,8,6,-12.0,2,58,19,5,8.0,False,False,10,5,1,1,0,2000,54120,60100,orange orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60100,6,7,-24.0,4,62,15,4,18.0,False,False,10,4,1,1,0,2600,56720,60100,blue blue orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60100,1,8,-54.0,2,64,13,3,8.0,False,False,10,3,1,1,0,200,56920,60100,blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60100,1,9,-54.0,0,64,13,2,-2.0,False,False,10,2,1,1,0,0,56920,60100,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60100,13,10,18.0,2,66,11,1,8.0,False,False,10,1,1,1,0,2100,59020,60100,blue orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60100,15,11,30.0,1,67,10,0,3.0,False,False,10,0,1,1,0,1000,60020,60100,orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60101,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,5500,5500,60101,blue orange blue blue blue orange orange orange blue orange,20,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60101,7,2,-18.0,27,37,40,8,133.0,False,False,10,8,0,0,0,23220,28720,60101,blue orange blue blue blue blue blue blue blue blue orange blue blue blue blue orange blue blue blue orange blue blue orange blue blue blue blue,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60101,14,3,24.0,2,39,38,7,8.0,False,False,10,7,0,0,0,440,29160,60101,orange blue,14,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60101,15,4,30.0,2,41,36,6,8.0,False,False,10,6,0,0,0,440,29600,60101,orange blue,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60101,0,5,-60.0,12,53,24,5,58.0,False,False,10,5,0,0,0,14040,43640,60101,blue blue blue blue orange orange blue blue blue orange blue orange,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60101,10,6,0.0,5,58,19,4,23.0,False,False,10,4,0,0,0,750,44390,60101,blue blue blue blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60101,0,7,-60.0,3,61,16,3,13.0,False,False,10,3,0,0,0,1080,45470,60101,orange blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60101,0,8,-60.0,1,62,15,2,3.0,False,False,10,2,0,0,0,300,45770,60101,orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60101,7,9,-18.0,3,65,12,1,13.0,False,False,10,1,0,0,0,1740,47510,60101,blue orange blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60101,7,10,-18.0,2,67,10,0,8.0,False,False,10,0,0,0,0,2000,49510,60101,orange orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60102,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60102,blue blue blue orange orange blue blue blue orange blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60102,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,32130,35830,60102,orange orange blue blue blue blue blue blue orange blue blue blue blue orange blue orange orange blue blue blue blue blue blue blue blue orange orange,14,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60102,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,12960,48790,60102,blue blue blue orange orange orange blue blue blue orange blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60102,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,6600,55390,60102,blue blue blue orange blue blue blue blue blue blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60102,8,5,-12.0,5,65,12,6,23.0,False,False,10,6,1,1,0,3450,58840,60102,orange blue orange blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60102,5,6,-30.0,0,65,12,5,-2.0,False,False,10,5,1,1,0,0,58840,60102,,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60102,4,7,-36.0,0,65,12,4,-2.0,False,False,10,4,1,1,0,0,58840,60102,,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60102,15,8,30.0,3,68,9,3,13.0,False,False,10,3,1,1,0,3090,61930,60102,blue orange orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60102,8,9,-12.0,0,68,9,2,-2.0,False,False,10,2,1,1,0,0,61930,60102,,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60102,6,10,-24.0,2,70,7,1,8.0,False,False,10,1,1,1,0,3000,64930,60102,orange orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60102,0,11,-60.0,3,73,4,0,13.0,False,False,10,0,1,1,0,6300,71230,60102,blue orange orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60103,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60103,blue orange blue blue orange blue orange blue blue blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60103,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,38610,42310,60103,blue orange blue blue orange blue blue blue blue blue blue orange blue orange blue orange blue orange blue orange blue blue orange blue orange blue blue,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60103,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,7200,49510,60103,orange blue blue orange blue blue blue blue blue blue blue blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60103,0,4,-60.0,3,52,25,7,13.0,False,False,10,7,1,1,0,180,49690,60103,blue blue blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60103,3,5,-42.0,4,56,21,6,18.0,False,False,10,6,1,1,0,1560,51250,60103,orange blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60103,13,6,18.0,4,60,17,5,18.0,False,False,10,5,1,1,0,2640,53890,60103,blue orange blue orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60103,8,7,-12.0,1,61,16,4,3.0,False,False,10,4,1,1,0,300,54190,60103,orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60103,7,8,-18.0,3,64,13,3,13.0,False,False,10,3,1,1,0,3150,57340,60103,orange blue orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60103,13,9,18.0,2,66,11,2,8.0,False,False,10,2,1,1,0,3000,60340,60103,orange orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60103,15,10,30.0,2,68,9,1,8.0,False,False,10,1,1,1,0,400,60740,60103,blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60103,19,11,54.0,2,70,7,0,8.0,False,False,10,0,1,1,0,2200,62940,60103,blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60104,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60104,blue blue blue orange blue orange orange blue blue blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60104,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,27000,30700,60104,blue orange blue blue blue orange blue blue blue blue blue blue blue orange orange orange blue blue blue blue orange blue blue blue blue blue orange,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60104,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,18360,49060,60104,blue blue blue orange orange orange orange blue blue orange orange blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60104,0,4,-60.0,3,52,25,7,13.0,False,False,10,7,1,1,0,3300,52360,60104,orange orange orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60104,13,5,18.0,4,56,21,6,18.0,False,False,10,6,1,1,0,2600,54960,60104,blue orange blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60104,13,6,18.0,2,58,19,5,8.0,False,False,10,5,1,1,0,1100,56060,60104,blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60104,0,7,-60.0,4,62,15,4,18.0,False,False,10,4,1,1,0,800,56860,60104,blue blue blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60104,15,8,30.0,2,64,13,3,8.0,False,False,10,3,1,1,0,200,57060,60104,blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60104,0,9,-60.0,3,67,10,2,13.0,False,False,10,2,1,1,0,450,57510,60104,blue blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60104,6,10,-24.0,2,69,8,1,8.0,False,False,10,1,1,1,0,200,57710,60104,blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60104,13,11,18.0,0,69,8,0,-2.0,False,False,10,0,1,1,0,0,57710,60104,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60105,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60105,blue blue blue orange blue blue orange blue blue blue,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60105,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,35100,37900,60105,orange blue blue blue blue orange blue blue blue blue orange blue blue blue blue blue blue orange orange blue orange orange blue orange blue orange blue,14,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60105,10,3,0.0,8,45,32,8,38.0,False,False,10,8,1,1,0,10240,48140,60105,orange orange orange blue orange blue orange blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60105,7,4,-18.0,5,50,27,7,23.0,False,False,10,7,1,1,0,3450,51590,60105,blue blue orange blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60105,8,5,-12.0,8,58,19,7,38.0,False,False,10,7,2,2,1,29200,80790,60105,orange orange orange blue blue blue orange orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60105,10,6,0.0,3,61,16,6,13.0,False,False,10,6,2,2,0,900,81690,60105,blue blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60105,13,7,18.0,4,65,12,5,18.0,False,False,10,5,2,2,0,1600,83290,60105,blue blue blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60105,0,8,-60.0,5,70,7,4,23.0,False,False,10,4,2,2,0,11500,94790,60105,blue blue orange orange blue,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60105,2,9,-48.0,1,71,6,3,3.0,False,False,10,3,2,2,0,100,94890,60105,blue,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60105,15,10,30.0,1,72,5,2,3.0,False,False,10,2,2,2,0,100,94990,60105,blue,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60105,7,11,-18.0,2,74,3,1,8.0,False,False,10,1,2,2,0,400,95390,60105,blue blue,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60105,3,12,-42.0,0,74,3,0,-2.0,False,False,10,0,2,2,0,0,95390,60105,,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60106,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,5500,5500,60106,orange blue blue orange blue orange blue orange blue orange,20,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60106,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,25110,30610,60106,blue orange blue blue orange blue blue blue blue blue blue blue orange orange blue orange blue blue blue blue blue blue blue blue blue blue blue,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60106,7,3,-18.0,9,46,31,8,43.0,False,False,10,8,1,1,0,10620,41230,60106,orange blue blue blue orange blue orange orange orange,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60106,8,4,-12.0,7,53,24,7,33.0,False,False,10,7,1,1,0,10430,51660,60106,orange blue blue blue orange orange orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60106,8,5,-12.0,2,55,22,6,8.0,False,False,10,6,1,1,0,1100,52760,60106,blue orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60106,8,6,-12.0,4,59,18,5,18.0,False,False,10,5,1,1,0,2600,55360,60106,blue orange blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60106,13,7,18.0,6,65,12,4,28.0,False,False,10,4,1,1,0,7500,62860,60106,blue blue blue blue blue orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60106,9,8,-6.0,0,65,12,3,-2.0,False,False,10,3,1,1,0,0,62860,60106,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60106,7,9,-18.0,0,65,12,2,-2.0,False,False,10,2,1,1,0,0,62860,60106,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60106,13,10,18.0,3,68,9,1,13.0,False,False,10,1,1,1,0,3600,66460,60106,blue orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60106,13,11,18.0,0,68,9,0,-2.0,False,False,10,0,1,1,0,0,66460,60106,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60107,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60107,blue orange orange blue blue blue blue blue blue blue,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60107,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,40230,43030,60107,blue blue orange blue blue orange blue blue orange orange blue orange orange blue blue blue blue blue blue orange blue blue orange blue blue orange orange,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60107,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,21000,64030,60107,blue blue blue orange orange orange orange blue blue orange blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60107,0,4,-60.0,3,52,25,7,13.0,False,False,10,7,1,1,0,1800,65830,60107,orange blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60107,8,5,-12.0,11,63,14,7,53.0,False,False,10,7,2,2,1,37950,103780,60107,orange orange blue blue blue blue blue orange orange blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60107,7,6,-18.0,4,67,10,6,18.0,False,False,10,6,2,2,0,1600,105380,60107,blue blue blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60107,15,7,30.0,1,68,9,5,3.0,False,False,10,5,2,2,0,1000,106380,60107,orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60107,0,8,-60.0,1,69,8,4,3.0,False,False,10,4,2,2,0,100,106480,60107,blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60107,15,9,30.0,0,69,8,3,-2.0,False,False,10,3,2,2,0,0,106480,60107,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60107,0,10,-60.0,2,71,6,2,8.0,False,False,10,2,2,2,0,400,106880,60107,blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60107,7,11,-18.0,2,73,4,1,8.0,False,False,10,1,2,2,0,400,107280,60107,blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60107,0,12,-60.0,0,73,4,0,-2.0,False,False,10,0,2,2,0,0,107280,60107,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60108,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,1900,1900,60108,blue blue orange blue blue blue blue blue blue blue,24,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60108,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,38880,40780,60108,orange blue orange blue blue blue blue orange orange orange blue orange blue orange orange blue blue blue orange blue blue blue blue blue orange blue blue,14,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60108,13,3,18.0,4,41,36,8,18.0,False,False,10,8,1,1,0,1040,41820,60108,blue blue blue orange,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60108,0,4,-60.0,12,53,24,7,58.0,False,False,10,7,1,1,0,17400,59220,60108,orange blue blue blue blue blue orange blue orange orange blue orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60108,0,5,-60.0,3,56,21,6,13.0,False,False,10,6,1,1,0,270,59490,60108,blue blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60108,8,6,-12.0,1,57,20,5,3.0,False,False,10,5,1,1,0,30,59520,60108,blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60108,0,7,-60.0,4,61,16,4,18.0,False,False,10,4,1,1,0,1560,61080,60108,orange blue blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60108,0,8,-60.0,3,64,13,3,13.0,False,False,10,3,1,1,0,4500,65580,60108,orange orange orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60108,3,9,-42.0,6,70,7,2,28.0,False,False,10,2,1,1,0,14400,79980,60108,orange blue blue orange blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60108,14,10,24.0,1,71,6,1,3.0,False,False,10,1,1,1,0,100,80080,60108,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60108,5,11,-30.0,0,71,6,0,-2.0,False,False,10,0,1,1,0,0,80080,60108,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60109,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60109,blue blue blue orange blue blue blue orange blue orange,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60109,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,27810,31510,60109,orange blue blue orange blue blue blue blue blue blue blue blue blue blue blue orange blue blue orange orange blue blue orange orange blue blue blue,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60109,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,21960,53470,60109,blue blue orange orange orange orange orange orange orange blue blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60109,8,4,-12.0,11,60,17,8,53.0,False,False,10,8,2,2,1,34980,88450,60109,orange blue orange orange blue blue orange blue orange blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60109,8,5,-12.0,5,65,12,7,23.0,False,False,10,7,2,2,0,7000,95450,60109,blue blue blue orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60109,5,6,-30.0,0,65,12,6,-2.0,False,False,10,6,2,2,0,0,95450,60109,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60109,15,7,30.0,3,68,9,5,13.0,False,False,10,5,2,2,0,900,96350,60109,blue blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60109,13,8,18.0,2,70,7,4,8.0,False,False,10,4,2,2,0,2200,98550,60109,orange blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60109,0,9,-60.0,3,73,4,3,13.0,False,False,10,3,2,2,0,3600,102150,60109,blue orange blue,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60109,10,10,0.0,0,73,4,2,-2.0,False,False,10,2,2,2,0,0,102150,60109,,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60109,7,11,-18.0,1,74,3,1,3.0,False,False,10,1,2,2,0,100,102250,60109,blue,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60109,12,12,12.0,0,74,3,0,-2.0,False,False,10,0,2,2,0,0,102250,60109,,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60110,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60110,blue blue orange blue blue blue orange orange orange blue,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60110,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,41850,46450,60110,blue blue blue blue blue orange blue blue orange orange blue orange blue blue blue orange orange blue blue orange blue orange orange blue blue blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60110,13,3,18.0,4,41,36,8,18.0,False,False,10,8,1,1,0,2160,48610,60110,orange blue blue orange,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60110,8,4,-12.0,10,51,26,7,48.0,False,False,10,7,1,1,0,11100,59710,60110,blue orange blue blue orange blue blue blue blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60110,0,5,-60.0,5,56,21,6,23.0,False,False,10,6,1,1,0,750,60460,60110,blue blue blue blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60110,0,6,-60.0,3,59,18,5,13.0,False,False,10,5,1,1,0,270,60730,60110,blue blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60110,5,7,-30.0,1,60,17,4,3.0,False,False,10,4,1,1,0,30,60760,60110,blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60110,8,8,-12.0,7,67,10,4,33.0,False,False,10,4,2,2,1,25410,86170,60110,blue orange orange orange orange orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60110,16,9,36.0,0,67,10,3,-2.0,False,False,10,3,2,2,0,0,86170,60110,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60110,0,10,-60.0,0,67,10,2,-2.0,False,False,10,2,2,2,0,0,86170,60110,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60110,13,11,18.0,0,67,10,1,-2.0,False,False,10,1,2,2,0,0,86170,60110,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60110,7,12,-18.0,2,69,8,0,8.0,False,False,10,0,2,2,0,400,86570,60110,blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60111,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60111,orange blue blue blue blue blue blue orange blue orange,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60111,7,2,-18.0,27,37,40,8,133.0,False,False,10,8,0,0,0,17010,20710,60111,blue blue orange orange blue blue blue blue blue blue blue orange blue blue blue blue blue blue blue blue blue blue blue orange blue blue blue,18,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60111,0,3,-60.0,12,49,28,7,58.0,False,False,10,7,0,0,0,8880,29590,60111,orange blue orange blue orange blue blue blue orange blue blue blue,14,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60111,0,4,-60.0,3,52,25,6,13.0,False,False,10,6,0,0,0,1800,31390,60111,orange orange orange,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60111,11,5,6.0,11,63,14,6,53.0,False,False,10,6,1,1,1,41800,73190,60111,blue orange blue orange orange orange orange orange blue orange orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60111,4,6,-36.0,0,63,14,5,-2.0,False,False,10,5,1,1,0,0,73190,60111,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60111,8,7,-12.0,3,66,11,4,13.0,False,False,10,4,1,1,0,900,74090,60111,blue blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60111,0,8,-60.0,1,67,10,3,3.0,False,False,10,3,1,1,0,1000,75090,60111,orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60111,8,9,-12.0,0,67,10,2,-2.0,False,False,10,2,1,1,0,0,75090,60111,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60111,0,10,-60.0,0,67,10,1,-2.0,False,False,10,1,1,1,0,0,75090,60111,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60111,15,11,30.0,3,70,7,0,13.0,False,False,10,0,1,1,0,900,75990,60111,blue blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60112,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60112,blue orange blue orange blue blue blue orange blue orange,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60112,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,41310,45910,60112,blue orange blue blue blue orange blue blue blue orange blue orange blue blue blue blue orange blue orange blue orange orange blue orange blue blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60112,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,16080,61990,60112,orange orange orange orange blue blue blue blue blue blue blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60112,6,4,-24.0,11,60,17,7,53.0,False,False,10,7,1,1,0,6600,68590,60112,blue blue blue blue blue orange blue blue blue blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60112,6,5,-24.0,1,61,16,6,3.0,False,False,10,6,1,1,0,30,68620,60112,blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60112,7,6,-18.0,0,61,16,5,-2.0,False,False,10,5,1,1,0,0,68620,60112,,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60112,7,7,-18.0,0,61,16,4,-2.0,False,False,10,4,1,1,0,0,68620,60112,,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60112,15,8,30.0,1,62,15,3,3.0,False,False,10,3,1,1,0,500,69120,60112,orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60112,15,9,30.0,2,64,13,2,8.0,False,False,10,2,1,1,0,1100,70220,60112,blue orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60112,7,10,-18.0,0,64,13,1,-2.0,False,False,10,1,1,1,0,0,70220,60112,,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60112,0,11,-60.0,3,67,10,0,13.0,False,False,10,0,1,1,0,4800,75020,60112,orange orange blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60113,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60113,blue orange blue blue blue orange blue blue orange blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60113,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,34560,38260,60113,blue blue orange blue orange orange blue blue orange orange blue blue blue orange blue blue orange blue blue blue orange blue blue blue blue blue blue,14,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60113,2,3,-48.0,6,43,34,8,28.0,False,False,10,8,1,1,0,3960,42220,60113,blue blue orange orange blue orange,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60113,0,4,-60.0,7,50,27,7,33.0,False,False,10,7,1,1,0,7140,49360,60113,orange orange blue blue orange blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60113,8,5,-12.0,10,60,17,6,48.0,False,False,10,6,1,1,0,10800,60160,60113,blue blue blue blue blue blue orange orange blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60113,10,6,0.0,2,62,15,5,8.0,False,False,10,5,1,1,0,1100,61260,60113,blue orange,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60113,7,7,-18.0,4,66,11,4,18.0,False,False,10,4,1,1,0,2600,63860,60113,blue blue blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60113,0,8,-60.0,0,66,11,3,-2.0,False,False,10,3,1,1,0,0,63860,60113,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60113,8,9,-12.0,3,69,8,2,13.0,False,False,10,2,1,1,0,3450,67310,60113,blue orange blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60113,13,10,18.0,1,70,7,1,3.0,False,False,10,1,1,1,0,1000,68310,60113,orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60113,3,11,-42.0,0,70,7,0,-2.0,False,False,10,0,1,1,0,0,68310,60113,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60114,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60114,blue blue blue orange orange blue orange blue blue orange,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60114,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,41580,46180,60114,blue orange blue blue blue blue blue orange blue blue orange blue orange blue orange blue blue orange blue blue blue orange blue orange orange blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60114,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,19200,65380,60114,orange blue orange blue blue blue blue blue orange orange blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60114,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,20020,85400,60114,blue blue blue blue orange blue blue blue orange blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60114,7,5,-18.0,7,67,10,6,33.0,False,False,10,6,1,1,0,17150,102550,60114,blue orange blue blue blue orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60114,13,6,18.0,1,68,9,5,3.0,False,False,10,5,1,1,0,100,102650,60114,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60114,13,7,18.0,2,70,7,4,8.0,False,False,10,4,1,1,0,2200,104850,60114,blue orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60114,3,8,-42.0,0,70,7,3,-2.0,False,False,10,3,1,1,0,0,104850,60114,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60114,0,9,-60.0,2,72,5,2,8.0,False,False,10,2,1,1,0,400,105250,60114,blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60114,8,10,-12.0,1,73,4,1,3.0,False,False,10,1,1,1,0,100,105350,60114,blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60114,3,11,-42.0,0,73,4,0,-2.0,False,False,10,0,1,1,0,0,105350,60114,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60115,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,6400,6400,60115,orange orange orange blue orange blue blue orange orange blue,19,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60115,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,51300,57700,60115,orange orange blue orange blue blue blue blue blue orange blue orange blue orange blue orange blue blue orange blue blue blue blue blue blue blue orange,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60115,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,10800,68500,60115,blue blue blue orange blue blue blue blue blue blue blue orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60115,12,4,12.0,4,53,24,7,18.0,False,False,10,7,1,1,0,1560,70060,60115,blue blue orange blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60115,8,5,-12.0,1,54,23,6,3.0,False,False,10,6,1,1,0,500,70560,60115,orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60115,7,6,-18.0,7,61,16,5,33.0,False,False,10,5,1,1,0,5600,76160,60115,blue blue blue blue blue orange blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60115,6,7,-24.0,3,64,13,4,13.0,False,False,10,4,1,1,0,4800,80960,60115,orange orange blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60115,4,8,-36.0,0,64,13,3,-2.0,False,False,10,3,1,1,0,0,80960,60115,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60115,15,9,30.0,2,66,11,2,8.0,False,False,10,2,1,1,0,400,81360,60115,blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60115,3,10,-42.0,1,67,10,1,3.0,False,False,10,1,1,1,0,100,81460,60115,blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60115,15,11,30.0,1,68,9,0,3.0,False,False,10,0,1,1,0,100,81560,60115,blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60116,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60116,blue orange blue blue blue blue blue orange orange blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60116,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,39150,42850,60116,blue blue blue orange blue blue blue orange blue blue orange orange orange blue blue orange blue orange orange blue blue blue blue blue blue orange blue,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60116,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,13920,56770,60116,blue blue blue blue blue blue blue orange blue orange orange orange,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60116,6,4,-24.0,11,60,17,7,53.0,False,False,10,7,1,1,0,15180,71950,60116,orange blue orange blue blue blue blue blue orange blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60116,8,5,-12.0,4,64,13,6,18.0,False,False,10,6,1,1,0,4400,76350,60116,blue orange orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60116,0,6,-60.0,3,67,10,5,13.0,False,False,10,5,1,1,0,450,76800,60116,blue blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60116,3,7,-42.0,0,67,10,4,-2.0,False,False,10,4,1,1,0,0,76800,60116,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60116,15,8,30.0,1,68,9,3,3.0,False,False,10,3,1,1,0,50,76850,60116,blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60116,3,9,-42.0,0,68,9,2,-2.0,False,False,10,2,1,1,0,0,76850,60116,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60116,3,10,-42.0,0,68,9,1,-2.0,False,False,10,1,1,1,0,0,76850,60116,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60116,15,11,30.0,1,69,8,0,3.0,False,False,10,0,1,1,0,1000,77850,60116,orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60117,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60117,blue blue orange blue blue orange blue orange blue orange,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60117,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,42390,46990,60117,blue orange orange blue blue blue blue orange blue orange orange blue blue blue orange blue orange blue orange blue blue blue orange blue blue blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60117,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,8880,55870,60117,orange blue blue blue blue blue blue orange blue blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60117,0,4,-60.0,3,52,25,7,13.0,False,False,10,7,1,1,0,1080,56950,60117,orange blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60117,7,5,-18.0,7,59,18,6,33.0,False,False,10,6,1,1,0,3360,60310,60117,orange blue blue blue blue blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60117,12,6,12.0,4,63,14,5,18.0,False,False,10,5,1,1,0,3520,63830,60117,blue orange orange blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60117,6,7,-24.0,3,66,11,4,13.0,False,False,10,4,1,1,0,1800,65630,60117,blue orange blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60117,1,8,-54.0,1,67,10,3,3.0,False,False,10,3,1,1,0,50,65680,60117,blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60117,13,9,18.0,2,69,8,2,8.0,False,False,10,2,1,1,0,1100,66780,60117,orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60117,13,10,18.0,0,69,8,1,-2.0,False,False,10,1,1,1,0,0,66780,60117,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60117,3,11,-42.0,1,70,7,0,3.0,False,False,10,0,1,1,0,50,66830,60117,blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60118,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60118,orange blue blue blue blue orange blue blue blue orange,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60118,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,44010,47710,60118,blue orange blue blue blue blue blue blue orange blue blue orange orange blue blue orange orange orange orange orange orange blue blue blue blue blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60118,7,3,-18.0,9,46,31,8,43.0,False,False,10,8,1,1,0,5940,53650,60118,blue blue blue orange blue blue orange blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60118,7,4,-18.0,8,54,23,7,38.0,False,False,10,7,1,1,0,8400,62050,60118,blue blue orange blue blue orange orange blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60118,0,5,-60.0,9,63,14,6,43.0,False,False,10,6,1,1,0,12150,74200,60118,orange blue blue blue blue orange blue blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60118,12,6,12.0,1,64,13,5,3.0,False,False,10,5,1,1,0,500,74700,60118,orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60118,14,7,24.0,2,66,11,4,8.0,False,False,10,4,1,1,0,200,74900,60118,blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60118,6,8,-24.0,0,66,11,3,-2.0,False,False,10,3,1,1,0,0,74900,60118,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60118,15,9,30.0,4,70,7,2,18.0,False,False,10,2,1,1,0,8400,83300,60118,blue blue orange orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60118,15,10,30.0,1,71,6,1,3.0,False,False,10,1,1,1,0,100,83400,60118,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60118,3,11,-42.0,0,71,6,0,-2.0,False,False,10,0,1,1,0,0,83400,60118,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60119,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60119,orange orange blue blue blue blue blue blue blue blue,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60119,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,41310,44110,60119,blue blue blue blue orange blue blue blue blue orange orange blue orange blue orange orange blue orange orange blue orange blue blue blue blue orange blue,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60119,5,3,-30.0,3,40,37,8,13.0,False,False,10,8,1,1,0,720,44830,60119,blue blue orange,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60119,0,4,-60.0,12,52,25,8,58.0,False,False,10,8,2,2,1,25680,70510,60119,orange orange blue orange orange blue orange blue orange blue blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60119,7,5,-18.0,11,63,14,8,53.0,False,False,10,8,3,3,1,28050,98560,60119,blue orange blue blue blue orange blue orange blue blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60119,13,6,18.0,5,68,9,7,23.0,False,False,10,7,3,3,0,11500,110060,60119,blue orange orange blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60119,2,7,-48.0,0,68,9,6,-2.0,False,False,10,6,3,3,0,0,110060,60119,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60119,9,8,-6.0,1,69,8,5,3.0,False,False,10,5,3,3,0,100,110160,60119,blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60119,8,9,-12.0,1,70,7,4,3.0,False,False,10,4,3,3,0,100,110260,60119,blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60119,6,10,-24.0,0,70,7,3,-2.0,False,False,10,3,3,3,0,0,110260,60119,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60119,4,11,-36.0,0,70,7,2,-2.0,False,False,10,2,3,3,0,0,110260,60119,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60119,14,12,24.0,2,72,5,1,8.0,False,False,10,1,3,3,0,400,110660,60119,blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60119,13,13,18.0,0,72,5,0,-2.0,False,False,10,0,3,3,0,0,110660,60119,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60120,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60120,blue blue orange orange blue blue orange blue blue blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60120,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,27000,30700,60120,blue blue blue blue blue blue blue blue blue orange orange blue blue blue orange blue blue orange orange blue blue blue orange blue blue blue orange,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60120,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,9360,40060,60120,blue orange blue blue orange orange blue blue blue blue blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60120,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,16830,56890,60120,orange blue blue blue blue blue orange orange orange orange blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60120,8,5,-12.0,5,65,12,6,23.0,False,False,10,6,1,1,0,8000,64890,60120,orange blue orange blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60120,0,6,-60.0,3,68,9,5,13.0,False,False,10,5,1,1,0,3450,68340,60120,blue orange blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60120,13,7,18.0,1,69,8,4,3.0,False,False,10,4,1,1,0,1000,69340,60120,orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60120,15,8,30.0,2,71,6,3,8.0,False,False,10,3,1,1,0,400,69740,60120,blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60120,0,9,-60.0,0,71,6,2,-2.0,False,False,10,2,1,1,0,0,69740,60120,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60120,0,10,-60.0,0,71,6,1,-2.0,False,False,10,1,1,1,0,0,69740,60120,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60120,0,11,-60.0,0,71,6,0,-2.0,False,False,10,0,1,1,0,0,69740,60120,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60121,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60121,orange blue orange blue orange blue blue blue blue blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60121,7,2,-18.0,27,37,40,8,133.0,False,False,10,8,0,0,0,21870,25570,60121,blue blue blue blue blue orange blue blue blue orange blue blue orange blue orange blue blue blue blue blue blue blue orange orange blue blue blue,16,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60121,0,3,-60.0,12,49,28,7,58.0,False,False,10,7,0,0,0,20880,46450,60121,orange orange orange orange blue orange orange orange blue blue blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60121,7,4,-18.0,12,61,16,7,58.0,False,False,10,7,1,1,1,40680,87130,60121,orange orange blue blue blue orange blue blue orange orange orange blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60121,0,5,-60.0,3,64,13,6,13.0,False,False,10,6,1,1,0,3600,90730,60121,blue orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60121,9,6,-6.0,0,64,13,5,-2.0,False,False,10,5,1,1,0,0,90730,60121,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60121,13,7,18.0,4,68,9,4,18.0,False,False,10,4,1,1,0,1600,92330,60121,blue blue blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60121,15,8,30.0,2,70,7,3,8.0,False,False,10,3,1,1,0,400,92730,60121,blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60121,15,9,30.0,1,71,6,2,3.0,False,False,10,2,1,1,0,100,92830,60121,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60121,7,10,-18.0,1,72,5,1,3.0,False,False,10,1,1,1,0,100,92930,60121,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60121,13,11,18.0,0,72,5,0,-2.0,False,False,10,0,1,1,0,0,92930,60121,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60122,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60122,blue blue orange blue orange blue blue blue orange orange,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60122,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,48060,52660,60122,blue orange blue blue orange blue orange orange orange blue blue orange blue orange blue blue orange blue blue orange blue blue orange blue blue blue blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60122,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,7560,60220,60122,orange blue blue blue blue blue blue blue blue blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60122,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,12540,72760,60122,orange orange blue blue blue blue blue blue blue orange blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60122,7,5,-18.0,7,67,10,6,33.0,False,False,10,6,1,1,0,18550,91310,60122,orange blue blue orange blue orange orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60122,7,6,-18.0,4,71,6,5,18.0,False,False,10,5,1,1,0,5200,96510,60122,blue blue blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60122,3,7,-42.0,0,71,6,4,-2.0,False,False,10,4,1,1,0,0,96510,60122,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60122,0,8,-60.0,0,71,6,3,-2.0,False,False,10,3,1,1,0,0,96510,60122,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60122,15,9,30.0,1,72,5,2,3.0,False,False,10,2,1,1,0,100,96610,60122,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60122,3,10,-42.0,0,72,5,1,-2.0,False,False,10,1,1,1,0,0,96610,60122,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60122,8,11,-12.0,0,72,5,0,-2.0,False,False,10,0,1,1,0,0,96610,60122,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60123,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60123,blue blue blue orange orange blue blue orange blue blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60123,7,2,-18.0,27,37,40,8,133.0,False,False,10,8,0,0,0,21870,25570,60123,blue blue blue blue blue blue blue blue orange orange blue blue blue blue blue blue blue orange blue blue blue orange blue blue blue orange orange,16,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60123,14,3,24.0,2,39,38,7,8.0,False,False,10,7,0,0,0,440,26010,60123,orange blue,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60123,0,4,-60.0,12,51,26,6,58.0,False,False,10,6,0,0,0,14880,40890,60123,blue orange blue orange blue orange blue blue orange blue blue orange,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60123,7,5,-18.0,7,58,19,5,33.0,False,False,10,5,0,0,0,10430,51320,60123,blue blue blue orange orange orange orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60123,16,6,36.0,9,67,10,4,43.0,False,False,10,4,0,0,0,20700,72020,60123,blue blue blue blue blue orange blue orange orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60123,0,7,-60.0,2,69,8,3,8.0,False,False,10,3,0,0,0,400,72420,60123,blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60123,15,8,30.0,2,71,6,2,8.0,False,False,10,2,0,0,0,2200,74620,60123,blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60123,15,9,30.0,1,72,5,1,3.0,False,False,10,1,0,0,0,100,74720,60123,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60123,3,10,-42.0,1,73,4,0,3.0,False,False,10,0,0,0,0,1000,75720,60123,orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60124,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60124,orange blue blue blue orange blue blue blue blue blue,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60124,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,58860,61660,60124,orange blue blue orange blue blue orange blue blue orange orange blue blue blue blue orange orange orange blue orange blue orange orange blue blue orange orange,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60124,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,14040,75700,60124,blue blue orange blue orange blue blue orange blue blue blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60124,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,10340,86040,60124,blue blue blue orange blue blue blue blue blue blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60124,0,5,-60.0,3,63,14,6,13.0,False,False,10,6,1,1,0,1800,87840,60124,orange blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60124,8,6,-12.0,5,68,9,5,23.0,False,False,10,5,1,1,0,8750,96590,60124,blue orange orange blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60124,8,7,-12.0,0,68,9,4,-2.0,False,False,10,4,1,1,0,0,96590,60124,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60124,6,8,-24.0,2,70,7,3,8.0,False,False,10,3,1,1,0,400,96990,60124,blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60124,8,9,-12.0,0,70,7,2,-2.0,False,False,10,2,1,1,0,0,96990,60124,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60124,15,10,30.0,1,71,6,1,3.0,False,False,10,1,1,1,0,1000,97990,60124,orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60124,8,11,-12.0,0,71,6,0,-2.0,False,False,10,0,1,1,0,0,97990,60124,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60125,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60125,blue blue blue orange orange blue blue orange blue blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60125,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,27270,30970,60125,blue orange blue blue blue blue blue orange orange blue blue blue orange orange blue orange blue blue blue blue blue blue blue blue blue orange blue,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60125,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,9360,40330,60125,blue blue orange blue blue blue blue orange blue blue blue orange,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60125,0,4,-60.0,3,52,25,7,13.0,False,False,10,7,1,1,0,1560,41890,60125,blue orange orange,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60125,7,5,-18.0,7,59,18,6,33.0,False,False,10,6,1,1,0,7140,49030,60125,orange orange blue blue orange blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60125,16,6,36.0,8,67,10,5,38.0,False,False,10,5,1,1,0,13840,62870,60125,blue orange blue blue orange orange blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60125,9,7,-6.0,0,67,10,4,-2.0,False,False,10,4,1,1,0,0,62870,60125,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60125,11,8,6.0,1,68,9,3,3.0,False,False,10,3,1,1,0,1000,63870,60125,orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60125,16,9,36.0,1,69,8,2,3.0,False,False,10,2,1,1,0,100,63970,60125,blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60125,9,10,-6.0,0,69,8,1,-2.0,False,False,10,1,1,1,0,0,63970,60125,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60125,15,11,30.0,4,73,4,0,18.0,False,False,10,0,1,1,0,5200,69170,60125,blue blue orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60126,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60126,blue blue blue orange blue blue blue orange orange blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60126,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,32670,36370,60126,orange blue orange blue orange orange blue blue blue blue blue blue blue orange blue orange blue blue blue blue blue blue blue orange orange blue blue,14,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60126,7,3,-18.0,9,46,31,8,43.0,False,False,10,8,1,1,0,6480,42850,60126,blue orange orange blue blue blue blue blue orange,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60126,8,4,-12.0,7,53,24,7,33.0,False,False,10,7,1,1,0,5040,47890,60126,blue blue blue orange orange blue blue,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60126,7,5,-18.0,8,61,16,6,38.0,False,False,10,6,1,1,0,10000,57890,60126,blue blue blue orange blue orange blue orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60126,0,6,-60.0,3,64,13,5,13.0,False,False,10,5,1,1,0,3150,61040,60126,blue orange orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60126,15,7,30.0,7,71,6,4,33.0,False,False,10,4,1,1,0,17500,78540,60126,orange orange blue blue blue blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60126,3,8,-42.0,0,71,6,3,-2.0,False,False,10,3,1,1,0,0,78540,60126,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60126,0,9,-60.0,3,74,3,2,13.0,False,False,10,2,1,1,0,900,79440,60126,blue blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60126,3,10,-42.0,0,74,3,1,-2.0,False,False,10,1,1,1,0,0,79440,60126,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60126,15,11,30.0,1,75,2,0,3.0,False,False,10,0,1,1,0,100,79540,60126,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60127,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60127,blue orange orange blue orange blue blue orange blue blue,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60127,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,43740,48340,60127,orange orange blue orange blue orange orange blue blue orange blue blue blue blue orange blue blue blue blue blue blue blue blue blue orange blue orange,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60127,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,15720,64060,60127,blue blue blue orange orange orange blue blue blue orange blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60127,2,4,-48.0,6,55,22,7,28.0,False,False,10,7,1,1,0,2700,66760,60127,blue blue orange blue blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60127,3,5,-42.0,3,58,19,6,13.0,False,False,10,6,1,1,0,4500,71260,60127,orange orange orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60127,10,6,0.0,1,59,18,5,3.0,False,False,10,5,1,1,0,50,71310,60127,blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60127,9,7,-6.0,1,60,17,4,3.0,False,False,10,4,1,1,0,50,71360,60127,blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60127,7,8,-18.0,6,66,11,3,28.0,False,False,10,3,1,1,0,1800,73160,60127,blue blue blue blue blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60127,15,9,30.0,1,67,10,2,3.0,False,False,10,2,1,1,0,50,73210,60127,blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60127,20,10,60.0,0,67,10,1,-2.0,False,False,10,1,1,1,0,0,73210,60127,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60127,7,11,-18.0,2,69,8,0,8.0,False,False,10,0,1,1,0,2100,75310,60127,blue orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60128,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,8200,8200,60128,orange orange orange orange orange blue orange orange orange blue,17,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60128,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,62910,71110,60128,blue orange blue blue blue orange blue blue blue blue orange blue blue blue blue blue blue orange blue orange blue blue orange orange orange blue orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60128,7,3,-18.0,9,46,31,8,43.0,False,False,10,8,1,1,0,4860,75970,60128,blue blue blue blue blue blue blue blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60128,13,4,18.0,4,50,27,7,18.0,False,False,10,7,1,1,0,480,76450,60128,blue blue blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60128,16,5,36.0,3,53,24,6,13.0,False,False,10,6,1,1,0,1680,78130,60128,blue blue orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60128,16,6,36.0,1,54,23,5,3.0,False,False,10,5,1,1,0,50,78180,60128,blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60128,7,7,-18.0,5,59,18,4,23.0,False,False,10,4,1,1,0,5750,83930,60128,blue blue blue orange orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60128,5,8,-30.0,2,61,16,3,8.0,False,False,10,3,1,1,0,2200,86130,60128,orange blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60128,0,9,-60.0,9,70,7,2,43.0,False,False,10,2,1,1,0,24300,110430,60128,orange blue blue blue blue orange blue blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60128,0,10,-60.0,3,73,4,1,13.0,False,False,10,1,1,1,0,900,111330,60128,blue blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60128,0,11,-60.0,0,73,4,0,-2.0,False,False,10,0,1,1,0,0,111330,60128,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60129,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60129,orange blue blue blue blue orange orange blue blue blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60129,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,33480,37180,60129,orange blue orange orange blue blue blue blue blue blue blue orange blue blue blue blue blue orange blue orange orange blue blue orange blue blue blue,14,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60129,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,16440,53620,60129,blue orange orange blue blue blue orange orange blue blue blue orange,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60129,13,4,18.0,4,53,24,7,18.0,False,False,10,7,1,1,0,2640,56260,60129,orange blue orange blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60129,0,5,-60.0,3,56,21,6,13.0,False,False,10,6,1,1,0,270,56530,60129,blue blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60129,7,6,-18.0,7,63,14,5,33.0,False,False,10,5,1,1,0,11620,68150,60129,blue blue orange orange blue orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60129,7,7,-18.0,2,65,12,4,8.0,False,False,10,4,1,1,0,200,68350,60129,blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60129,8,8,-12.0,0,65,12,3,-2.0,False,False,10,3,1,1,0,0,68350,60129,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60129,13,9,18.0,2,67,10,2,8.0,False,False,10,2,1,1,0,2100,70450,60129,blue orange,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60129,15,10,30.0,2,69,8,1,8.0,False,False,10,1,1,1,0,400,70850,60129,blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60129,15,11,30.0,2,71,6,0,8.0,False,False,10,0,1,1,0,2200,73050,60129,blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60130,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60130,blue blue blue orange blue orange blue blue blue blue,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60130,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,51300,54100,60130,blue orange blue blue blue blue blue orange blue orange orange blue orange blue orange blue orange orange blue blue orange blue blue orange orange orange blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60130,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,10320,64420,60130,blue blue blue blue orange blue blue blue blue blue blue orange,9,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60130,7,4,-18.0,12,61,16,8,58.0,False,False,10,8,2,2,1,28440,92860,60130,blue blue blue orange orange blue orange orange blue blue blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60130,0,5,-60.0,3,64,13,7,13.0,False,False,10,7,2,2,0,450,93310,60130,blue blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60130,10,6,0.0,0,64,13,6,-2.0,False,False,10,6,2,2,0,0,93310,60130,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60130,0,7,-60.0,0,64,13,5,-2.0,False,False,10,5,2,2,0,0,93310,60130,,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60130,13,8,18.0,4,68,9,4,18.0,False,False,10,4,2,2,0,4800,98110,60130,blue blue orange blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60130,13,9,18.0,0,68,9,3,-2.0,False,False,10,3,2,2,0,0,98110,60130,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60130,0,10,-60.0,0,68,9,2,-2.0,False,False,10,2,2,2,0,0,98110,60130,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60130,16,11,36.0,1,69,8,1,3.0,False,False,10,1,2,2,0,100,98210,60130,blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60130,3,12,-42.0,1,70,7,0,3.0,False,False,10,0,2,2,0,100,98310,60130,blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60131,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,5500,5500,60131,blue orange orange blue blue orange orange blue orange blue,20,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60131,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,34830,40330,60131,orange blue blue blue orange blue blue blue orange blue blue blue blue orange blue orange blue blue blue blue blue blue blue orange blue orange blue,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60131,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,17880,58210,60131,blue orange orange blue orange blue orange orange blue blue blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60131,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,17600,75810,60131,orange blue blue blue blue blue orange blue orange blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60131,10,5,0.0,2,62,15,6,8.0,False,False,10,6,1,1,0,200,76010,60131,blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60131,2,6,-48.0,0,62,15,5,-2.0,False,False,10,5,1,1,0,0,76010,60131,,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60131,0,7,-60.0,3,65,12,4,13.0,False,False,10,4,1,1,0,1800,77810,60131,blue blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60131,7,8,-18.0,4,69,8,3,18.0,False,False,10,3,1,1,0,8800,86610,60131,orange orange blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60131,13,9,18.0,2,71,6,2,8.0,False,False,10,2,1,1,0,2200,88810,60131,blue orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60131,0,10,-60.0,2,73,4,1,8.0,False,False,10,1,1,1,0,400,89210,60131,blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60131,3,11,-42.0,0,73,4,0,-2.0,False,False,10,0,1,1,0,0,89210,60131,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60132,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,6400,6400,60132,orange blue orange orange orange blue blue blue orange orange,19,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60132,7,2,-18.0,27,37,40,8,133.0,False,False,10,8,0,0,0,20250,26650,60132,blue blue orange orange orange blue blue blue blue blue blue blue blue blue blue blue blue blue blue blue blue blue blue blue orange blue blue,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60132,0,3,-60.0,12,49,28,7,58.0,False,False,10,7,0,0,0,15000,41650,60132,orange blue orange blue orange blue orange blue blue blue orange blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60132,0,4,-60.0,3,52,25,6,13.0,False,False,10,6,0,0,0,1890,43540,60132,orange orange blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60132,0,5,-60.0,4,56,21,5,18.0,False,False,10,5,0,0,0,480,44020,60132,blue blue blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60132,13,6,18.0,4,60,17,4,18.0,False,False,10,4,0,0,0,1560,45580,60132,orange blue blue blue,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60132,13,7,18.0,2,62,15,3,8.0,False,False,10,3,0,0,0,1060,46640,60132,blue orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60132,13,8,18.0,0,62,15,2,-2.0,False,False,10,2,0,0,0,0,46640,60132,,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60132,3,9,-42.0,4,66,11,1,18.0,False,False,10,1,0,0,0,4400,51040,60132,blue blue orange orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60132,15,10,30.0,2,68,9,0,8.0,False,False,10,0,0,0,0,200,51240,60132,blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60133,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,4600,4600,60133,orange blue orange orange blue blue orange blue blue blue,21,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60133,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,42930,47530,60133,blue blue blue orange blue blue blue blue orange orange orange orange orange blue orange orange blue blue orange blue blue blue blue blue blue blue blue,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60133,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,15720,63250,60133,blue orange blue blue orange blue blue blue blue orange blue orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60133,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,18260,81510,60133,blue blue orange orange blue blue orange blue blue blue blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60133,13,5,18.0,4,64,13,6,18.0,False,False,10,6,1,1,0,6600,88110,60133,orange blue orange blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60133,15,6,30.0,2,66,11,5,8.0,False,False,10,5,1,1,0,400,88510,60133,blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60133,0,7,-60.0,2,68,9,4,8.0,False,False,10,4,1,1,0,400,88910,60133,blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60133,8,8,-12.0,3,71,6,3,13.0,False,False,10,3,1,1,0,6300,95210,60133,blue orange orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60133,13,9,18.0,2,73,4,2,8.0,False,False,10,2,1,1,0,400,95610,60133,blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60133,0,10,-60.0,2,75,2,1,8.0,False,False,10,1,1,1,0,400,96010,60133,blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60133,15,11,30.0,1,76,1,0,3.0,False,False,10,0,1,1,0,1000,97010,60133,orange,0,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60134,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60134,orange blue orange blue blue blue blue blue blue blue,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60134,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,31320,34120,60134,orange orange orange blue blue orange blue orange blue blue blue orange orange blue blue blue blue blue blue orange blue blue blue blue blue blue blue,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60134,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,11520,45640,60134,blue blue blue blue blue blue orange orange blue orange orange blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60134,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,20900,66540,60134,orange orange blue blue orange blue blue orange blue orange blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60134,17,5,42.0,0,60,17,6,-2.0,False,False,10,6,1,1,0,0,66540,60134,,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60134,17,6,42.0,0,60,17,5,-2.0,False,False,10,5,1,1,0,0,66540,60134,,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60134,7,7,-18.0,7,67,10,4,33.0,False,False,10,4,1,1,0,8750,75290,60134,orange blue blue blue blue blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60134,13,8,18.0,1,68,9,3,3.0,False,False,10,3,1,1,0,50,75340,60134,blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60134,16,9,36.0,2,70,7,2,8.0,False,False,10,2,1,1,0,4000,79340,60134,orange orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60134,0,10,-60.0,1,71,6,1,3.0,False,False,10,1,1,1,0,100,79440,60134,blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60134,13,11,18.0,2,73,4,0,8.0,False,False,10,0,1,1,0,400,79840,60134,blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60135,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60135,blue orange blue blue blue blue blue blue orange blue,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60135,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,29700,32500,60135,blue blue blue blue blue blue orange blue orange blue blue blue orange orange blue orange orange blue blue blue orange blue blue blue blue orange blue,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60135,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,14880,47380,60135,orange blue orange orange blue orange blue blue blue blue blue orange,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60135,11,4,6.0,11,60,17,7,53.0,False,False,10,7,1,1,0,9570,56950,60135,blue blue blue blue orange blue blue blue orange blue blue,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60135,0,5,-60.0,3,63,14,6,13.0,False,False,10,6,1,1,0,2490,59440,60135,orange blue orange,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60135,13,6,18.0,3,66,11,5,13.0,False,False,10,5,1,1,0,3150,62590,60135,orange blue orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60135,13,7,18.0,2,68,9,4,8.0,False,False,10,4,1,1,0,2200,64790,60135,orange blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60135,18,8,48.0,1,69,8,3,3.0,False,False,10,3,1,1,0,100,64890,60135,blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60135,19,9,54.0,0,69,8,2,-2.0,False,False,10,2,1,1,0,0,64890,60135,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60135,13,10,18.0,0,69,8,1,-2.0,False,False,10,1,1,1,0,0,64890,60135,,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60135,0,11,-60.0,1,70,7,0,3.0,False,False,10,0,1,1,0,100,64990,60135,blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60136,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60136,blue blue orange blue blue orange blue blue blue blue,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60136,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,29430,32230,60136,orange blue blue blue blue blue orange blue blue blue orange blue blue blue blue orange orange blue blue orange blue orange blue blue blue blue orange,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60136,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,11520,43750,60136,blue orange blue orange blue blue blue orange orange blue blue blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60136,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,12540,56290,60136,orange orange blue blue blue blue blue blue blue blue orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60136,7,5,-18.0,7,67,10,6,33.0,False,False,10,6,1,1,0,13370,69660,60136,orange blue blue orange orange orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60136,12,6,12.0,5,72,5,5,23.0,False,False,10,5,1,1,0,15500,85160,60136,blue blue orange orange orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60136,5,7,-30.0,0,72,5,4,-2.0,False,False,10,4,1,1,0,0,85160,60136,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60136,4,8,-36.0,0,72,5,3,-2.0,False,False,10,3,1,1,0,0,85160,60136,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60136,0,9,-60.0,2,74,3,2,8.0,False,False,10,2,1,1,0,400,85560,60136,blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60136,6,10,-24.0,0,74,3,1,-2.0,False,False,10,1,1,1,0,0,85560,60136,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60136,13,11,18.0,0,74,3,0,-2.0,False,False,10,0,1,1,0,0,85560,60136,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60137,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,3700,3700,60137,orange orange blue blue blue blue orange blue blue blue,22,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60137,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,39420,43120,60137,blue orange blue blue blue blue orange blue blue blue blue orange blue orange orange orange orange blue blue blue blue blue blue orange orange blue blue,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60137,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,5040,48160,60137,blue blue blue blue blue blue blue blue blue blue blue orange,12,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60137,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,16940,65100,60137,blue orange blue blue blue orange blue blue orange orange orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60137,8,5,-12.0,5,65,12,6,23.0,False,False,10,6,1,1,0,7800,72900,60137,blue blue orange orange orange,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60137,7,6,-18.0,1,66,11,5,3.0,False,False,10,5,1,1,0,50,72950,60137,blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60137,15,7,30.0,3,69,8,4,13.0,False,False,10,4,1,1,0,6300,79250,60137,orange orange blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60137,0,8,-60.0,3,72,5,3,13.0,False,False,10,3,1,1,0,3600,82850,60137,orange blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60137,0,9,-60.0,0,72,5,2,-2.0,False,False,10,2,1,1,0,0,82850,60137,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60137,13,10,18.0,2,74,3,1,8.0,False,False,10,1,1,1,0,400,83250,60137,blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60137,13,11,18.0,0,74,3,0,-2.0,False,False,10,0,1,1,0,0,83250,60137,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60138,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,5500,5500,60138,orange blue orange blue blue orange blue orange orange blue,20,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60138,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,55620,61120,60138,blue orange orange blue blue blue orange blue orange orange orange blue blue orange blue blue blue orange orange orange blue blue blue blue blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60138,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,20400,81520,60138,blue blue orange blue blue blue orange orange orange blue blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60138,8,4,-12.0,11,60,17,7,53.0,False,False,10,7,1,1,0,15950,97470,60138,blue blue blue orange blue blue blue blue blue orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60138,0,5,-60.0,3,63,14,6,13.0,False,False,10,6,1,1,0,450,97920,60138,blue blue blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60138,8,6,-12.0,5,68,9,5,23.0,False,False,10,5,1,1,0,16000,113920,60138,orange orange blue blue orange,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60138,8,7,-12.0,0,68,9,4,-2.0,False,False,10,4,1,1,0,0,113920,60138,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60138,0,8,-60.0,1,69,8,3,3.0,False,False,10,3,1,1,0,100,114020,60138,blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60138,13,9,18.0,1,70,7,2,3.0,False,False,10,2,1,1,0,100,114120,60138,blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60138,15,10,30.0,1,71,6,1,3.0,False,False,10,1,1,1,0,100,114220,60138,blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60138,0,11,-60.0,0,71,6,0,-2.0,False,False,10,0,1,1,0,0,114220,60138,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60139,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60139,blue orange blue blue blue blue orange blue blue blue,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60139,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,40500,43300,60139,blue blue blue blue orange blue orange orange blue blue blue blue orange orange blue blue orange blue blue blue orange orange blue blue orange orange blue,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60139,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,17280,60580,60139,blue blue blue orange blue blue blue blue orange orange orange orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60139,7,4,-18.0,12,61,16,8,58.0,False,False,10,8,2,2,1,25200,85780,60139,blue blue blue blue orange blue orange orange blue blue orange blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60139,7,5,-18.0,1,62,15,7,3.0,False,False,10,7,2,2,0,50,85830,60139,blue,4,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60139,0,6,-60.0,3,65,12,6,13.0,False,False,10,6,2,2,0,3600,89430,60139,orange blue blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60139,20,7,60.0,1,66,11,5,3.0,False,False,10,5,2,2,0,100,89530,60139,blue,3,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60139,3,8,-42.0,3,69,8,4,13.0,False,False,10,4,2,2,0,6300,95830,60139,orange orange blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60139,0,9,-60.0,0,69,8,3,-2.0,False,False,10,3,2,2,0,0,95830,60139,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60139,15,10,30.0,2,71,6,2,8.0,False,False,10,2,2,2,0,400,96230,60139,blue blue,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60139,0,11,-60.0,0,71,6,1,-2.0,False,False,10,1,2,2,0,0,96230,60139,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60139,3,12,-42.0,0,71,6,0,-2.0,False,False,10,0,2,2,0,0,96230,60139,,1,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60140,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,1900,1900,60140,blue blue blue orange blue blue blue blue blue blue,24,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60140,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,42660,44560,60140,orange blue blue blue blue orange blue orange orange blue blue orange blue orange orange blue blue orange blue blue blue blue orange orange blue blue orange,13,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60140,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,7200,51760,60140,blue blue blue blue blue blue orange blue orange blue blue blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60140,13,4,18.0,4,53,24,7,18.0,False,False,10,7,1,1,0,320,52080,60140,blue blue blue blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60140,8,5,-12.0,1,54,23,6,3.0,False,False,10,6,1,1,0,20,52100,60140,blue,11,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60140,0,6,-60.0,3,57,20,5,13.0,False,False,10,5,1,1,0,1020,53120,60140,blue blue orange,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60140,2,7,-48.0,4,61,16,4,18.0,False,False,10,4,1,1,0,2640,55760,60140,blue orange blue orange,8,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60140,0,8,-60.0,4,65,12,3,18.0,False,False,10,3,1,1,0,1560,57320,60140,blue blue blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60140,13,9,18.0,2,67,10,2,8.0,False,False,10,2,1,1,0,1100,58420,60140,orange blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60140,8,10,-12.0,3,70,7,1,13.0,False,False,10,1,1,1,0,1800,60220,60140,blue orange blue,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60140,13,11,18.0,0,70,7,0,-2.0,False,False,10,0,1,1,0,0,60220,60140,,5,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60141,7,1,-18.0,10,10,67,9,48.0,False,False,10,9,0,0,0,2800,2800,60141,blue blue blue blue orange blue blue blue blue orange,23,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60141,7,2,-18.0,27,37,40,9,133.0,False,False,10,9,1,1,1,29430,32230,60141,orange blue blue blue blue blue blue blue blue orange blue blue blue blue orange orange blue blue blue orange orange blue orange blue blue blue orange,15,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60141,0,3,-60.0,12,49,28,8,58.0,False,False,10,8,1,1,0,15360,47590,60141,blue blue orange orange blue orange orange orange blue blue blue blue,10,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60141,6,4,-24.0,11,60,17,7,53.0,False,False,10,7,1,1,0,12540,60130,60141,blue blue blue blue orange blue blue blue orange blue orange,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60141,5,5,-30.0,0,60,17,6,-2.0,False,False,10,6,1,1,0,0,60130,60141,,7,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60141,8,6,-12.0,4,64,13,5,18.0,False,False,10,5,1,1,0,2520,62650,60141,blue orange blue blue,6,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60141,13,7,18.0,5,69,8,4,23.0,False,False,10,4,1,1,0,15500,78150,60141,orange orange orange blue orange,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60141,12,8,12.0,0,69,8,3,-2.0,False,False,10,3,1,1,0,0,78150,60141,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60141,13,9,18.0,2,71,6,2,8.0,False,False,10,2,1,1,0,400,78550,60141,blue blue,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60141,20,10,60.0,0,71,6,1,-2.0,False,False,10,1,1,1,0,0,78550,60141,,2,original,final,models/ppo_version4_best.zip,100352
+PPO sampled,60141,13,11,18.0,0,71,6,0,-2.0,False,False,10,0,1,1,0,0,78550,60141,,2,original,final,models/ppo_version4_best.zip,100352

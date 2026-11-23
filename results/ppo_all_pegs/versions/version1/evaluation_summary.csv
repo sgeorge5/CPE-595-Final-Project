@@ -1,0 +1,6 @@
+strategy,games,total_pegs,shot_limit,avg_pegs_cleared,best_pegs_cleared,clearance_pct,avg_pegs_remaining,wins,completion_pct,avg_shots_success,min_shots_success,avg_shots_used,avg_reward,distinct_angles,simulation_timeouts
+PPO,1,77,10,64.0,64,83.11688311688312,13.0,0,0.0,N/A,N/A,10.0,300.0,3,0
+Random,100,77,10,50.15,72,65.12987012987013,26.85,0,0.0,N/A,N/A,10.0,230.75,21,0
+Straight down,1,77,10,40.0,40,51.94805194805195,37.0,0,0.0,N/A,N/A,10.0,180.0,1,0
+Fixed sequence,1,77,10,64.0,64,83.11688311688312,13.0,0,0.0,N/A,N/A,10.0,300.0,10,0
+PPO sampled,100,77,10,59.42,72,77.16883116883119,17.58,0,0.0,N/A,N/A,10.0,277.1,21,0

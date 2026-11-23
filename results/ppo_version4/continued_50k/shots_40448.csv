@@ -1,0 +1,11 @@
+strategy,seed,action,shot,angle_degrees,new_pegs_cleared,pegs_cleared,pegs_remaining,shots_remaining,reward,success,shot_timed_out,starting_balls,balls_remaining,free_balls_earned,shots_earning_free_balls,shot_free_balls,shot_score,total_score,action_seed
+PPO,50042,4,1,-36.0,16,16,61,9,78.0,False,False,10,9,0,0,0,9760,9760,50042
+PPO,50042,7,2,-18.0,10,26,51,8,48.0,False,False,10,8,0,0,0,3700,13460,50042
+PPO,50042,7,3,-18.0,15,41,36,7,73.0,False,False,10,7,0,0,0,7950,21410,50042
+PPO,50042,7,4,-18.0,13,54,23,6,63.0,False,False,10,6,0,0,0,16510,37920,50042
+PPO,50042,7,5,-18.0,4,58,19,5,18.0,False,False,10,5,0,0,0,2640,40560,50042
+PPO,50042,15,6,30.0,4,62,15,4,18.0,False,False,10,4,0,0,0,3520,44080,50042
+PPO,50042,15,7,30.0,1,63,14,3,3.0,False,False,10,3,0,0,0,50,44130,50042
+PPO,50042,15,8,30.0,0,63,14,2,-2.0,False,False,10,2,0,0,0,0,44130,50042
+PPO,50042,15,9,30.0,0,63,14,1,-2.0,False,False,10,1,0,0,0,0,44130,50042
+PPO,50042,15,10,30.0,0,63,14,0,-2.0,False,False,10,0,0,0,0,0,44130,50042

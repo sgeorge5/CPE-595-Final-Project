@@ -1,0 +1,2 @@
+starting_steps,additional_steps,final_steps,actions,observations,entropy,result
+166912,512,167424,21,155,0.005,passed; temporary checkpoint removed

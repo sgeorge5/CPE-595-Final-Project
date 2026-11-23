@@ -1,0 +1,44 @@
+game,shot,action,angle,pegs_before,pegs_cleared,hit_ids,peg32_newly_hit,score,free_balls
+Improved B validation,1,7,-18.0,77,10,26 28 33 34 35 39 52 53 61 66,False,3700,0
+Improved B validation,2,7,-18.0,67,37,0 5 6 8 9 10 11 12 14 15 17 18 19 21 22 27 37 40 45 48 51 56 69 70 71 73 75,False,32670,1
+Improved B validation,3,0,-60.0,40,49,25 36 46 47 49 54 55 57 67 68 72 76,False,9360,1
+Improved B validation,4,0,-60.0,28,52,1 23 74,False,180,1
+Improved B validation,5,7,-18.0,25,59,2 4 20 24 42 44 58,False,7140,1
+Improved B validation,6,15,30.0,18,63,29 30 32 65,True,3600,1
+Improved B validation,7,0,-60.0,14,65,3 7,False,200,1
+Improved B validation,8,8,-12.0,12,69,38 43 50 59,False,4400,1
+Improved B validation,9,13,18.0,8,73,13 31 62 64,False,4800,1
+Improved B validation,10,13,18.0,4,77,16 41 60 63,False,12400,1
+PPO V5 validation,1,38,54.0,77,18,0 4 17 18 22 31 36 37 52 53 54 61 67 68 69 70 71 76,False,16200,0
+PPO V5 validation,2,38,54.0,59,37,5 6 7 8 10 11 12 14 15 16 19 25 27 45 48 49 51 55 75,False,42180,1
+PPO V5 validation,3,30,30.0,40,40,29 32 34,True,270,1
+PPO V5 validation,4,24,12.0,37,55,1 2 3 9 13 20 30 35 40 46 47 50 56 60 65,False,19050,1
+PPO V5 validation,5,20,0.0,22,57,28 59,False,200,1
+PPO V5 validation,6,16,-12.0,20,63,21 23 24 57 73 74,False,4500,1
+PPO V5 validation,7,14,-18.0,14,68,38 39 42 58 72,False,13000,1
+PPO V5 validation,8,33,39.0,9,71,26 33 63,False,900,1
+PPO V5 validation,9,18,-6.0,6,75,43 62 64 66,False,8800,1
+PPO V5 validation,10,18,-6.0,2,75,,False,0,1
+PPO V5 validation,11,14,-18.0,2,77,41 44,False,400,1
+Improved D training 129717,1,7,-18.0,77,10,26 28 33 34 35 39 52 53 61 66,False,4600,0
+Improved D training 129717,2,7,-18.0,67,37,0 5 6 8 9 10 11 12 14 15 17 18 19 21 22 27 37 40 45 48 51 56 69 70 71 73 75,False,37530,1
+Improved D training 129717,3,0,-60.0,40,49,25 36 46 47 49 54 55 57 67 68 72 76,False,18000,1
+Improved D training 129717,4,0,-60.0,28,52,1 23 74,False,270,1
+Improved D training 129717,5,8,-12.0,25,63,2 13 16 24 29 30 44 50 58 59 60,False,34100,2
+Improved D training 129717,6,9,-6.0,14,70,3 20 31 32 43 62 65,True,17500,2
+Improved D training 129717,7,7,-18.0,7,71,42,False,100,2
+Improved D training 129717,8,16,36.0,6,73,7 38,False,400,2
+Improved D training 129717,9,7,-18.0,4,74,41,False,100,2
+Improved D training 129717,10,13,18.0,3,75,64,False,100,2
+Improved D training 129717,11,13,18.0,2,77,4 63,False,2200,2
+Improved D training 141605,1,7,-18.0,77,10,26 28 33 34 35 39 52 53 61 66,False,2800,0
+Improved D training 141605,2,7,-18.0,67,37,0 5 6 8 9 10 11 12 14 15 17 18 19 21 22 27 37 40 45 48 51 56 69 70 71 73 75,False,40500,1
+Improved D training 141605,3,0,-60.0,40,49,25 36 46 47 49 54 55 57 67 68 72 76,False,14880,1
+Improved D training 141605,4,8,-12.0,28,60,2 13 16 24 29 30 44 50 58 59 60,False,15840,1
+Improved D training 141605,5,0,-60.0,17,63,1 23 74,False,1800,1
+Improved D training 141605,6,13,18.0,14,68,3 20 31 62 64,False,8250,1
+Improved D training 141605,7,0,-60.0,9,70,4 7,False,2200,1
+Improved D training 141605,8,8,-12.0,7,73,32 42 43,True,3600,1
+Improved D training 141605,9,15,30.0,4,74,65,False,1000,1
+Improved D training 141605,10,13,18.0,3,76,41 63,False,400,1
+Improved D training 141605,11,15,30.0,1,77,38,False,100,1

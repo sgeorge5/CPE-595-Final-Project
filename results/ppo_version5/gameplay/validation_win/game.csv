@@ -1,0 +1,2 @@
+strategy,seed,total_pegs,shot_limit,pegs_cleared,clearance_pct,pegs_remaining,success,shots_used,reward,distinct_angles,simulation_timeouts,orange_peg_ids,action_seed,fixed_shot_limit,starting_balls,balls_remaining,free_balls_earned,shots_earning_free_balls,total_score,timesteps,demonstration
+PPO sampled,40107,77,10,77,100.0,0,True,11,463.0,8,0,0 1 6 7 11 12 16 17 18 19 22 24 31 38 39 42 43 48 50 51 52 64 67 70 75,40107,False,10,0,1,1,105500,91136,Sampled validation win | seed 40107

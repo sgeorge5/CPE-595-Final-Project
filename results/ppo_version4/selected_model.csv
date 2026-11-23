@@ -1,0 +1,2 @@
+menu_model_path,results_dir,selected_timestep,total_timesteps,free_balls,selection
+models/ppo_version4_best.zip,results/ppo_version4\selected_evaluation,100352,100352,True,"deterministic win, fewer shots in wins, otherwise more pegs"

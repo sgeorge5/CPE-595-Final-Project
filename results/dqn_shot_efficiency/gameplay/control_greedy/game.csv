@@ -1,0 +1,2 @@
+strategy,seed,action_seed,orange_peg_ids,total_pegs,shot_limit,epsilon,clearance_pct,reward,actions,angle_sequence,pegs_cleared,pegs_remaining,shots_used,success,simulation_timeouts,model,checkpoint,timesteps,phase
+Greedy,50042,50042,2 6 7 10 13 14 17 27 28 31 32 34 36 41 42 45 47 48 50 58 59 61 65 69 76,77,10,N/A,100.0,465.0,10 16 16 7 11 0 7 0 7 6,0 36 36 -18 6 -60 -18 -60 -18 -24,77,0,10,True,0,Continued DQN control,models/dqn_shot_efficiency\control\checkpoint_110000.zip,110000,final

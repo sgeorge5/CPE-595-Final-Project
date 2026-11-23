@@ -1,0 +1,11 @@
+strategy,seed,action_seed,action,exploratory,shot,reward,angle_degrees,new_pegs_cleared,pegs_cleared,pegs_remaining,shots_remaining,success,shot_timed_out
+Greedy,50042,50042,10,False,1,128.0,0.0,26,26,51,9,False,False
+Greedy,50042,50042,16,False,2,33.0,36.0,7,33,44,8,False,False
+Greedy,50042,50042,16,False,3,23.0,36.0,5,38,39,7,False,False
+Greedy,50042,50042,7,False,4,33.0,-18.0,7,45,32,6,False,False
+Greedy,50042,50042,11,False,5,38.0,6.0,8,53,24,5,False,False
+Greedy,50042,50042,0,False,6,33.0,-60.0,7,60,17,4,False,False
+Greedy,50042,50042,7,False,7,38.0,-18.0,8,68,9,3,False,False
+Greedy,50042,50042,0,False,8,28.0,-60.0,6,74,3,2,False,False
+Greedy,50042,50042,7,False,9,8.0,-18.0,2,76,1,1,False,False
+Greedy,50042,50042,6,False,10,103.0,-24.0,1,77,0,0,True,False

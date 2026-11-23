@@ -1,0 +1,2 @@
+experiment,training_mode,starting_checkpoint,starting_timesteps,requested_timesteps,requested_additional_timesteps,shot_limit,goal,input_size,seed,device,policy,peg_reward,shot_penalty,completion_bonus,empty_shot_penalty,learning_rate,gamma,n_steps,batch_size,n_epochs,ent_coef,policy_kwargs,actual_timesteps,actual_additional_timesteps,best_timestep
+PPO-2,continued,models/ppo_all_pegs_level1_extended_10_shots_checkpoints/checkpoint_25088.zip,25088,50000,24912,10,all,78,42,cpu,MlpPolicy,5.0,2.0,100.0,0,0.0003,0.99,512,64,10,0.02,"{'net_arch': [64, 64]}",50176,25088,45568

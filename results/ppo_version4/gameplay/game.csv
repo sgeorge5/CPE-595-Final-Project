@@ -1,0 +1,2 @@
+strategy,seed,total_pegs,shot_limit,pegs_cleared,clearance_pct,pegs_remaining,success,shots_used,reward,distinct_angles,simulation_timeouts,orange_peg_ids,action_seed,fixed_shot_limit,starting_balls,balls_remaining,free_balls_earned,shots_earning_free_balls,total_score,selected_timestep
+PPO sampled,50076,77,10,76,98.7012987012987,1,False,11,358.0,8,0,0 4 6 12 15 16 17 23 25 31 32 38 40 41 52 54 56 58 60 61 66 68 70 75 76,50076,False,10,0,1,1,85570,100352

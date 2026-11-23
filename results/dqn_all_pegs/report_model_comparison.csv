@@ -1,0 +1,4 @@
+model,algorithm,objective,scoring_and_free_balls,stochastic_method,training_checkpoint,greedy_pegs,mean_pegs,wins,games,evaluation
+DQN Model 2,DQN,All 77 pegs,False,Epsilon-greedy,90000,77,74.71,73,100,Matched seeds 91042–91141
+PPO V3,PPO,All 77 pegs,False,PPO sampled,105472,70,65.82,0,100,Matched seeds 91042–91141
+PPO Improved D,PPO,All 77 pegs,True,PPO sampled,166912,76,75.9,0,100,Published seeds 90042–90141

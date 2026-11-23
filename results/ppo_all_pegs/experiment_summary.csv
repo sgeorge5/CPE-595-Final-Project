@@ -1,0 +1,5 @@
+experiment,shot_limit,requested_timesteps,actual_timesteps,best_checkpoint,deterministic_pegs_cleared,deterministic_win,deterministic_distinct_angles
+Smoke,10,2000,2048,2048,58.0,False,2
+initial_10_shots,10,10000,10240,5120,58.0,False,2
+extended_10_shots,10,25000,25088,15360,64.0,False,3
+exploratory_15_shots,15,10000,10240,10240,53.0,False,2

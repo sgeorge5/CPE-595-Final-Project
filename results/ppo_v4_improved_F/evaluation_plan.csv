@@ -1,0 +1,2 @@
+start,target,additional,checkpoint_interval,validation_first,validation_games,final_first,final_games,selection,menu_selection,menu_mean_gain
+166912,266752,99840,10000,43042,50,80042,100,wins; fewer average winning shots; mean clearance; fewer games leaving 32; earliest tie,"higher wins or fewer winning shots, otherwise clearance margin; retain D on tie",0.25

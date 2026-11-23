@@ -1,0 +1,12 @@
+shot,angle_degrees,new_orange_cleared,orange_remaining,shots_remaining,reward,new_pegs_cleared,pegs_cleared,pegs_remaining,success,starting_balls,balls_remaining,free_balls_earned,shots_earning_free_balls,shot_free_balls,shot_score,total_score
+1,-18.0,3,22,9,48.0,10,10,67,False,10,9,0,0,0,3700,3700
+2,-18.0,8,14,9,133.0,27,37,40,False,10,9,1,1,1,32940,36640
+3,-60.0,3,11,8,58.0,12,49,28,False,10,8,1,1,0,9360,46000
+4,-12.0,5,6,7,53.0,11,60,17,False,10,7,1,1,0,20240,66240
+5,-18.0,4,2,6,33.0,7,67,10,False,10,6,1,1,0,23100,89340
+6,-60.0,0,2,5,12.0,2,69,8,False,10,5,1,1,0,400,89740
+7,-18.0,1,1,4,26.0,4,73,4,False,10,4,1,1,0,5200,94940
+8,30.0,0,1,3,5.0,1,74,3,False,10,3,1,1,0,100,95040
+9,18.0,0,1,2,12.0,2,76,1,False,10,2,1,1,0,400,95440
+10,30.0,0,1,1,-2.0,0,76,1,False,10,1,1,1,0,0,95440
+11,30.0,0,1,0,-2.0,0,76,1,False,10,0,1,1,0,0,95440

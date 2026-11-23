@@ -1,5 +1,5 @@
 """Measured policy comparisons and separate environment diagnostics."""
-from pathlib import Path
+import os
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -114,14 +114,14 @@ def evaluate_agents(model_path=None, episodes=DEFAULT_EVAL_EPISODES, seed=TEST_S
                     results_dir=None, config=CONFIG, model=None, include_baselines=False,
                     original_model_path=ORIGINAL_LEVEL1_MODEL_PATH):
     """Rerun all policies under current rules, including the same empty-shot penalty."""
-    model_path = Path(BEST_MODEL_PATH if model_path is None else model_path)
-    folder = Path(IMPROVED_RESULTS_DIR if results_dir is None else results_dir)
+    model_path = BEST_MODEL_PATH if model_path is None else model_path
+    folder = IMPROVED_RESULTS_DIR if results_dir is None else results_dir
     if model is None:
         model = DQN.load(model_path, device='cpu')
     agents = [('DQN', 'dqn', model), ('Random', 'random', None)]
     if include_baselines:
         agents.append(('Straight down', 'fixed', None))
-        if original_model_path is not None and Path(original_model_path).exists():
+        if original_model_path is not None and os.path.exists(original_model_path):
             agents.append(('Original DQN', 'dqn', DQN.load(original_model_path, device='cpu')))
     summaries, episode_tables, shot_tables, board_tables = [], [], [], []
     for name, policy, agent in agents:
@@ -132,12 +132,12 @@ def evaluate_agents(model_path=None, episodes=DEFAULT_EVAL_EPISODES, seed=TEST_S
         board_tables.append(boards)
     summary = pd.DataFrame(summaries)
     data = pd.concat(episode_tables, ignore_index=True)
-    folder.mkdir(parents=True, exist_ok=True)
-    data.to_csv(folder/'evaluation_episodes.csv', index=False)
-    pd.concat(shot_tables, ignore_index=True).to_csv(folder/'evaluation_shots.csv', index=False)
-    pd.concat(board_tables, ignore_index=True).to_csv(folder/'evaluation_arrangements.csv', index=False)
-    summary.to_csv(folder/'evaluation_summary.csv', index=False)
-    plt.close(plot_comparison(summary, folder/'dqn_vs_random.png'))
+    os.makedirs(folder, exist_ok=True)
+    data.to_csv(os.path.join(folder, 'evaluation_episodes.csv'), index=False)
+    pd.concat(shot_tables, ignore_index=True).to_csv(os.path.join(folder, 'evaluation_shots.csv'), index=False)
+    pd.concat(board_tables, ignore_index=True).to_csv(os.path.join(folder, 'evaluation_arrangements.csv'), index=False)
+    summary.to_csv(os.path.join(folder, 'evaluation_summary.csv'), index=False)
+    plt.close(plot_comparison(summary, os.path.join(folder, 'dqn_vs_random.png')))
     return summary, data
 
 
@@ -156,9 +156,9 @@ def angle_diagnostic(seeds=(42,43,44), config=CONFIG, results_dir=IMPROVED_RESUL
                 'x_at_frame_10': point['x'], 'y_at_frame_10': point['y']})
     env.close()
     data = pd.DataFrame(rows)
-    folder = Path(results_dir)
-    folder.mkdir(parents=True, exist_ok=True)
-    data.to_csv(folder/'angle_diagnostic.csv', index=False)
+    folder = results_dir
+    os.makedirs(folder, exist_ok=True)
+    data.to_csv(os.path.join(folder, 'angle_diagnostic.csv'), index=False)
     fig, ax = plt.subplots(figsize=(9,4))
     for seed, group in data.groupby('seed'):
         ax.plot(group.angle_degrees, group.orange_cleared, marker='o', label=f'Seed {seed}')
@@ -167,7 +167,7 @@ def angle_diagnostic(seeds=(42,43,44), config=CONFIG, results_dir=IMPROVED_RESUL
     ax.legend()
     ax.grid(alpha=0.2)
     fig.tight_layout()
-    fig.savefig(folder/'angle_diagnostic.png', dpi=180)
+    fig.savefig(os.path.join(folder, 'angle_diagnostic.png'), dpi=180)
     plt.close(fig)
     return data
 
@@ -200,15 +200,15 @@ def greedy_diagnostic(seeds=(30042,30043,30044), config=CONFIG, results_dir=IMPR
             'orange_cleared': info['orange_cleared'], 'orange_remaining': info['orange_remaining'],
             'orange_cleared_pct': 100 * info['orange_cleared'] / info['orange_initial']})
         env.close()
-    folder = Path(results_dir)
-    folder.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(episodes).to_csv(folder/'greedy_diagnostic_episodes.csv', index=False)
-    pd.DataFrame(shots).to_csv(folder/'greedy_diagnostic_shots.csv', index=False)
+    folder = results_dir
+    os.makedirs(folder, exist_ok=True)
+    pd.DataFrame(episodes).to_csv(os.path.join(folder, 'greedy_diagnostic_episodes.csv'), index=False)
+    pd.DataFrame(shots).to_csv(os.path.join(folder, 'greedy_diagnostic_shots.csv'), index=False)
     return pd.DataFrame(episodes)
 
 
 def main():
-    selected = pd.read_csv(IMPROVED_RESULTS_DIR/'selected_model.csv').iloc[0]
+    selected = pd.read_csv(os.path.join(IMPROVED_RESULTS_DIR, 'selected_model.csv')).iloc[0]
     config = RLConfig(observation=selected.observation,
                       empty_shot_penalty=float(selected.empty_shot_penalty))
     summary, _ = evaluate_agents(config=config,include_baselines=True)
@@ -216,3 +216,33 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+def summarize(episodes, shots):
+    data = pd.DataFrame(episodes)
+    wins = data[data.success]
+    result = {"strategy": data.strategy.iloc[0], "games": len(data),
+            "total_pegs": data.total_pegs.iloc[0], "shot_limit": data.shot_limit.iloc[0],
+            "avg_pegs_cleared": data.pegs_cleared.mean(),
+            "best_pegs_cleared": int(data.pegs_cleared.max()),
+            "clearance_pct": data.clearance_pct.mean(),
+            "avg_pegs_remaining": data.pegs_remaining.mean(),
+            "wins": len(wins), "completion_pct": 100 * data.success.mean(),
+            "avg_shots_success": wins.shots_used.mean(), "min_shots_success": wins.shots_used.min(),
+            "avg_shots_used": data.shots_used.mean(), "avg_reward": data.reward.mean(),
+            "distinct_angles": len({shot["action"] for shot in shots}),
+            "simulation_timeouts": data.simulation_timeouts.sum()}
+    if "free_balls_earned" in data:
+        result["fixed_shot_limit"] = False
+        for key in ("starting_balls", "balls_remaining", "free_balls_earned",
+                    "shots_earning_free_balls", "total_score"):
+            result["avg_" + key] = data[key].mean()
+    if "peg32_left" in data:
+        result.update(peg32_left_games=int(data.peg32_left.sum()),
+                      peg32_early_games=int(data.peg32_early.sum()),
+                      total_empty_shots=int(data.empty_shots.sum()),
+                      avg_empty_shots=data.empty_shots.mean())
+        for key in ("peg32_shot", "pegs_before_32", "other_pegs_with_32"):
+            result["avg_" + key] = pd.to_numeric(data[key]).mean()
+    return result
+

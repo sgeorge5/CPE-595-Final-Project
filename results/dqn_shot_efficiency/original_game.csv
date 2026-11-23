@@ -1,0 +1,2 @@
+model,strategy,seed,orange_peg_ids,actions,angle_sequence,shots_used,pegs_cleared,success,peg32_shot,candidate,replay_verified,search_method
+DQN Model 2,Original greedy sequence,50042,2 6 7 10 13 14 17 27 28 31 32 34 36 41 42 45 47 48 50 58 59 61 65 69 76,10 16 16 7 11 0 7 0 7 6,0 36 36 -18 6 -60 -18 -60 -18 -24,10,77,True,1,0,True,Original greedy DQN

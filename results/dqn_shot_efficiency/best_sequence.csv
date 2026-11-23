@@ -1,0 +1,2 @@
+model,strategy,seed,orange_peg_ids,actions,angle_sequence,shots_used,pegs_cleared,success,peg32_shot,candidate,replay_verified,search_method
+Simulator search,Recorded angle sequence,50042,2 6 7 10 13 14 17 27 28 31 32 34 36 41 42 45 47 48 50 58 59 61 65 69 76,9 12 5 0 1 10 3 3,-6 12 -30 -60 -54 0 -42 -42,8,77,True,3,12466,True,Forward beam

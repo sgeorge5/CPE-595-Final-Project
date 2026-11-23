@@ -1,6 +1,7 @@
 """Gymnasium environment: reset a board, choose an angle, simulate a full shot."""
 
 import ast
+import os
 import sys
 import types
 
@@ -8,7 +9,7 @@ import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
 
-from levels.config_rl import CONFIG, FIXED_BOARD, PEGGLE_ROOT, RLConfig
+from levels.config_rl import CONFIG, PEGGLE_ROOT, RLConfig
 
 
 def random_peg_colors(n_pegs, n_orange, rng):
@@ -17,6 +18,43 @@ def random_peg_colors(n_pegs, n_orange, rng):
     for index in rng.choice(n_pegs, size=n_orange, replace=False):
         colors[index] = "orange"
     return colors
+
+
+def fever_multiplier(orange_remaining):
+    if orange_remaining <= 3:
+        return 10
+    elif orange_remaining <= 6:
+        return 5
+    elif orange_remaining <= 10:
+        return 3
+    elif orange_remaining <= 15:
+        return 2
+    return 1
+
+
+def peggle_shot_score(hit_colors, orange_remaining):
+    """Simplified scoring in first-contact order, after each orange decrement."""
+    points = 0
+    for color in hit_colors:
+        if color == "orange":
+            orange_remaining -= 1
+            base = 100
+        elif color == "blue":
+            base = 10
+        else:
+            raise ValueError("Only orange and blue pegs are scored.")
+        points += base * fever_multiplier(orange_remaining)
+    return points * len(hit_colors)
+
+
+def free_balls_for_score(score):
+    if score >= 125_000:
+        return 3
+    elif score >= 75_000:
+        return 2
+    elif score >= 25_000:
+        return 1
+    return 0
 
 
 class HeadlessPeg:
@@ -51,12 +89,12 @@ def _load_physics(config):
     if cache_key in _PHYSICS_CACHE:
         return _PHYSICS_CACHE[cache_key]
 
-    source_dir = PEGGLE_ROOT / "local"
-    if not (source_dir / "collision.py").exists():
+    source_dir = os.path.join(PEGGLE_ROOT, "local")
+    if not os.path.exists(os.path.join(source_dir, "collision.py")):
         raise FileNotFoundError(f"Expected the downloaded PegglePy source at {PEGGLE_ROOT}")
     package_name = f"_peggle_rl_physics_{len(_PHYSICS_CACHE)}"
     package = types.ModuleType(package_name)
-    package.__path__ = [str(source_dir)]
+    package.__path__ = [source_dir]
     sys.modules[package_name] = package
 
     def module(name):
@@ -67,13 +105,14 @@ def _load_physics(config):
 
     def load(name):
         target = module(name)
-        path = source_dir / f"{name}.py"
-        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        path = os.path.join(source_dir, f"{name}.py")
+        with open(path, encoding="utf-8") as source:
+            tree = ast.parse(source.read(), filename=path)
         for node in ast.walk(tree):
             if isinstance(node, ast.ImportFrom) and node.module and node.module.startswith("local."):
                 node.module = package_name + node.module[len("local"):]
-        target.__file__ = str(path)
-        exec(compile(tree, str(path), "exec"), target.__dict__)
+        target.__file__ = path
+        exec(compile(tree, path, "exec"), target.__dict__)
         return target
 
     vectors = load("vectors")
@@ -93,7 +132,7 @@ def _load_physics(config):
 
 
 class PeggleEnv(gym.Env):
-    """DQN observes the board between shots; one step finishes one whole shot."""
+    """Both agents observe the board between shots."""
     metadata = {"render_modes": []}
 
     def __init__(self, config: RLConfig = CONFIG, record_trajectory=False):
@@ -115,11 +154,13 @@ class PeggleEnv(gym.Env):
 
     def reset(self, *, seed=None, options=None):
         super().reset(seed=seed)
-        if self.config.random_oranges:
-            colors = random_peg_colors(self.config.n_pegs, self.config.n_orange,
-                                      self.np_random)
-        else:
-            colors = [color for x, y, color in FIXED_BOARD]
+        colors = random_peg_colors(self.config.n_pegs, self.config.n_orange, self.np_random)
+        if self.config.free_balls and options and "orange_peg_ids" in options:
+            orange_ids = set(options["orange_peg_ids"])
+            if (len(orange_ids) != self.config.n_orange
+                    or not orange_ids.issubset(range(self.config.n_pegs))):
+                raise ValueError("Replay requires exactly 25 valid orange peg IDs.")
+            colors = ["orange" if index in orange_ids else "blue" for index in range(self.config.n_pegs)]
         self.pegs = []
         for (x, y), color in zip(self.config.coordinates, colors):
             self.pegs.append(HeadlessPeg(self.Vector(x, y), color,
@@ -130,16 +171,28 @@ class PeggleEnv(gym.Env):
         self.stuck_removals = 0
         self._done = False
         self.trajectory = []
+        if self.config.free_balls:
+            self.shots_fired = 0
+            self.shot_hit_colors = []
+            self.shot_score = self.total_score = 0
+            self.shot_free_balls = self.free_balls_earned = self.shots_earning_free_balls = 0
         return self._observation(), self._info()
 
     def _observation(self, mode=None):
         mode = self.config.observation if mode is None else mode
+        if self.config.free_balls:
+            features = [float(peg.isOrange) for peg in self.pegs]
+            features.extend(float(peg.isHit) for peg in self.pegs)
+            features.append(self.shots_remaining / self.config.ball_observation_scale)
+            return np.array(features, dtype=np.float32)
         features = []
         for peg in self.pegs:
             if mode == "full":
                 features.extend([peg.pos.x / self.config.width,
                                  peg.pos.y / self.config.height])
-            features.extend([float(peg.isOrange), float(peg.isHit)])
+            if mode != "hits":
+                features.append(float(peg.isOrange))
+            features.append(float(peg.isHit))
         features.append(self.shots_remaining / self.config.max_shots)
         return np.array(features, dtype=np.float32)
 
@@ -151,12 +204,23 @@ class PeggleEnv(gym.Env):
 
     def _info(self):
         remaining = sum(p.isOrange and not p.isHit for p in self.pegs)
-        return {"orange_initial": self.orange_initial,
+        info = {"orange_initial": self.orange_initial,
                 "orange_remaining": remaining, "orange_cleared": self.orange_initial - remaining,
                 "success": remaining == 0, "shots_remaining": self.shots_remaining,
                 "shots_used": self.config.max_shots - self.shots_remaining,
                 "simulation_timeouts": self.simulation_timeouts,
                 "stuck_removals": self.stuck_removals}
+        if self.config.goal == "all":
+            cleared = sum(peg.isHit for peg in self.pegs)
+            info.update(pegs_cleared=cleared, pegs_remaining=len(self.pegs) - cleared,
+                        success=cleared == len(self.pegs))
+        if self.config.free_balls:
+            info.update(shots_used=self.shots_fired, starting_balls=self.config.max_shots,
+                        balls_remaining=self.shots_remaining, free_balls_earned=self.free_balls_earned,
+                        shots_earning_free_balls=self.shots_earning_free_balls,
+                        shot_free_balls=self.shot_free_balls, shot_score=self.shot_score,
+                        total_score=self.total_score)
+        return info
 
     def _record_frame(self, ball, frame, shot_finished=False):
         if self.record_trajectory:
@@ -167,6 +231,11 @@ class PeggleEnv(gym.Env):
                 "is_hit": [peg.isHit for peg in self.pegs],
                 "is_visible": [peg.isVisible for peg in self.pegs],
             })
+            if self.config.free_balls:
+                self.trajectory[-1].update(
+                    shot_score=peggle_shot_score(self.shot_hit_colors, self.shot_orange_start),
+                    shot_free_balls=0, free_balls_earned=self.free_balls_earned,
+                    balls_remaining=self.shots_remaining - 1, shots_used=self.shots_fired + 1)
 
     def _simulate_shot(self, angle_degrees):
         cfg = self.config
@@ -176,6 +245,9 @@ class PeggleEnv(gym.Env):
         ball.applyForce(self.Vector(cfg.launch_force * np.sin(angle),
                                     cfg.launch_force * np.cos(angle)))
         self.trajectory = []  # Only keep the current shot.
+        if cfg.free_balls:
+            self.shot_hit_colors = []
+            self.shot_orange_start = sum(p.isOrange and not p.isHit for p in self.pegs)
         self._record_frame(ball, 0)
         active = [p for p in self.pegs if not p.isHit]
         slow_contacts = {}
@@ -202,6 +274,8 @@ class PeggleEnv(gym.Env):
                         contacts.append(peg)
                 touched = contacts
                 for peg in touched:
+                    if cfg.free_balls and not peg.isHit:
+                        self.shot_hit_colors.append(peg.color)
                     peg.isHit = True
                     key = id(peg)
                     if ball.vel.getMag() <= 1.5:
@@ -213,6 +287,10 @@ class PeggleEnv(gym.Env):
                         peg.isVisible = False
                         self.stuck_removals += 1
             self._record_frame(ball, frame)
+            if touched and cfg.goal == "all" and all(peg.isHit for peg in self.pegs):
+                # The last target was hit. End the shot and remove hit pegs now.
+                timed_out = False
+                break
         for peg in self.pegs:
             if peg.isHit:
                 peg.isVisible = False
@@ -225,14 +303,39 @@ class PeggleEnv(gym.Env):
             raise RuntimeError("Call reset() before stepping a new or finished episode.")
         if not self.action_space.contains(action):
             raise ValueError(f"Action must be an integer in [0, {self.config.n_actions - 1}].")
-        before = self._info()["orange_cleared"]
+        before = self._info()
+        peg32_was_hit = self.config.early_peg_bonus and self.pegs[32].isHit
         angle = float(self.config.angles_degrees[int(action)])
         frames, timeout = self._simulate_shot(angle)
         self.shots_remaining -= 1
+        if self.config.free_balls:
+            self.shots_fired += 1
+            self.shot_score = peggle_shot_score(self.shot_hit_colors, before["orange_remaining"])
+            self.shot_free_balls = free_balls_for_score(self.shot_score)
+            self.shots_remaining += self.shot_free_balls
+            self.free_balls_earned += self.shot_free_balls
+            self.shots_earning_free_balls += int(self.shot_free_balls > 0)
+            self.total_score += self.shot_score
+            if self.record_trajectory:
+                self.trajectory[-1].update(shot_score=self.shot_score,
+                    shot_free_balls=self.shot_free_balls, free_balls_earned=self.free_balls_earned,
+                    balls_remaining=self.shots_remaining, shots_used=self.shots_fired)
         info = self._info()
-        newly_cleared = info["orange_cleared"] - before
-        reward = self.config.orange_reward * newly_cleared - self.config.shot_penalty
-        if newly_cleared == 0:
+        newly_cleared = info["orange_cleared"] - before["orange_cleared"]
+        if self.config.goal == "all":
+            new_pegs = info["pegs_cleared"] - before["pegs_cleared"]
+            info["new_pegs_cleared"] = new_pegs
+            reward = self.config.peg_reward * new_pegs - self.config.shot_penalty
+            if self.config.endgame_bonus and before["pegs_remaining"] <= 10:
+                reward += 2 * new_pegs
+            if (self.config.early_peg_bonus and before["pegs_remaining"] > 10
+                    and not peg32_was_hit and self.pegs[32].isHit):
+                reward += 10
+            if new_pegs == 0:
+                reward -= self.config.empty_shot_penalty
+        else:
+            reward = self.config.orange_reward * newly_cleared - self.config.shot_penalty
+        if self.config.goal == "orange" and newly_cleared == 0:
             reward -= self.config.empty_shot_penalty
         terminated = bool(info["success"] or self.shots_remaining == 0)
         if info["success"]:
