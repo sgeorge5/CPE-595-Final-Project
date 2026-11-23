@@ -3,7 +3,7 @@ import pytest
 
 from levels.config_rl import RLConfig
 from levels.peggle_env import PeggleEnv
-from levels.ppo_endgame_diagnostics import state_signature
+from levels.test_environment import state_signature
 from levels.ppo_v4_shot_order import (config_for, checkpoint_rank, promote_f,
                                       verify_source)
 from levels.train_ppo import play_episode

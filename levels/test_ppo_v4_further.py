@@ -5,7 +5,7 @@ from stable_baselines3.common.monitor import Monitor
 
 from levels.config_rl import RLConfig
 from levels.peggle_env import PeggleEnv
-from levels.ppo_endgame_diagnostics import state_signature
+from levels.test_environment import state_signature
 from levels.ppo_v4_further import MODELS, START, config_for, settings_for, verify_source
 
 
