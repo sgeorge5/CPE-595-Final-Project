@@ -109,9 +109,12 @@ def test_only_full_clear_earns_completion_bonus(monkeypatch):
         env.close()
 
 
-def test_source_only_workflows_without_pretrained_files(tmp_path, monkeypatch):
-    from levels.train_dqn import train_model_one, train_model_two
+def test_fresh_training_runs_without_pretrained_files(tmp_path, monkeypatch):
+    import play
+    from levels import train_dqn
     original_load = DQN.load
+    original_one = train_dqn.train_model_one
+    original_two = train_dqn.train_model_two
     root = os.path.realpath(str(tmp_path))
 
     def load_generated(cls, path, *args, **kwargs):
@@ -120,19 +123,27 @@ def test_source_only_workflows_without_pretrained_files(tmp_path, monkeypatch):
         return original_load(path, *args, **kwargs)
 
     monkeypatch.setattr(DQN, "load", classmethod(load_generated))
-    orange_path = train_model_one(os.path.join(root, "orange"), steps=32)
-    orange = DQN.load(orange_path, device="cpu")
+    monkeypatch.setattr(train_dqn, "train_model_one", lambda folder: original_one(folder, steps=32))
+    monkeypatch.setattr(train_dqn, "train_model_two", lambda folder: original_two(
+        folder, base_steps=1104, additional_steps=1104, cloning_updates=8,
+        validation_games=2, interval=552))
+    orange, config, first_run = play.train_fresh("1", root)
     assert orange.observation_space.shape == (155,) and orange.action_space.n == 21
-    path = train_model_two(os.path.join(root, "all"), base_steps=1104,
-                           additional_steps=1104, cloning_updates=8,
-                           validation_games=2, interval=552)
-    model = DQN.load(path, device="cpu")
+    again, _, second_run = play.train_fresh("1", root)
+    assert first_run != second_run and os.path.isdir(first_run) and os.path.isdir(second_run)
+    assert orange.num_timesteps == again.num_timesteps == 32
+    model, config, all_run = play.train_fresh("2", root)
     assert model.observation_space.shape == (78,) and model.action_space.n == 21
-    assert model.num_timesteps > 1104
-    last = DQN.load(os.path.join(root, "all", "demonstration_stage", "checkpoint_2208.zip"), device="cpu")
+    assert not config.free_balls and model.num_timesteps > 1104
+    last = DQN.load(os.path.join(all_run, "demonstration_stage", "checkpoint_2208.zip"), device="cpu")
     assert last._n_updates > 0 and last.policy.optimizer.state_dict()["state"]
-    # Repeated requests reuse the completed source-only run.
-    assert train_model_two(os.path.join(root, "all")) == path
+    # The selected checkpoint reloads and plays using its actual learned predictions.
+    restored = DQN.load(os.path.join(all_run, "best_model.zip"), device="cpu")
+    actual, _ = run.play(restored)
+    assert 0 <= actual["pegs_cleared"] <= 77 and actual["shots_used"] <= 10
+    summary = play.evaluate_new_model(restored, config, all_run)
+    assert summary["games"] == 100
+    assert os.path.isfile(os.path.join(all_run, "evaluation_summary.csv"))
 
 
 def test_saved_final_policy_uses_q_values():
@@ -154,28 +165,51 @@ def test_saved_final_policy_uses_q_values():
         env.close()
 
 
-def test_two_dqn_menu_and_missing_model_fallback(monkeypatch, capsys):
+def test_pretrained_menu_routes_both_models_without_training(monkeypatch, capsys):
     import play
-    from levels import train_dqn
-    from levels.config_rl import RLConfig
-    # Exercise auto-training routing without a full training run.
     marker = object()
-    monkeypatch.setattr(play.os.path, "isfile", lambda path: False)
-    monkeypatch.setattr(train_dqn, "train_model_one", lambda: "fresh_orange.zip")
-
-    fake = type("Policy", (), {"observation_space": type("Space", (), {"shape": (155,)})(),
-                               "action_space": type("Space", (), {"n": 21})()})()
-    monkeypatch.setattr(play.DQN, "load", lambda path, **kwargs: fake)
-    model, config = play.load_game_mode("1")
-    assert model is fake and config.goal == "orange" and not config.free_balls
-    monkeypatch.setattr(train_dqn, "train_model_two", lambda: "fresh_all.zip")
-    fake.observation_space.shape = (78,)
-    model, config = play.load_game_mode("2")
-    assert model is fake and config.goal == "all" and not config.free_balls
-    monkeypatch.setattr("builtins.input", lambda prompt: "2")
-    monkeypatch.setattr(play, "load_game_mode", lambda choice: (marker, run.all_pegs_config()))
-    monkeypatch.setattr(play, "demonstrate", lambda model, config, label: None)
-    play.main()
+    def no_training(*args, **kwargs):
+        raise AssertionError("Pretrained playback started training")
+    monkeypatch.setattr(play, "train_fresh", no_training)
+    for choice in ("1", "2"):
+        answers = iter([choice, "1"])
+        monkeypatch.setattr("builtins.input", lambda prompt: next(answers))
+        config = RLConfig(observation="compact") if choice == "1" else run.all_pegs_config()
+        monkeypatch.setattr(play, "load_game_mode", lambda selected: (marker, config))
+        shown = []
+        monkeypatch.setattr(play, "demonstrate", lambda model, config, label: shown.append((model, label)))
+        play.main()
+        assert shown == [(marker, "DQN Model " + choice)]
     output = capsys.readouterr().out
-    assert "1. DQN Model 1 - Clear all orange pegs" in output
-    assert "2. DQN Model 2 - Clear all 77 pegs" in output
+    assert "Use existing pretrained model" in output and "Train a new model from scratch" in output
+    assert "Back to model selection" in output
+
+
+def test_missing_and_incompatible_pretrained_checkpoints(monkeypatch):
+    import play
+    import pytest
+    monkeypatch.setattr(play.os.path, "isfile", lambda path: False)
+    for choice in ("1", "2"):
+        with pytest.raises(FileNotFoundError, match="Pretrained checkpoint missing"):
+            play.load_game_mode(choice)
+    monkeypatch.setattr(play.os.path, "isfile", lambda path: True)
+    fake = type("Policy", (), {"observation_space": type("Space", (), {"shape": (1,)})(),
+                               "action_space": type("Space", (), {"n": 21})()})()
+    monkeypatch.setattr(play.DQN, "load", lambda *args, **kwargs: fake)
+    for choice in ("1", "2"):
+        with pytest.raises(ValueError, match="Incompatible checkpoint"):
+            play.load_game_mode(choice)
+
+
+def test_back_menu_and_fresh_model_demonstration(monkeypatch, capsys):
+    import play
+    answers = iter(["1", "3", "2", "2"])
+    monkeypatch.setattr("builtins.input", lambda prompt: next(answers))
+    model = object()
+    events = []
+    monkeypatch.setattr(play, "train_fresh", lambda choice: (model, run.all_pegs_config(), "new_run"))
+    monkeypatch.setattr(play, "evaluate_new_model", lambda m, c, folder: events.append(("evaluate", m, folder)))
+    monkeypatch.setattr(play, "demonstrate", lambda m, c, label: events.append(("play", m, label)))
+    play.main()
+    assert events == [("evaluate", model, "new_run"), ("play", model, "DQN Model 2")]
+    assert capsys.readouterr().out.count("PEGGLE REINFORCEMENT LEARNING") == 2

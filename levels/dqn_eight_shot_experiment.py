@@ -85,10 +85,9 @@ def rank(row):
     return row["wins"], -winning_shots, row["greedy_win"], -row["greedy_shots"], row["mean_pegs"]
 
 
-def load_policy(path=None, train_if_missing=True):
+def load_policy(path=None, train_if_missing=False):
     """Use the historical final policy locally, or build a new source-only policy."""
-    source_path = "models/source_only/model2/best_model.zip"
-    chosen = path or (FINAL_DQN_PATH if os.path.isfile(FINAL_DQN_PATH) else source_path)
+    chosen = path or FINAL_DQN_PATH
     if not os.path.isfile(chosen):
         if path or not train_if_missing:
             raise FileNotFoundError(chosen)

@@ -1,0 +1,12 @@
+# Tested with Python 3.12.1. Dependencies for the final DQN interface and tests.
+numpy==1.26.4
+matplotlib==3.11.2
+pandas==3.0.6
+torch==2.15.0
+gymnasium==1.4.0
+stable-baselines3==2.9.2
+pytest==9.2.0
+# For reading and executing supported notebook cells.
+ipykernel>=6.29,<8
+nbformat>=5.10,<6
+nbclient>=0.10,<1

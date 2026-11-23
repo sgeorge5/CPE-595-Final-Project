@@ -1,115 +1,76 @@
-# CPE 595 Final Project ? Two DQN Models
+# CPE 595 Peggle DQN Project
 
-The final Python submission contains two Stable-Baselines3 DQN models on the original 77-peg PegglePy Level 1 board.
+This project provides two trained DQN policies on the original PegglePy Level 1 board, plus their source training procedures.
 
-- Model 1 targets the 25 randomly assigned orange pegs. It has 155 observations, 21 angles and ten shots, with no free balls. Its original reward and compact observation order are preserved.
-- Model 2 targets all 77 pegs. It has 78 observations, 21 angles and ten shots, with no free balls. It was trained using simulator demonstrations and DQN replay learning. The selected historical checkpoint clears 77/77 in eight greedy shots.
+| Model | Objective | Inputs | Selected pretrained checkpoint |
+|---|---|---|---|
+| DQN Model 1 | Clear the 25 orange pegs | 155 | `models/level1_improved/best_model.zip` |
+| DQN Model 2 | Clear all 77 pegs | 78 | `models/dqn_eight_shot_experiment/best_new.zip` |
+
+Both models use 21 launch angles, a maximum of ten shots, the original physics and no free balls. The two selected checkpoints are included for reproducible saved-policy playback. Experimental checkpoints and replay buffers are excluded from the submission commit.
 
 ## Install and run
 
-Use Python 3.12 and install `requirements.txt` in the project environment. Run commands from the `Final Project` root.
+Use Python 3.12. Create or activate a Python environment, then run these commands from the project root.
 
 ```text
 python -m pip install -r requirements.txt
 python play.py
 ```
 
-The menu offers only these objectives.
+First choose the objective.
 
 ```text
 1. DQN Model 1 - Clear all orange pegs
 2. DQN Model 2 - Clear all 77 pegs
 ```
 
-If the corresponding model is absent, the program starts its complete source-only training workflow. Training is substantially longer than playback. It saves new models under `models/source_only/`. Local research checkpoints are used when available, but they are optional for a source-only submission.
-
-Separate training and evaluation commands are available.
+Then choose the action.
 
 ```text
-python -m levels.train_dqn orange
-python -m levels.train_dqn all
+1. Use existing pretrained model
+2. Train a new model from scratch
+3. Back to model selection
+```
+
+Pretrained playback loads exactly the corresponding checkpoint listed above, runs its neural-network predictions and displays an animated recording of actual gameplay. A missing or incompatible checkpoint produces an error and returns to the action menu. This option never starts training automatically.
+
+Fresh training creates a unique empty directory under `models/retrained/model1/run_*` or `models/retrained/model2/run_*`. Each request starts from new random network weights. It saves checkpoints, validation results and the selected new model in that run directory. After training, the program prints an actual 100-game evaluation, saves its CSVs in the same run directory, and demonstrates the newly trained policy. A previous run is never reused by this menu choice. Historical checkpoints are preserved.
+
+Training can take considerably longer than playback. A fresh model may perform differently from the historical checkpoints. The program reports its measured outcome and does not assume an eight-shot win or the original orange-clearance result.
+
+## What the models learned
+
+Model 1's saved 45,000-step checkpoint historically averaged 92.60% orange clearance, or 23.15 of 25 targets, with 12 wins out of 100 games. Its selected compact training settings and original reward remain in `train_dqn.py` and `config_rl.py`.
+
+Model 2's selected 110,000-step checkpoint greedily clears all 77 pegs in eight shots. Its learned angles are `[-6, 12, -30, -60, -54, 0, -42, -42]`. Its saved matched epsilon-greedy evaluation at epsilon 0.05 recorded 78/100 wins, including 69 eight-shot wins and nine nine-shot wins.
+
+The improved model used demonstration-assisted DQN training. Its initialization came from an earlier all-peg DQN trained for 90,000 steps. Eight actual simulator transitions supplied 1,000 supervised action-preference updates. A fresh replay buffer contained 100 copies of those transitions, with another copy added every 32 gameplay steps during standard SB3 DQN training. The run completed 25,000 additional steps and selected the checkpoint after 20,000 additional steps using validation games. The network chooses its own actions during inference.
+
+For a fresh Model 2 run, `train_dqn.py` recreates the initial 90,000-step all-peg stage from random weights before demonstration-assisted learning. It generates the eight demonstration transitions directly through the simulator, without needing historical checkpoints or search CSVs. Model 2's reward is `5 * newly_hit_pegs - 2`, plus `100 + 20 * actual_unused_shots` on completion. Model 1 retains its original orange-only reward. Full fresh-training reproduction of the historical metrics was not performed during this final submission update.
+
+## Other commands
+
+```text
 python -m levels.dqn_eight_shot_experiment play
+python -m levels.dqn_eight_shot_experiment play --no-browser
 python -m levels.evaluate orange
 python -m levels.evaluate all
 python -m pytest levels -q
 ```
 
-Use `python -m levels.dqn_eight_shot_experiment play --no-browser` to save a replay without opening it. Newly generated playback files go into a fresh `results/source_playback/game_*` folder. The evaluation commands print results in memory. To play a newly trained Model 2 while historical research checkpoints still exist locally, use `python -m levels.dqn_eight_shot_experiment play --checkpoint models/source_only/model2/best_model.zip`.
+The first two commands use the selected pretrained Model 2 without training. Evaluation commands print results in memory. Playback creates a new `results/source_playback/game_*` folder, preserving earlier recordings.
 
-## Complete training without pretrained ZIP files
+The lower-level training APIs and `python -m levels.train_dqn orange` / `all` remain available for source-only experiments. Their default output is `models/source_only/`. Use the fresh-training menu option for a guaranteed new run directory on every request.
 
-`train_dqn.py` contains both learning workflows. Model 1 creates a new DQN with the original selected compact settings, including learning rate 0.0003, seed 42 and a default 50,000-step budget. Its older training/evaluation functions remain available to explain the mid-stage work.
+## Files and historical research
 
-Model 2 originally continued from the 90,000-step all-peg DQN. The source-only workflow recreates that prerequisite from random weights using the original 64-by-64 network, learning rate 0.0003, 20,000-transition buffer, original exploration schedule and base all-peg reward. It then loads only the initial checkpoint generated by this new run, resets the replay buffer and applies the successful demonstration-assisted procedure.
+`play.py` contains the two menus. `train_dqn.py` trains both models. `dqn_eight_shot_experiment.py` loads and plays Model 2 and constructs demonstration transitions. `evaluate.py`, `peggle_env.py`, `config_rl.py` and `visualize_data.py` provide evaluation, the shared environment, configuration and rendering. The two `test_*.py` files check observations, rewards, physics, checkpoints, menus and isolated fresh training.
 
-The demonstration angles `[-6, 12, -30, -60, -54, 0, -42, -42]` are used only by `collect_demonstration`. That function fires the eight shots through the original simulator and obtains the actual 78-value observations, action indices, rewards, next observations and terminal flags. It requires no historical search CSV or model. Training applies 1,000 supervised action-preference updates, synchronizes the target network, creates a fresh optimizer, inserts 100 copies of the eight transitions, and adds another copy every 32 gameplay steps during 25,000 additional DQN steps. Ordinary SB3 replay sampling and target-network updates continue throughout. Checkpoints are evaluated on 50 fixed validation seeds and selected by wins, winning shot count, greedy completion, greedy shots, then mean clearance.
+The runtime also needs `local/PegglePy-main/local/vectors.py`, `ball.py`, `collision.py`, and `local/PegglePy-main/levels/Level 1.lvl`, in their existing locations. The full original PegglePy source remains available locally. Its separate graphical game may require its own optional dependencies. The final DQN interface uses Matplotlib recordings.
 
-The new reward is `5 * newly_hit_pegs - 2`, plus `100 + 20 * actual_unused_shots` on completion. This terminal adjustment is confined to Model 2's wrapper. Model 1's reward and the shared physics are unchanged. During playback every action is selected from the network's predicted Q-values. Demonstration angles are never substituted for predictions.
+Historical DQN/PPO checkpoints, CSVs, figures, search evidence and notebook outputs are preserved. The independent simulator search and the demonstration-assisted trained DQN are distinct stages of the research. Fixed Level 1 geometry and limited recovery performance restrict conclusions about new levels. Eight shots is the shortest clear found in our experiments, with no mathematical optimality proof.
 
-The historical eight-shot policy was selected after 20,000 additional steps from a run that completed 25,000. Fresh training is not guaranteed to reproduce the same policy or numerical results on every machine. This cleanup ran only small source-only smoke training, not the full 90,000-plus-25,000-step workflow. A successful smoke test establishes initialization, data flow, learning updates and save/load behavior. Full-run outcome reproduction remains unverified.
+`main.ipynb` contains the recorded research results. Removed PPO scripts mean some historical code cells require their archived Git revision to rerun. Direct archived imports occur in one-based cells 33, 44, 55, 64, 74 and 84; later dependent cells need those setup cells. Existing outputs remain readable. The final appended eight-shot DQN section reads saved results and includes a read-only optional checkpoint check.
 
-## Historical results and notebook
-
-All previous model weights, result CSVs, figures, recorded gameplay and the full notebook file are preserved. The historical Model 1 result is 92.60% orange clearance, 23.15/25 on average and 12/100 wins. The selected Model 2 result is 77/77 in eight greedy shots, with 78/100 stochastic wins at epsilon 0.05, including 69 wins in eight or fewer shots and nine in nine shots. These are saved research results. Newly trained models report their actual outcomes.
-
-PPO code has been removed from the submitted implementation. Its historical results remain under `results/` and in the notebook's saved outputs. The notebook opens as the research record, but Run All cannot rerun all historical experiments after this cleanup. In particular, these one-based cell numbers directly import archived code or removed PPO constants.
-
-| Cell | Archived dependency |
-|---|---|
-| 33 | `train_ppo.py`, `PPO_SETTINGS`, `PPO_VERSIONS_DIR` |
-| 44 | `train_ppo.py`, `ppo_version4.py`, V4 constants |
-| 55 | `ppo_version5.py`, V5 constants |
-| 64 | `ppo_v4_improved.py`, improved-PPO constants |
-| 74 | `ppo_v4_further.py`, further-PPO constants |
-| 84 | `ppo_v4_shot_order.py`, shot-order PPO constants |
-
-Later cells using variables from these sections also depend on those setup cells. Historical training calls and old menu APIs require the corresponding code and configuration from Git history. Restore the relevant historical revision to reproduce that workflow. Use the final Python commands above for the two current DQN demonstrations. No historical notebook cells or outputs were rewritten.
-
-## Final source structure
-
-```text
-levels/
-    config_rl.py
-    dqn_eight_shot_experiment.py
-    evaluate.py
-    peggle_env.py
-    test_environment.py
-    test_dqn_eight_shot_experiment.py
-    train_dqn.py
-    visualize_data.py
-play.py
-main.ipynb
-requirements.txt
-README.md
-```
-
-`file_audit.csv` records retained, consolidated and removed modules. All 17 deleted files were verified recoverable from Git HEAD before deletion. Their relevant DQN callbacks, settings, initial training, demonstration training and playback were moved into retained modules. PPO-only tests were removed. Tests of the all-peg environment and completion reward were consolidated into the retained test files.
-
-## Minimum source submission
-
-Keep the following runtime files and their relative paths. The tests, README and requirements should accompany them for review.
-
-- `play.py`
-- `levels/config_rl.py`
-- `levels/dqn_eight_shot_experiment.py`
-- `levels/evaluate.py`
-- `levels/peggle_env.py`
-- `levels/train_dqn.py`
-- `levels/visualize_data.py`
-- `local/PegglePy-main/local/vectors.py`
-- `local/PegglePy-main/local/ball.py`
-- `local/PegglePy-main/local/collision.py`
-- `local/PegglePy-main/levels/Level 1.lvl`
-- `requirements.txt`
-
-The `levels` folder is a namespace package when launched from the project root. No pretrained ZIP, replay buffer or historical result CSV is required for fresh training. Training generates its own SB3 checkpoint ZIPs for subsequent playback. The full bundled PegglePy directory is retained locally to preserve the original game.
-
-## Tested software
-
-The cleanup was tested with Python 3.12.1, NumPy 1.26.4, PyTorch 2.15.0, Gymnasium 1.4.0, Stable-Baselines3 2.9.2, Matplotlib 3.11.2, pandas 3.0.6 and pytest 9.2.0. SB3 is pinned because the code uses its current scheduling API. Other supported dependency ranges are in `requirements.txt`.
-
-## Cleanup verification
-
-Before cleanup, the applicable historical suite passed 63 tests with five training tests excluded. The final DQN-only suite passed all 37 tests, including short training smoke tests. PPO-only and deleted experiment-orchestration tests account for the smaller suite; all-peg observation, reward, completion and shot-budget checks were consolidated. The source-only smoke test loaded checkpoints only from its own temporary output directory, exercised both training paths, and completed normal DQN optimizer updates.
-
-Read-only verification reproduced every original orange-DQN evaluation row and every final eight-shot DQN evaluation game and shot. The retained local checkpoint still produces 77/77 in eight greedy shots directly from its Q-values. All 3,782 protected checkpoint, result, physics and notebook files matched their pre-cleanup checksums. The entire notebook file was preserved byte-for-byte. The shared `peggle_env.py` file was preserved byte-for-byte. No full training, PPO training or simulator optimization search was run during cleanup.
+`requirements.txt` records the compatible package versions tested for this submission. Short isolated training smoke tests verify initialization, actual optimizer updates, checkpoint reload and playback. They do not establish that a full fresh run will reproduce historical performance.
