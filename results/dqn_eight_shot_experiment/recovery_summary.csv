@@ -1,0 +1,5 @@
+model,probes,wins,wins_eight_or_less,mean_pegs
+original,63,1,0,62.84126984126984
+reward,63,1,0,62.76190476190476
+demonstration,63,15,4,68.26984126984127
+rehearsal,63,15,4,65.3015873015873

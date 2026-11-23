@@ -1,0 +1,2 @@
+model,checkpoint,timesteps,additional_timesteps,phase,games,greedy_pegs,greedy_shots,greedy_win,greedy_balls_remaining,greedy_reward,greedy_angles,mean_pegs,min_pegs,max_pegs,wins,win_pct,average_shots,min_winning_shots,average_winning_shots,wins_eight_or_less,wins_nine,wins_ten,bonus_per_unused_shot
+demonstration,models/dqn_eight_shot_experiment\demonstration\checkpoint_100000.zip,100000,10000,validation,50,75,10,False,0,355.0,-6 12 -30 -60 -54 -42 -42 -42 0 -42,72.16,30,77,2,4.0,9.96,9,9.0,0,2,0,20
