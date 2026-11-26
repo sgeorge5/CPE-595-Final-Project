@@ -1,0 +1,4 @@
+choice,selected_steps,inputs,optimizer_updates,source_only,checkpoint_reloaded
+1,256,155,14,True,True
+2,1104,78,26,True,True
+3,2208,78,52,True,True

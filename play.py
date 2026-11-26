@@ -6,17 +6,22 @@ from stable_baselines3 import DQN
 from levels.config_rl import BEST_MODEL_PATH, FINAL_DQN_PATH, RLConfig
 from levels.visualize_data import demonstrate
 
+STANDARD_ALL_PATH = "models/dqn_all_pegs_best.zip"
+
 
 def load_game_mode(choice):
     if choice == "1":
         path = BEST_MODEL_PATH
         config = RLConfig(observation="compact")
     elif choice == "2":
-        from levels.dqn_eight_shot_experiment import all_pegs_config
+        path = STANDARD_ALL_PATH
+        config = RLConfig(goal="all", max_shots=10, free_balls=False, n_actions=21)
+    elif choice == "3":
+        from levels.demonstation_assisted_dqn import all_pegs_config
         path = FINAL_DQN_PATH
         config = all_pegs_config()
     else:
-        raise ValueError("Please enter 1 or 2.")
+        raise ValueError("Please enter 1, 2, or 3.")
     if not os.path.isfile(path):
         raise FileNotFoundError(f"Pretrained checkpoint missing: {path}. Select fresh training to create a new model.")
     model = DQN.load(path, device="cpu")
@@ -28,9 +33,9 @@ def load_game_mode(choice):
 
 def train_fresh(choice, output_root="models/retrained"):
     """An empty, uniquely named run prevents reuse of any previous trained weights."""
-    from levels.train_dqn import train_model_one, train_model_two
-    if choice not in ("1", "2"):
-        raise ValueError("Please enter 1 or 2.")
+    from levels.train_dqn import train_model_one, train_standard_all_pegs, train_model_two
+    if choice not in ("1", "2", "3"):
+        raise ValueError("Please enter 1, 2, or 3.")
     parent = os.path.join(output_root, "model" + choice)
     os.makedirs(parent, exist_ok=True)
     run_dir = tempfile.mkdtemp(prefix="run_", dir=parent)
@@ -39,8 +44,12 @@ def train_fresh(choice, output_root="models/retrained"):
         print("Training a new orange-only DQN from random network weights.")
         path = train_model_one(run_dir)
         config = RLConfig(observation="compact")
+    elif choice == "2":
+        print("Training a new standard all-peg DQN from random weights, without demonstrations.")
+        path = train_standard_all_pegs(run_dir)
+        config = RLConfig(goal="all", max_shots=10, free_balls=False, n_actions=21)
     else:
-        from levels.dqn_eight_shot_experiment import all_pegs_config
+        from levels.demonstation_assisted_dqn import all_pegs_config
         print("Training a new initial all-peg DQN, then demonstration-assisted DQN learning.")
         path = train_model_two(run_dir)
         config = all_pegs_config()
@@ -48,13 +57,15 @@ def train_fresh(choice, output_root="models/retrained"):
     return DQN.load(path, device="cpu"), config, run_dir
 
 
-def evaluate_new_model(model, config, run_dir):
-    from levels.evaluate import run_policy, evaluate_model_two
+def evaluate_new_model(model, config, run_dir, assisted=False):
+    from levels.evaluate import run_policy, evaluate_model_two, evaluate_standard_all_pegs
     if config.goal == "orange":
         summary, games, shots, arrangements = run_policy(model, config=config)
         arrangements.to_csv(os.path.join(run_dir, "evaluation_arrangements.csv"), index=False)
-    else:
+    elif assisted:
         summary, games, shots = evaluate_model_two(model)
+    else:
+        summary, games, shots = evaluate_standard_all_pegs(model)
     pd.DataFrame([summary]).to_csv(os.path.join(run_dir, "evaluation_summary.csv"), index=False)
     games.to_csv(os.path.join(run_dir, "evaluation_games.csv"), index=False)
     shots.to_csv(os.path.join(run_dir, "evaluation_shots.csv"), index=False)
@@ -66,11 +77,12 @@ def evaluate_new_model(model, config, run_dir):
 def main():
     while True:
         print("PEGGLE REINFORCEMENT LEARNING\n")
-        print("1. DQN Model 1 - Clear all orange pegs")
-        print("2. DQN Model 2 - Clear all 77 pegs")
+        print("1. Standard DQN - Clear orange pegs")
+        print("2. Standard DQN - Clear all 77 pegs")
+        print("3. Demonstration-assisted DQN - Clear all 77 pegs")
         choice = input("Enter your choice: ").strip()
-        if choice not in ("1", "2"):
-            print("Please enter 1 or 2.")
+        if choice not in ("1", "2", "3"):
+            print("Please enter 1, 2, or 3.")
             continue
         while True:
             print("1. Use existing pretrained model")
@@ -87,7 +99,10 @@ def main():
                     model, config = load_game_mode(choice)
                 else:
                     model, config, run_dir = train_fresh(choice)
-                    evaluate_new_model(model, config, run_dir)
+                    if choice == "3":
+                        evaluate_new_model(model, config, run_dir, assisted=True)
+                    else:
+                        evaluate_new_model(model, config, run_dir)
             except Exception as error:
                 print(f"Unable to prepare DQN Model {choice}: {error}")
                 continue

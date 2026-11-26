@@ -118,7 +118,6 @@ def test_upstream_data_and_no_graphical_side_effects():
     data = original_level_data()
     assert len(data) == 77
     inventory = level_inventory()
-    # A minimal source submission includes Level 1 only; the local research copy keeps all ten.
     assert inventory.loc[inventory.level == "Level 1.lvl", "peg_count"].tolist() == [77]
     assert not data.color_stored_in_file.any()
     assert not data.initial_is_hit.any()
@@ -257,7 +256,6 @@ def test_colors_stay_fixed_within_game_and_reset_restores_pegs():
 
 
 def test_full_level_success_bonus_and_no_double_reward():
-    # First find the first orange contact, then leave just that target uncleared.
     probe = PeggleEnv(record_trajectory=True)
     probe.reset(seed=42)
     probe.step(10)
@@ -315,7 +313,6 @@ def test_trajectory_and_visualizations_use_current_states():
 
 
 def test_only_resolved_contact_is_marked_hit():
-    # One swept segment detects two pegs, but the first bounce prevents the second hit.
     config = RLConfig()
     config.gravity = 0
     config.launch_force = config.max_ball_velocity = 100
@@ -373,7 +370,7 @@ def test_checkpoint_resume_retains_weights_optimizer_replay_and_history(tmp_path
     assert restored.replay_buffer.size() == model.replay_buffer.size() == 64
     for key, value in restored.q_net.state_dict().items():
         assert torch.equal(value, old_weights[key])
-    assert restored.policy.optimizer.state_dict()["state"]  # Adam's learned moments restored.
+    assert restored.policy.optimizer.state_dict()["state"]  
     restored.get_env().close()
     checkpoint_path = os.path.join(tmp_path, "checkpoint_64.zip")
     with open(checkpoint_path, "rb") as file:
@@ -433,7 +430,6 @@ def test_angle_diagnostic_and_greedy_are_separate_measured_probes(tmp_path):
 
 
 def test_upstream_free_flight_and_isolated_collision_equations():
-    # Independent arithmetic checks against the bundled Ball.update integration order.
     env = PeggleEnv()
     for angle in (-30, 30):
         ball = env.Ball(600, 36)
@@ -454,7 +450,7 @@ def test_upstream_free_flight_and_isolated_collision_equations():
     assert env.collision.isBallTouchingPeg(ball, peg, 1)
     ball = env.collision.resolveCollision(ball, [peg], 1)
     assert ball.pos.x == pytest.approx(600) and ball.pos.y == pytest.approx(263)
-    assert ball.vel.y == pytest.approx(-4.5)  # Original restitution 0.90 at this speed.
+    assert ball.vel.y == pytest.approx(-4.5)  
 
 
 def test_recorded_gameplay_matches_policy_evaluation():
@@ -496,7 +492,6 @@ def test_all_pegs_color_independent_reward_and_no_double_count():
     env = PeggleEnv(RLConfig(goal="all", max_shots=2))
     for color in ("orange", "blue"):
         env.reset(seed=42)
-        # Isolate one peg on the launcher line and leave one unreachable on the left.
         for peg in env.pegs:
             peg.isHit = True
         target = next(peg for peg in env.pegs if peg.color == color)

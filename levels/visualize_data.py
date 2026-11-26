@@ -1,4 +1,3 @@
-"""Read PegglePy's level coordinates and plot the original and training boards."""
 
 import os
 
@@ -16,12 +15,7 @@ from levels.evaluate import model_observation
 
 
 def original_level_data(level_name="Level 1.lvl"):
-    """Read a bundled .lvl: it stores coordinates, NOT colors or hit labels.
 
-    PegglePy's loadData centers the coordinate bounding box on the screen. We
-    reproduce that translation and show both archived and centered values. Its
-    normal loader creates blue, unhit Pegs before random color assignment.
-    """
     positions = load_level_coordinates(level_name, center=False)
     centered = load_level_coordinates(level_name, width=CONFIG.width, height=CONFIG.height)
     return pd.DataFrame({"peg_id": np.arange(len(positions)),
@@ -40,7 +34,6 @@ def level_inventory():
 
 
 def plot_board(records=None, path=None, config=CONFIG, ax=None):
-    """Scatter plot with orange/blue pegs and game-style downward-positive y."""
     if records is None:
         env = PeggleEnv(config)
         env.reset(seed=SEED)
@@ -71,7 +64,6 @@ def plot_board(records=None, path=None, config=CONFIG, ax=None):
 
 
 def plot_arrangements(first, second, path=None, config=CONFIG):
-    """Two resets: identical coordinates, different orange assignments."""
     fig, axes = plt.subplots(1, 2, figsize=(12, 5))
     for number, (board, ax) in enumerate(zip((first, second), axes), start=1):
         plot_board(board, config=config, ax=ax)
@@ -99,7 +91,6 @@ def plot_original_board(data=None, path=None):
 
 def plot_gameplay(board, trajectory, frame_index, angle, shot_number,
                   config=CONFIG, ax=None):
-    """Draw one recorded moment, using that moment's hit and visibility states."""
     if ax is None:
         fig, ax = plt.subplots(figsize=(5, 4.5))
     else:
@@ -133,7 +124,6 @@ def plot_gameplay(board, trajectory, frame_index, angle, shot_number,
                                facecolor="black", zorder=5))
     ax.plot(config.width / 2, config.height / 25, marker="v", color="black",
             markersize=5)
-    # Empty markers make a small legend without adding anything to the board.
     for label, color, marker in (("Orange", "#ed8b22", "o"),
                                  ("Blue", "#2786c4", "o"),
                                  ("Ball", "black", "o"),
@@ -174,7 +164,6 @@ def plot_gameplay(board, trajectory, frame_index, angle, shot_number,
 
 
 def record_gameplay(model, seed, config=CONFIG, actions=None, orange_peg_ids=None):
-    """Play one real episode; keep each shot's actual trajectory and result."""
     env = PeggleEnv(config, record_trajectory=True)
     options = None if orange_peg_ids is None else {"orange_peg_ids": orange_peg_ids}
     obs, _ = env.reset(seed=seed, options=options)
@@ -207,7 +196,6 @@ def record_gameplay(model, seed, config=CONFIG, actions=None, orange_peg_ids=Non
 
 
 def demonstrate(model, config, label, seed=50042, show=True, output_dir=None):
-    """Render actual network-selected gameplay into a new local demonstration folder."""
     import tempfile
     import webbrowser
     from urllib.request import pathname2url
@@ -249,7 +237,7 @@ def export_data(output_dir=IMPROVED_RESULTS_DIR, seed=SEED, config=CONFIG):
     env = PeggleEnv(config)
     env.reset(seed=seed)
     board = pd.DataFrame(env.board_records())
-    env.reset()  # Continue the seeded generator; do not reseed each game.
+    env.reset()  
     second = pd.DataFrame(env.board_records())
     board.to_csv(os.path.join(output_dir, "board_data.csv"), index=False)
     second.to_csv(os.path.join(output_dir, "board_arrangement_2.csv"), index=False)

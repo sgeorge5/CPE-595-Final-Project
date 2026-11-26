@@ -1,4 +1,3 @@
-"""Measured policy comparisons and separate environment diagnostics."""
 import os
 import matplotlib
 matplotlib.use('Agg')
@@ -142,7 +141,6 @@ def evaluate_agents(model_path=None, episodes=DEFAULT_EVAL_EPISODES, seed=TEST_S
 
 
 def angle_diagnostic(seeds=(42,43,44), config=CONFIG, results_dir=IMPROVED_RESULTS_DIR):
-    """One fresh copy of the same seeded arrangement per angle; never trains DQN."""
     rows = []
     env = PeggleEnv(config, record_trajectory=True)
     for seed in seeds:
@@ -173,7 +171,6 @@ def angle_diagnostic(seeds=(42,43,44), config=CONFIG, results_dir=IMPROVED_RESUL
 
 
 def greedy_diagnostic(seeds=(30042,30043,30044), config=CONFIG, results_dir=IMPROVED_RESULTS_DIR):
-    """Small simulator-lookahead feasibility probe. NEVER supplies DQN actions."""
     episodes, shots = [], []
     for seed in seeds:
         env = PeggleEnv(config)
@@ -210,15 +207,18 @@ def greedy_diagnostic(seeds=(30042,30043,30044), config=CONFIG, results_dir=IMPR
 def main():
     import argparse
     from play import load_game_mode
-    parser = argparse.ArgumentParser(description="Evaluate either final DQN in memory.")
-    parser.add_argument("model", choices=["orange", "all"])
+    parser = argparse.ArgumentParser(description="Evaluate any of the three DQNs in memory.")
+    parser.add_argument("model", choices=["orange", "standard", "all"],
+                        help="all retains the demonstration-assisted evaluation command")
     parser.add_argument("--episodes", type=int, default=100)
     args = parser.parse_args()
     if args.episodes < 1:
         parser.error("Use a positive number of episodes.")
-    model, config = load_game_mode("1" if args.model == "orange" else "2")
+    model, config = load_game_mode({"orange": "1", "standard": "2", "all": "3"}[args.model])
     if args.model == "orange":
         summary, _, _, _ = run_policy(model, episodes=args.episodes, config=config)
+    elif args.model == "standard":
+        summary, _, _ = evaluate_standard_all_pegs(model, episodes=args.episodes)
     else:
         summary, _, _ = evaluate_model_two(model, episodes=args.episodes)
     print(pd.DataFrame([summary]).to_string(index=False))
@@ -226,13 +226,13 @@ def main():
 
 
 
-def evaluate_model_two(model, episodes=100, seed=93_042):
-    """One greedy game and a separate fixed-epsilon all-peg evaluation."""
-    from levels.dqn_eight_shot_experiment import play
-    greedy, greedy_shots = play(model)
+def evaluate_model_two(model, episodes=100, seed=93_042, play_game=None):
+    if play_game is None:
+        from levels.demonstation_assisted_dqn import play as play_game
+    greedy, greedy_shots = play_game(model)
     games, shots = [], []
     for current in range(seed, seed + episodes):
-        game, trace = play(model, current, sampled=True)
+        game, trace = play_game(model, current, sampled=True)
         games.append(game)
         shots.extend(trace)
     data = pd.DataFrame(games)
@@ -245,6 +245,37 @@ def evaluate_model_two(model, episodes=100, seed=93_042):
                    average_shots=data.shots_used.mean(), wins_eight_or_less=int(wins.shots_used.le(8).sum()),
                    wins_nine=int(wins.shots_used.eq(9).sum()), wins_ten=int(wins.shots_used.eq(10).sum()))
     return summary, pd.DataFrame([greedy] + games), pd.DataFrame(greedy_shots + shots)
+
+
+def play_standard_all_pegs(model, seed=50_042, sampled=False):
+    env = PeggleEnv(RLConfig(goal="all", max_shots=10, free_balls=False, n_actions=21))
+    rng = np.random.default_rng(seed)
+    obs, _ = env.reset(seed=seed)
+    colors = " ".join(str(i) for i, peg in enumerate(env.pegs) if peg.isOrange)
+    trace = []
+    try:
+        done = False
+        while not done:
+            exploratory = sampled and rng.random() < 0.05
+            action = int(rng.integers(21)) if exploratory else int(model.predict(obs, deterministic=True)[0])
+            obs, reward, terminal, truncated, info = env.step(action)
+            done = terminal or truncated
+            trace.append(dict(seed=seed, strategy="Epsilon-greedy" if sampled else "Greedy",
+                              action=action, exploratory=exploratory, shot=info["shots_used"], reward=reward,
+                              **{k: info[k] for k in ("angle_degrees", "new_pegs_cleared", "pegs_cleared",
+                                 "pegs_remaining", "shots_remaining", "success")}))
+    finally:
+        env.close()
+    game = dict(seed=seed, strategy="Epsilon-greedy" if sampled else "Greedy", orange_peg_ids=colors,
+                shots_used=info["shots_used"], pegs_cleared=info["pegs_cleared"], success=info["success"],
+                balls_remaining=info["shots_remaining"], reward=sum(s["reward"] for s in trace),
+                actions=" ".join(str(s["action"]) for s in trace),
+                angle_sequence=" ".join(str(int(s["angle_degrees"])) for s in trace))
+    return game, trace
+
+
+def evaluate_standard_all_pegs(model, episodes=100, seed=91_042):
+    return evaluate_model_two(model, episodes, seed, play_game=play_standard_all_pegs)
 
 
 if __name__ == '__main__':

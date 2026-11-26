@@ -1,5 +1,3 @@
-"""Gymnasium environment: reset a board, choose an angle, simulate a full shot."""
-
 import ast
 import os
 import sys
@@ -13,7 +11,6 @@ from levels.config_rl import CONFIG, PEGGLE_ROOT, RLConfig
 
 
 def random_peg_colors(n_pegs, n_orange, rng):
-    """Choose distinct orange pegs once per game; all other pegs are blue."""
     colors = ["blue"] * n_pegs
     for index in rng.choice(n_pegs, size=n_orange, replace=False):
         colors[index] = "orange"
@@ -33,7 +30,6 @@ def fever_multiplier(orange_remaining):
 
 
 def peggle_shot_score(hit_colors, orange_remaining):
-    """Simplified scoring in first-contact order, after each orange decrement."""
     points = 0
     for color in hit_colors:
         if color == "orange":
@@ -58,7 +54,6 @@ def free_balls_for_score(score):
 
 
 class HeadlessPeg:
-    """Peg position, color and hit status, without game images or animations."""
 
     def __init__(self, pos, color, radius, mass):
         self.pos = pos
@@ -69,18 +64,11 @@ class HeadlessPeg:
         self.isVisible = True
         self.isOrange = color == "orange"
 
-
-# Remember physics that has already been loaded for a set of settings.
 _PHYSICS_CACHE = {}
 
 
 def _load_physics(config):
-    """Load PegglePy's physics without starting its graphical game.
-
-    PegglePy imports its settings and classes as local.* modules. Redirecting
-    those imports keeps the original physics functions intact while supplying
-    headless settings. The sys/ast/module code is confined to this adapter.
-    """
+  
     cache_key = (
         config.width, config.height, config.gravity,
         config.max_ball_velocity, config.ball_radius,
@@ -132,7 +120,6 @@ def _load_physics(config):
 
 
 class PeggleEnv(gym.Env):
-    """Both agents observe the board between shots."""
     metadata = {"render_modes": []}
 
     def __init__(self, config: RLConfig = CONFIG, record_trajectory=False):
@@ -148,7 +135,6 @@ class PeggleEnv(gym.Env):
         self._done = True
         self.simulation_timeouts = 0
         self.stuck_removals = 0
-        # Optional display data only; training leaves recording switched off.
         self.record_trajectory = record_trajectory
         self.trajectory = []
 
@@ -224,7 +210,6 @@ class PeggleEnv(gym.Env):
 
     def _record_frame(self, ball, frame, shot_finished=False):
         if self.record_trajectory:
-            # Copy values now so later collisions cannot change earlier frames.
             self.trajectory.append({
                 "frame": frame, "x": float(ball.pos.x), "y": float(ball.pos.y),
                 "ball_alive": ball.isAlive and not shot_finished,
@@ -265,8 +250,6 @@ class PeggleEnv(gym.Env):
             touched = [p for p in nearby if self.collision.isBallTouchingPeg(ball, p, cfg.dt)]
             if touched:
                 ball = self.collision.resolveCollision(ball, touched, cfg.dt)
-                # The response stops at its first impact. Later candidates on the
-                # original swept path were not necessarily reached after that bounce.
                 contacts = []
                 for peg in touched:
                     distance = np.hypot(ball.pos.x - peg.pos.x, ball.pos.y - peg.pos.y)
@@ -288,7 +271,6 @@ class PeggleEnv(gym.Env):
                         self.stuck_removals += 1
             self._record_frame(ball, frame)
             if touched and cfg.goal == "all" and all(peg.isHit for peg in self.pegs):
-                # The last target was hit. End the shot and remove hit pegs now.
                 timed_out = False
                 break
         for peg in self.pegs:

@@ -1,6 +1,5 @@
-"""Check isolated rewards and demonstrated transitions without retraining old models."""
 import numpy as np
-from levels import dqn_eight_shot_experiment as run
+from levels import demonstation_assisted_dqn as run
 from levels.peggle_env import PeggleEnv
 from levels.config_rl import RLConfig
 from gymnasium.utils.env_checker import check_env
@@ -137,7 +136,6 @@ def test_fresh_training_runs_without_pretrained_files(tmp_path, monkeypatch):
     assert not config.free_balls and model.num_timesteps > 1104
     last = DQN.load(os.path.join(all_run, "demonstration_stage", "checkpoint_2208.zip"), device="cpu")
     assert last._n_updates > 0 and last.policy.optimizer.state_dict()["state"]
-    # The selected checkpoint reloads and plays using its actual learned predictions.
     restored = DQN.load(os.path.join(all_run, "best_model.zip"), device="cpu")
     actual, _ = run.play(restored)
     assert 0 <= actual["pegs_cleared"] <= 77 and actual["shots_used"] <= 10

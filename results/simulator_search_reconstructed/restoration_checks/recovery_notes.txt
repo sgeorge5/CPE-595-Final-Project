@@ -1,0 +1,4 @@
+Full original dqn_shot_efficiency.py recovered from local unreachable Git blob 91f71148aa52d72dee77038917216ea0d834766d (39844 bytes).
+Committed version a1511cc is replay-only. Recovered full source: FORWARD_WIDTH=60, POOL_SIZE=32, SEARCH_SEED=592, SEARCH_LIMIT=20000.
+Restoration simplifies search-only logic; removes RL continuation and original DQN sequence seeding. It is not claimed to reproduce exact historical candidate order.
+Original all-peg training and validation recovered from a1511cc:levels/dqn_all_pegs.py. Validation seeds45042..45091; final test91042..91141.

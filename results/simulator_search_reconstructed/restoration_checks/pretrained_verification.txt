@@ -1,0 +1,5 @@
+MENU 1 checkpoint step 45000 inputs (155,) pegs 24 shots 10 angles [0.0, -60.0, -18.0, -18.0, -18.0, -18.0, 36.0, -60.0, -60.0, -60.0]
+MENU 2 checkpoint step 90000 inputs (78,) pegs 77 shots 10 angles [0.0, 36.0, 36.0, -18.0, 6.0, -60.0, -18.0, -60.0, -18.0, -24.0]
+MENU 3 checkpoint step 110000 inputs (78,) pegs 77 shots 8 angles [-6.0, 12.0, -30.0, -60.0, -54.0, 0.0, -42.0, -42.0]
+ORIGINAL STANDARD RESULT EXACTLY REPRODUCED: {'greedy_pegs': 77, 'greedy_shots': 10, 'greedy_win': True, 'greedy_angles': '0 36 36 -18 6 -60 -18 -60 -18 -24', 'greedy_reward': 465.0, 'wins': 73, 'games': 100, 'average_winning_shots': 10.0, 'mean_pegs': 74.71, 'min_pegs': 53, 'max_pegs': 77, 'average_shots': 10.0, 'wins_eight_or_less': 0, 'wins_nine': 0, 'wins_ten': 73}
+ORIGINAL ORANGE RESULT EXACTLY REPRODUCED: {'agent': 'DQN', 'episodes': 100, 'successes': 12, 'success_rate_pct': 12.0, 'avg_orange_cleared': 23.15, 'orange_cleared_pct': 92.6, 'avg_orange_remaining': 1.85, 'avg_shots_success': 7.916666666666667, 'avg_shots_all': 9.75, 'mean_episode_reward': 224.75, 'distinct_angles': 5, 'most_common_angle': -18.0, 'most_common_angle_pct': 44.51282051282051, 'simulation_timeouts': 0}

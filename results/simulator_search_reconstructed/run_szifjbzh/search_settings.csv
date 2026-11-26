@@ -1,0 +1,2 @@
+implementation,source_blob,beam_width,pool_size,candidate_budget,max_depth,board_seed,search_seed,ranking,initial_candidates
+Restored/adapted; not an exact historical rerun,91f71148aa52d72dee77038917216ea0d834766d,2,32,63,3,50042,592,"clearance descending, candidate ascending; distinct hit states",empty sequence; no DQN or historical solutions

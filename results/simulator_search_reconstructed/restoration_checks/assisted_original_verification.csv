@@ -1,0 +1,2 @@
+greedy_pegs,greedy_shots,greedy_win,greedy_angles,greedy_reward,wins,games,average_winning_shots,mean_pegs,min_pegs,max_pegs,average_shots,wins_eight_or_less,wins_nine,wins_ten
+77,8,True,-6 12 -30 -60 -54 0 -42 -42,509.0,78,100,8.115384615384615,74.34,48,77,8.53,69,9,0

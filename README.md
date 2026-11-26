@@ -52,8 +52,8 @@ For a fresh Model 2 run, `train_dqn.py` recreates the initial 90,000-step all-pe
 ## Other commands
 
 ```text
-python -m levels.dqn_eight_shot_experiment play
-python -m levels.dqn_eight_shot_experiment play --no-browser
+python -m levels.demonstation_assisted_dqn play
+python -m levels.demonstation_assisted_dqn play --no-browser
 python -m levels.evaluate orange
 python -m levels.evaluate all
 python -m pytest levels -q
@@ -65,7 +65,7 @@ The lower-level training APIs and `python -m levels.train_dqn orange` / `all` re
 
 ## Files and historical research
 
-`play.py` contains the two menus. `train_dqn.py` trains both models. `dqn_eight_shot_experiment.py` loads and plays Model 2 and constructs demonstration transitions. `evaluate.py`, `peggle_env.py`, `config_rl.py` and `visualize_data.py` provide evaluation, the shared environment, configuration and rendering. The two `test_*.py` files check observations, rewards, physics, checkpoints, menus and isolated fresh training.
+`play.py` contains the two menus. `train_dqn.py` trains both models. `demonstation_assisted_dqn.py` loads and plays Model 2 and constructs demonstration transitions. `evaluate.py`, `peggle_env.py`, `config_rl.py` and `visualize_data.py` provide evaluation, the shared environment, configuration and rendering. The two `test_*.py` files check observations, rewards, physics, checkpoints, menus and isolated fresh training.
 
 The runtime also needs `local/PegglePy-main/local/vectors.py`, `ball.py`, `collision.py`, and `local/PegglePy-main/levels/Level 1.lvl`, in their existing locations. The full original PegglePy source remains available locally. Its separate graphical game may require its own optional dependencies. The final DQN interface uses Matplotlib recordings.
 

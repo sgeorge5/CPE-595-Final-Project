@@ -354,15 +354,20 @@ def train_model_one(output_dir="models/source_only/model1", steps=50_000):
     return os.path.join(output_dir, "best_model.zip")
 
 
-def train_initial_all_pegs(output_dir, steps=90_000):
-    """Recreate the prerequisite all-peg DQN stage from new random weights."""
-    from levels.dqn_eight_shot_experiment import all_pegs_config
+def train_initial_all_pegs(output_dir, steps=90_000, on_checkpoint=None):
+    """Standard DQN only; the optional hook evaluates saved checkpoints.
+
+    The assisted trainer keeps its original 90k prerequisite and no hook.
+    An empty output directory starts random weights and an empty replay buffer.
+    """
+    from levels.config_rl import RLConfig
     if steps < 4 or steps % 4:
         raise ValueError("Initial training steps must be positive and divisible by four.")
     torch.set_num_threads(1)
     os.makedirs(output_dir, exist_ok=True)
     paths = sorted(glob.glob(os.path.join(output_dir, "checkpoint_*.zip")), key=checkpoint_step)
-    env = TrainingMonitor(PeggleEnv(all_pegs_config()), SEED)
+    env = TrainingMonitor(PeggleEnv(RLConfig(goal="all", max_shots=10,
+                                          free_balls=False, n_actions=21)), SEED)
     try:
         if paths:
             model = DQN.load(paths[-1], env=env, device="cpu")
@@ -388,16 +393,69 @@ def train_initial_all_pegs(output_dir, steps=90_000):
             model.save(path + ".zip")
             write_csv(pd.DataFrame(log.rows[begin:]), path + "_episodes.csv")
             print(f"Initial all-peg stage saved at {model.num_timesteps:,} shots.", flush=True)
+            if on_checkpoint is not None:
+                on_checkpoint(model, path + ".zip")
         return os.path.join(output_dir, f"checkpoint_{model.num_timesteps}.zip")
     finally:
         env.close()
+
+
+def standard_validation_key(row):
+    """Original a1511cc all-peg selection rule, using the current metric names."""
+    winning_shots = row["average_winning_shots"] if row["wins"] else 0
+    return (row["greedy_win"], row["wins"], row["greedy_pegs"], row["mean_pegs"],
+            -row["greedy_shots"] if row["greedy_win"] else 0, -winning_shots)
+
+
+def train_standard_all_pegs(output_dir="models/source_only/standard_all", steps=100_000,
+                            validation_games=50):
+    """Train an independent all-peg DQN; never load historical weights or demos."""
+    from levels.evaluate import evaluate_standard_all_pegs
+    if steps < 4 or steps % 4 or validation_games < 1:
+        raise ValueError("Use positive steps divisible by four and positive validation games.")
+    if os.path.isdir(output_dir) and os.listdir(output_dir):
+        raise FileExistsError("Fresh standard training needs a new empty output folder.")
+    os.makedirs(output_dir, exist_ok=True)
+    settings = dict(seed=SEED, policy="MlpPolicy", inputs=78, actions=21, shot_limit=10,
+                    free_balls=False, peg_reward=5, shot_penalty=2, completion_bonus=100,
+                    target_timesteps=steps, exploration_decay_steps=60_000,
+                    validation_seed=45_042, validation_games=validation_games,
+                    training_method="Standard DQN; random weights; no demonstrations",
+                    **ALL_PEG_SETTINGS)
+    write_csv(pd.DataFrame([settings]), os.path.join(output_dir, "training_settings.csv"))
+    scores = []
+
+    def validate(model, checkpoint):
+        # This evaluator uses local RNGs and greedy network predictions, so it
+        # does not change training exploration or import demonstration helpers.
+        summary, games, shots = evaluate_standard_all_pegs(
+            model, episodes=validation_games, seed=45_042)
+        summary.update(checkpoint=checkpoint, timesteps=model.num_timesteps)
+        scores.append(summary)
+        stem = os.path.splitext(checkpoint)[0] + "_validation"
+        write_csv(games, stem + "_games.csv")
+        write_csv(shots, stem + "_shots.csv")
+        write_csv(pd.DataFrame(scores), os.path.join(output_dir, "checkpoint_evaluation.csv"))
+        print(f"Standard validation {model.num_timesteps:,}: "
+              f"{summary['greedy_pegs']}/77 greedy, {summary['wins']}/{validation_games} wins.", flush=True)
+
+    train_initial_all_pegs(output_dir, steps, on_checkpoint=validate)
+    chosen = max(scores, key=standard_validation_key)
+    best_path = os.path.join(output_dir, "best_model.zip")
+    shutil.copyfile(chosen["checkpoint"], best_path)
+    shutil.copyfile(os.path.splitext(chosen["checkpoint"])[0] + ".pkl",
+                    os.path.join(output_dir, "best_model.pkl"))
+    write_csv(pd.DataFrame([chosen]), os.path.join(output_dir, "selected_model.csv"))
+    print(f"Selected independent standard DQN: {chosen['checkpoint']}. "
+          "Fresh training may not reproduce the historical ten-shot result.", flush=True)
+    return best_path
 
 
 def train_model_two(output_dir="models/source_only/model2", base_steps=90_000,
                     additional_steps=25_000, cloning_updates=1000, validation_games=50,
                     interval=5000):
     """Source-only initial stage, supervised pretraining, then standard DQN replay learning."""
-    from levels.dqn_eight_shot_experiment import CompletionReward, collect_demonstration, rank
+    from levels.demonstation_assisted_dqn import CompletionReward, collect_demonstration, rank
     from levels.evaluate import evaluate_model_two
     if additional_steps < 4 or additional_steps % 4 or interval < 4 or interval % 4:
         raise ValueError("Training interval and additional steps must be multiples of four.")
@@ -466,14 +524,17 @@ def train_model_two(output_dir="models/source_only/model2", base_steps=90_000,
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Train either final DQN from source.")
-    parser.add_argument("model", choices=["orange", "all"])
+    parser = argparse.ArgumentParser(description="Train orange, standard all-peg, or assisted all-peg DQN.")
+    parser.add_argument("model", choices=["orange", "standard", "all"],
+                        help="standard has no demonstrations; all retains the assisted training command")
     parser.add_argument("--output")
-    parser.add_argument("--steps", type=int, help="Model 1 training steps or Model 2 additional steps")
+    parser.add_argument("--steps", type=int, help="Orange/standard training steps, or assisted additional steps")
     parser.add_argument("--base-steps", type=int, default=90_000)
     args = parser.parse_args()
     if args.model == "orange":
         train_model_one(args.output or "models/source_only/model1", args.steps or 50_000)
+    elif args.model == "standard":
+        train_standard_all_pegs(args.output or "models/source_only/standard_all", args.steps or 100_000)
     else:
         train_model_two(args.output or "models/source_only/model2", args.base_steps, args.steps or 25_000)
 

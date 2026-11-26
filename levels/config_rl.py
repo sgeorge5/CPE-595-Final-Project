@@ -1,11 +1,8 @@
-"""Level 1 settings for DQN and PPO."""
-
 import os
 import pickle
 
 import numpy as np
 
-# Run the notebook or scripts from the Final Project folder.
 PEGGLE_ROOT = "local/PegglePy-main"
 MODELS_DIR = "models"
 RESULTS_DIR = "results/level1_random"
@@ -17,19 +14,18 @@ VALIDATION_SEED = 20_042
 TEST_SEED = 50_042
 CHECKPOINT_INTERVAL = 5_000
 VALIDATION_EPISODES = 10
-# Edit these values to change training and evaluation when running the scripts.
+
 SEED = 42
 DEFAULT_TIMESTEPS = 10_000
 DEFAULT_EVAL_EPISODES = 100
 
-# DQN settings are Python values, shared by the script and notebook.
 DQN_POLICY = "MlpPolicy"
 DQN_SETTINGS = {
     "learning_rate": 0.001,
-    "buffer_size": 20_000,  # Maximum number of stored gameplay transitions.
+    "buffer_size": 20_000, 
     "learning_starts": 200,
     "batch_size": 64,
-    "gamma": 0.99,  # Discount applied to future rewards.
+    "gamma": 0.99, 
     "train_freq": 4,
     "gradient_steps": 1,
     "target_update_interval": 500,
@@ -41,14 +37,12 @@ DQN_SETTINGS = {
 
 
 class _CoordinateUnpickler(pickle.Unpickler):
-    """The bundled level files should contain coordinates, not executable objects."""
 
     def find_class(self, module, name):
         raise pickle.UnpicklingError("Level data must contain primitive coordinates only.")
 
 
 def load_level_coordinates(level_name="Level 1.lvl", center=True, width=1200, height=900):
-    """Keep archive order and apply only PegglePy loadData's normal translation."""
     level_dir = os.path.realpath(os.path.join(PEGGLE_ROOT, "levels"))
     path = os.path.realpath(os.path.join(level_dir, level_name))
     if (os.path.normcase(os.path.dirname(path)) != os.path.normcase(level_dir)
@@ -66,12 +60,10 @@ def load_level_coordinates(level_name="Level 1.lvl", center=True, width=1200, he
 
 
 class RLConfig:
-    """A group of named settings, accessed as CONFIG.width, CONFIG.max_shots, etc."""
 
     def __init__(self, max_shots=10, observation="full", empty_shot_penalty=0, goal="orange",
                  free_balls=False, n_actions=21, endgame_bonus=False, ppo_completion_bonus=100,
                  early_peg_bonus=False):
-        # Board and action settings.
         self.width = 1200
         self.height = 900
         self.max_shots = max_shots
@@ -101,12 +93,10 @@ class RLConfig:
         self.coordinates = load_level_coordinates(width=self.width, height=self.height)
         if len(self.coordinates) != 77:
             raise ValueError("Expected all 77 pegs from the original Level 1.")
-        self.n_orange = 25  # PegglePy local/peg.py: createPegColors.
+        self.n_orange = 25 
         self.n_pegs = len(self.coordinates)
-        # Each peg can score once; at most three free balls per scoring shot.
         self.ball_observation_scale = max_shots + 3 * self.n_pegs if free_balls else max_shots
 
-        # Physics defaults from PegglePy, used by the headless adapter.
         self.launch_force = 5.0
         self.gravity = 0.045
         self.max_ball_velocity = 10.0
@@ -117,9 +107,8 @@ class RLConfig:
         self.collision_samples = 10
         self.dt = 1.0
         self.max_frames_per_shot = 10_000
-        self.stuck_frames = 24  # 0.4 seconds at a nominal 60 simulation ticks/s.
+        self.stuck_frames = 24  
 
-        # Rewards for the orange-only objective.
         self.orange_reward = 10.0
         self.completion_bonus = 25.0
         self.shot_penalty = 1.0
@@ -135,7 +124,6 @@ class RLConfig:
         )
 
     def validate(self):
-        """Check settings before using them to create an environment."""
         if self.max_shots < 1 or self.max_frames_per_shot < 1 or self.stuck_frames < 1:
             raise ValueError("Shot budget and simulation limits must be positive.")
         if self.n_actions < 2 or not -90 < self.min_angle < self.max_angle < 90:
@@ -151,6 +139,5 @@ class RLConfig:
 
 CONFIG = RLConfig()
 
-# Historical final policy remains optional for local playback.
 FINAL_DQN_PATH = "models/dqn_eight_shot_experiment/best_new.zip"
 DEMONSTRATION_ANGLES = (-6, 12, -30, -60, -54, 0, -42, -42)

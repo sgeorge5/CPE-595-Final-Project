@@ -1,4 +1,3 @@
-"""Final demonstration-assisted DQN for clearing all 77 pegs."""
 import argparse
 import os
 import gymnasium as gym
@@ -17,7 +16,6 @@ def all_pegs_config():
 
 
 class CompletionReward(gym.Wrapper):
-    """Keep the original dynamics and add a reward only after an actual full clear."""
     def __init__(self, bonus=BONUS):
         super().__init__(PeggleEnv(all_pegs_config()))
         self.bonus = bonus
@@ -30,7 +28,6 @@ class CompletionReward(gym.Wrapper):
 
 
 def collect_demonstration():
-    """Save the eight actual transitions with their 78-value observations."""
     env = CompletionReward()
     obs, _ = env.reset(seed=DEMO_SEED)
     transitions = []
