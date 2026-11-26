@@ -1,4 +1,3 @@
-"""Standard DQN training, measured checkpoints, and resumable experiment history."""
 import os
 import shutil
 import argparse
@@ -21,7 +20,6 @@ from levels.evaluate import run_policy
 
 
 def checkpoint_key(row):
-    # All checkpoints see the same validation arrangements. Final test games are separate.
     return (float(row['orange_cleared_pct']), float(row['success_rate_pct']))
 
 
@@ -48,7 +46,6 @@ def save_checkpoint(model, model_path, results_dir, config, rows, eval_episodes,
 
 
 class EpisodeLogger(BaseCallback):
-    """The SB3 callback collects completed episodes and periodically checks the policy."""
     columns = ['episode','timesteps','episode_reward','shots_used','orange_initial',
         'orange_cleared','orange_cleared_pct','success','simulation_timeouts','stuck_removals']
 
@@ -117,7 +114,6 @@ def plot_checkpoints(csv_path, output_path=None):
 
 
 def load_training_model(path, env, warmup=200):
-    """SB3 restores weights and optimizer; replay is a separate supported save file."""
     model = DQN.load(path, env=env, device='cpu')
     replay = os.path.splitext(path)[0] + '.pkl'
     if os.path.exists(replay):
@@ -129,7 +125,6 @@ def load_training_model(path, env, warmup=200):
 
 
 def record_experiment(name, config, model, episodes):
-    """One measured summary per experiment; detailed checkpoints retain its history."""
     scores = pd.read_csv(os.path.join(IMPROVED_RESULTS_DIR, name, 'checkpoint_evaluation.csv'))
     best = scores[scores.is_best].iloc[0]
     row = {'experiment':name,'observation':config.observation,
@@ -149,7 +144,6 @@ def record_experiment(name, config, model, episodes):
 
 
 def select_best_experiment():
-    """Publish the validation winner; the separate final evaluation is never consulted."""
     experiments = pd.read_csv(os.path.join(IMPROVED_RESULTS_DIR, 'experiments.csv'))
     selected = experiments.iloc[0]
     for _, row in experiments.iterrows():
@@ -170,12 +164,6 @@ def train_agent(total_timesteps=DEFAULT_TIMESTEPS, seed=SEED, model_path=None,
                 results_dir=None, config=CONFIG, verbose=1, dqn_settings=None,
                 resume_from=None, checkpoint_interval=CHECKPOINT_INTERVAL,
                 validation_episodes=VALIDATION_EPISODES, validation_seed=VALIDATION_SEED):
-    """Train this many ADDITIONAL shots. Resume never resets the learned weights.
-
-    Use a new output folder for a new experiment. Resume last_model.zip to retain
-    replay, optimizer and cumulative steps. SB3 extends its exploration schedule
-    to the new total budget; environment resets are not bit-exact interrupted play.
-    """
     if total_timesteps < 1 or checkpoint_interval < 1 or validation_episodes < 1:
         raise ValueError('Training and evaluation budgets must be positive.')
     model_path = os.path.join(IMPROVED_MODELS_DIR, 'last_model.zip') if model_path is None else str(model_path)
@@ -201,7 +189,6 @@ def train_agent(total_timesteps=DEFAULT_TIMESTEPS, seed=SEED, model_path=None,
         model.verbose = verbose
     start_step = model.num_timesteps
     if resume_from is not None:
-        # A resumed segment starts a fresh, reproducible sequence of games.
         model.get_env().seed(seed + 1_000_000 + start_step)
     previous_rows, checkpoint_rows, settings_rows = [], [], []
     if resume_from is not None:
@@ -249,7 +236,6 @@ def train_agent(total_timesteps=DEFAULT_TIMESTEPS, seed=SEED, model_path=None,
 ALL_PEG_SETTINGS = {'learning_rate': 0.0003, 'gamma': 0.99, 'buffer_size': 20000, 'batch_size': 64, 'learning_starts': 1000, 'policy_kwargs': {'net_arch': [64, 64]}, 'train_freq': 4, 'gradient_steps': 1, 'target_update_interval': 500, 'exploration_initial_eps': 1.0, 'exploration_final_eps': 0.05, 'exploration_fraction': 0.6}
 
 class TrainingMonitor(Monitor):
-    """Keep the random board seed with its terminal transition for exact replay."""
 
     def __init__(self, env, seed):
         super().__init__(env)
@@ -307,7 +293,6 @@ def insert_demonstration(model, transitions, copies=1):
 
 
 def clone_actions(model, transitions, updates=1000):
-    """Train Q-network action preferences using cross-entropy on eight observations."""
     observations = torch.as_tensor(np.stack([t[0] for t in transitions]), device=model.device)
     actions = torch.as_tensor([t[1] for t in transitions], device=model.device)
     optimizer = torch.optim.Adam(model.q_net.parameters(), lr=0.001)
@@ -322,7 +307,6 @@ def clone_actions(model, transitions, updates=1000):
             log.append(dict(update=update + 1, loss=float(loss.detach()),
                             correct=int((logits.argmax(dim=1) == actions).sum())))
     model.q_net_target.load_state_dict(model.q_net.state_dict())
-    # Normal SB3 DQN learning continues with a fresh optimizer after supervised pretraining.
     model.policy.optimizer = torch.optim.Adam(model.q_net.parameters(), lr=ALL_PEG_SETTINGS["learning_rate"])
     return pd.DataFrame(log)
 
@@ -338,13 +322,11 @@ class EpisodeLog(TrainingLog):
         if "episode" in self.locals["infos"][0]:
             self.rows[-1]["actions"] = " ".join(map(str, actions))
         if self.transitions and self.num_timesteps % 32 == 0:
-            # Uniform replay sampling mixes these eight transitions with actual gameplay.
             insert_demonstration(self.model, self.transitions)
         return result
 
 
 def train_model_one(output_dir="models/source_only/model1", steps=50_000):
-    """Fresh orange-DQN training with the selected historical compact settings."""
     from levels.config_rl import RLConfig
     os.makedirs(output_dir, exist_ok=True)
     settings = dict(DQN_SETTINGS, learning_rate=0.0003)
@@ -355,11 +337,6 @@ def train_model_one(output_dir="models/source_only/model1", steps=50_000):
 
 
 def train_initial_all_pegs(output_dir, steps=90_000, on_checkpoint=None):
-    """Standard DQN only; the optional hook evaluates saved checkpoints.
-
-    The assisted trainer keeps its original 90k prerequisite and no hook.
-    An empty output directory starts random weights and an empty replay buffer.
-    """
     from levels.config_rl import RLConfig
     if steps < 4 or steps % 4:
         raise ValueError("Initial training steps must be positive and divisible by four.")
@@ -401,7 +378,6 @@ def train_initial_all_pegs(output_dir, steps=90_000, on_checkpoint=None):
 
 
 def standard_validation_key(row):
-    """Original a1511cc all-peg selection rule, using the current metric names."""
     winning_shots = row["average_winning_shots"] if row["wins"] else 0
     return (row["greedy_win"], row["wins"], row["greedy_pegs"], row["mean_pegs"],
             -row["greedy_shots"] if row["greedy_win"] else 0, -winning_shots)
@@ -409,7 +385,6 @@ def standard_validation_key(row):
 
 def train_standard_all_pegs(output_dir="models/source_only/standard_all", steps=100_000,
                             validation_games=50):
-    """Train an independent all-peg DQN; never load historical weights or demos."""
     from levels.evaluate import evaluate_standard_all_pegs
     if steps < 4 or steps % 4 or validation_games < 1:
         raise ValueError("Use positive steps divisible by four and positive validation games.")
@@ -426,8 +401,6 @@ def train_standard_all_pegs(output_dir="models/source_only/standard_all", steps=
     scores = []
 
     def validate(model, checkpoint):
-        # This evaluator uses local RNGs and greedy network predictions, so it
-        # does not change training exploration or import demonstration helpers.
         summary, games, shots = evaluate_standard_all_pegs(
             model, episodes=validation_games, seed=45_042)
         summary.update(checkpoint=checkpoint, timesteps=model.num_timesteps)
@@ -454,14 +427,12 @@ def train_standard_all_pegs(output_dir="models/source_only/standard_all", steps=
 def train_model_two(output_dir="models/source_only/model2", base_steps=90_000,
                     additional_steps=25_000, cloning_updates=1000, validation_games=50,
                     interval=5000):
-    """Source-only initial stage, supervised pretraining, then standard DQN replay learning."""
     from levels.demonstation_assisted_dqn import CompletionReward, collect_demonstration, rank
     from levels.evaluate import evaluate_model_two
     if additional_steps < 4 or additional_steps % 4 or interval < 4 or interval % 4:
         raise ValueError("Training interval and additional steps must be multiples of four.")
     os.makedirs(output_dir, exist_ok=True)
     best_path = os.path.join(output_dir, "best_model.zip")
-    # Existing completed source-only runs are reused without touching historical models.
     if os.path.isfile(best_path):
         return best_path
     settings = dict(seed=SEED, base_steps=base_steps, additional_steps=additional_steps,
