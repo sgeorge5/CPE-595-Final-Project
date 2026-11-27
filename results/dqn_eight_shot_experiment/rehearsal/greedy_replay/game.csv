@@ -1,2 +1,0 @@
-seed,strategy,orange_peg_ids,shots_used,pegs_cleared,success,balls_remaining,reward,actions,angle_sequence,model,checkpoint
-50042,Greedy,2 6 7 10 13 14 17 27 28 31 32 34 36 41 42 45 47 48 50 58 59 61 65 69 76,8,77,True,2,509.0,9 12 5 0 1 10 3 3,-6 12 -30 -60 -54 0 -42 -42,rehearsal,models/dqn_eight_shot_experiment\rehearsal\checkpoint_95000.zip

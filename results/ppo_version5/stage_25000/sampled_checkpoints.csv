@@ -1,6 +1,0 @@
-strategy,games,total_pegs,shot_limit,avg_pegs_cleared,best_pegs_cleared,clearance_pct,avg_pegs_remaining,wins,completion_pct,avg_shots_success,min_shots_success,avg_shots_used,avg_reward,distinct_angles,simulation_timeouts,fixed_shot_limit,avg_starting_balls,avg_balls_remaining,avg_free_balls_earned,avg_shots_earning_free_balls,avg_total_score,timesteps,best_pegs
-PPO sampled,100,77,10,52.69,70,68.42857142857144,24.31,0,0.0,N/A,N/A,10.23,242.99,41,0,False,10.0,0.0,0.23,0.23,36262.9,5120,70
-PPO sampled,100,77,10,54.42,70,70.67532467532469,22.58,0,0.0,N/A,N/A,10.23,251.64,41,0,False,10.0,0.0,0.23,0.23,38245.5,10240,70
-PPO sampled,100,77,10,55.8,71,72.46753246753248,21.2,0,0.0,N/A,N/A,10.25,258.5,41,0,False,10.0,0.0,0.25,0.25,39065.0,15360,71
-PPO sampled,100,77,10,57.69,70,74.92207792207792,19.31,0,0.0,N/A,N/A,10.28,267.89,41,0,False,10.0,0.0,0.28,0.28,41455.2,20480,70
-PPO sampled,100,77,10,58.6,73,76.10389610389612,18.4,0,0.0,N/A,N/A,10.26,272.48,41,0,False,10.0,0.0,0.26,0.26,43064.8,25088,73

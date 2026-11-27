@@ -1,9 +1,0 @@
-shot,angle_degrees,new_orange_cleared,orange_remaining,shots_remaining,reward,new_pegs_cleared,pegs_cleared,pegs_remaining,success
-1,-6.0,3,22,9,38.0,8,8,69,False
-2,12.0,10,12,8,148.0,30,38,39,False
-3,-30.0,6,6,7,63.0,13,51,26,False
-4,-60.0,2,4,6,63.0,13,64,13,False
-5,-54.0,2,2,5,18.0,4,68,9,False
-6,0.0,1,1,4,13.0,3,71,6,False
-7,-42.0,1,0,3,18.0,4,75,2,False
-8,-42.0,0,0,2,108.0,2,77,0,True

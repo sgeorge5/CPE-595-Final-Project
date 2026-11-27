@@ -1,2 +1,0 @@
-actual_timesteps,checkpoint,target_timesteps
-100000,models/dqn_all_pegs\checkpoint_100000.zip,100000

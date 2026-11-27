@@ -1,2 +1,0 @@
-episode,timesteps,reward,pegs_cleared,clearance_pct,success,shots_used,simulation_timeouts,free_balls_earned,shots_earning_free_balls,total_score,orange_peg_ids,experiment,phase,checkpoint,actions
-916,110516,477.0,77,100.0,True,12,0,2,2,88880,2 3 5 6 8 12 15 16 23 25 34 35 40 45 52 53 57 59 61 63 64 65 67 68 76,B,training,results/ppo_v4_improved\B\wins_training\win_110516.zip,7 7 4 0 0 8 8 10 8 13 13 15

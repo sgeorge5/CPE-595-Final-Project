@@ -96,6 +96,25 @@ The first two commands use the selected pretrained Model 2 without training. Eva
 
 The lower-level training APIs and `python -m levels.train_dqn orange` / `all` remain available for source-only experiments. Their default output is `models/source_only/`. Use the fresh-training menu option for a guaranteed new run directory on every request.
 
+## Retained research results
+
+The published `results/` directory contains selected research evidence. Intermediate artifacts remain on the original local computer and in earlier Git commits; this cleanup does not rewrite history. Existing paths and file contents are preserved. Some extra tables, diagnostics and galleries remain because notebook cells reference them.
+
+| Directory | Retained evidence |
+|---|---|
+| `results/level1_improved/` | Original 100-game orange DQN evaluation, arrangements and shot actions; selected compact training logs, checkpoint selection, comparison figures and board data. The result remains 92.60% clearance, 23.15/25 pegs and 12/100 wins. |
+| `results/dqn_all_pegs/` | Independent standard DQN training/selection and the original PPO V3 comparison: 77/77 in ten greedy shots, 73/100 sampled wins and 74.71 mean pegs. `gameplay/greedy/` contains its verified ten-shot recording. |
+| `results/dqn_eight_shot_experiment/` | All four matched comparison rows, selected final evaluations, recovery evidence, demonstration transitions/cloning, training logs and validation summaries. On these later seeds, the original standard DQN had 63/100 wins and 74.41 mean pegs; the assisted DQN had 78/100 wins and 74.34 mean pegs. These are separate from the earlier 73-win evaluation. |
+| `results/dqn_shot_efficiency/` | Original 20,000-candidate search, both successful solution folders, progress figures and summarized stronger-shot-penalty controls. Eight shots is the shortest verified solution found, without a proof of global optimality. |
+| `results/simulator_search_reconstructed/` | Restoration notes, the existing 63-candidate smoke search and selected historical/model reproduction checks. These are not a second complete 20,000-candidate experiment. |
+| `results/ppo_all_pegs/`, `results/ppo_v4_further/`, `results/ppo_121_angles/` | PPO V3 and Improved D evidence, selection/progression, final game data and consolidated comparisons. V3's matched no-scoring result was 70/77 greedy, 65.82 mean and 0/100 wins; Improved D's later result was 76/77 in eleven greedy shots, 75.90 mean and 0/100 wins, with scoring and free balls enabled. Their gameplay rules differ from the no-scoring DQNs. |
+| `results/ppo_version4/`, `results/ppo_version5/`, `results/ppo_v4_improved/`, `results/ppo_v4_improved_F/` | Consolidated historical progression, selected final evidence and additional files referenced by notebook sections. No PPO checkpoints are published. |
+| `results/final_demonstrations/`, `results/final_eight_shot_notebook/` | Selected PPO presentation recordings, the ten-shot DQN trace and the existing completion-rate, greedy-shot and successful-game shot-distribution figures. Use `results/dqn_all_pegs/gameplay/greedy/` for the ten-shot DQN recording and screenshots; byte-identical extra copies were untracked. |
+
+The assisted policy's verified eight-shot recording and trace are in `results/dqn_eight_shot_experiment/demonstration/greedy_replay/`. Its 100-game evaluation contains 69 wins in eight shots and nine in nine shots. Eight greedy shots versus ten is a 20% reduction for the selected policies, not a guarantee for every game. Final control/rehearsal game logs remain available alongside their unchanged comparison rows.
+
+The small `results/level1_random/` archive and original coordinate exports remain as earlier orange-baseline and dataset evidence. Development locks/caches, temporary playback, per-training-win logs and redundant intermediate checkpoint outputs are excluded from the current published tree. Aggregate tables may still contain historical paths to those locally preserved files. The existing archived-PPO notebook limitations described below predate this cleanup; notebook cells and outputs have not been changed.
+
 ## Files and historical research
 
 `play.py` contains model, source and execution-mode menus. `train_dqn.py` trains the three policies. `demonstation_assisted_dqn.py` loads and plays the assisted policy and constructs demonstration transitions. Its optional viewer argument displays demonstration collection without changing the data. `evaluate.py`, `peggle_env.py`, `config_rl.py` and `visualize_data.py` provide evaluation, the shared environment, configuration and rendering. The two `test_*.py` files check observations, rewards, physics, checkpoints, menus and isolated fresh training.

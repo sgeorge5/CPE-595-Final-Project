@@ -1,2 +1,0 @@
-episode,timesteps,reward,pegs_cleared,clearance_pct,success,shots_used,simulation_timeouts,free_balls_earned,shots_earning_free_balls,total_score,orange_peg_ids,experiment,phase,checkpoint,training_seed,actions,peg32_left,peg32_shot,peg32_angle,pegs_before_32,other_pegs_with_32,peg32_early,empty_shots
-7219,74502,463.0,77,100.0,True,11,0,1,1,106220,0 5 7 15 16 17 19 20 26 28 35 38 42 43 50 51 54 57 60 63 65 68 70 71 72,121,training,results/ppo_121_angles\121\wins_training_1795396091964815300\win_74502.zip,42,37 43 64 29 7 49 67 83 36 0 39,False,5,-53.0,26,12,True,1
