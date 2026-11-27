@@ -113,6 +113,7 @@ def test_fresh_training_runs_without_pretrained_files(tmp_path, monkeypatch):
     from levels import train_dqn
     original_load = DQN.load
     original_one = train_dqn.train_model_one
+    original_standard = train_dqn.train_standard_all_pegs
     original_two = train_dqn.train_model_two
     root = os.path.realpath(str(tmp_path))
 
@@ -122,16 +123,24 @@ def test_fresh_training_runs_without_pretrained_files(tmp_path, monkeypatch):
         return original_load(path, *args, **kwargs)
 
     monkeypatch.setattr(DQN, "load", classmethod(load_generated))
-    monkeypatch.setattr(train_dqn, "train_model_one", lambda folder: original_one(folder, steps=32))
-    monkeypatch.setattr(train_dqn, "train_model_two", lambda folder: original_two(
+    monkeypatch.setattr(train_dqn, "train_model_one", lambda folder, **kwargs: original_one(folder, steps=208, **kwargs))
+    monkeypatch.setattr(train_dqn, "train_standard_all_pegs", lambda folder, **kwargs: original_standard(
+        folder, steps=1104, validation_games=2, **kwargs))
+    monkeypatch.setattr(train_dqn, "train_model_two", lambda folder, **kwargs: original_two(
         folder, base_steps=1104, additional_steps=1104, cloning_updates=8,
-        validation_games=2, interval=552))
+        validation_games=2, interval=552, **kwargs))
     orange, config, first_run = play.train_fresh("1", root)
     assert orange.observation_space.shape == (155,) and orange.action_space.n == 21
     again, _, second_run = play.train_fresh("1", root)
     assert first_run != second_run and os.path.isdir(first_run) and os.path.isdir(second_run)
-    assert orange.num_timesteps == again.num_timesteps == 32
-    model, config, all_run = play.train_fresh("2", root)
+    assert orange.num_timesteps == again.num_timesteps == 208
+    assert orange._n_updates > 0 and orange.policy.optimizer.state_dict()["state"]
+    standard, config, standard_run = play.train_fresh("2", root)
+    assert standard.observation_space.shape == (78,) and standard.action_space.n == 21
+    assert not config.free_balls and standard.num_timesteps == 1104
+    assert standard._n_updates > 0 and standard.policy.optimizer.state_dict()["state"]
+    assert not os.path.isdir(os.path.join(standard_run, "demonstration_stage"))
+    model, config, all_run = play.train_fresh("3", root)
     assert model.observation_space.shape == (78,) and model.action_space.n == 21
     assert not config.free_balls and model.num_timesteps > 1104
     last = DQN.load(os.path.join(all_run, "demonstration_stage", "checkpoint_2208.zip"), device="cpu")
@@ -139,7 +148,7 @@ def test_fresh_training_runs_without_pretrained_files(tmp_path, monkeypatch):
     restored = DQN.load(os.path.join(all_run, "best_model.zip"), device="cpu")
     actual, _ = run.play(restored)
     assert 0 <= actual["pegs_cleared"] <= 77 and actual["shots_used"] <= 10
-    summary = play.evaluate_new_model(restored, config, all_run)
+    summary = play.evaluate_new_model(restored, config, all_run, assisted=True)
     assert summary["games"] == 100
     assert os.path.isfile(os.path.join(all_run, "evaluation_summary.csv"))
 
@@ -163,21 +172,21 @@ def test_saved_final_policy_uses_q_values():
         env.close()
 
 
-def test_pretrained_menu_routes_both_models_without_training(monkeypatch, capsys):
+def test_pretrained_menu_routes_three_models_without_training(monkeypatch, capsys):
     import play
     marker = object()
     def no_training(*args, **kwargs):
         raise AssertionError("Pretrained playback started training")
     monkeypatch.setattr(play, "train_fresh", no_training)
-    for choice in ("1", "2"):
-        answers = iter([choice, "1"])
+    for choice in ("1", "2", "3"):
+        answers = iter([choice, "1", "2"])
         monkeypatch.setattr("builtins.input", lambda prompt: next(answers))
         config = RLConfig(observation="compact") if choice == "1" else run.all_pegs_config()
         monkeypatch.setattr(play, "load_game_mode", lambda selected: (marker, config))
         shown = []
-        monkeypatch.setattr(play, "demonstrate", lambda model, config, label: shown.append((model, label)))
+        monkeypatch.setattr(play, "play_policy", lambda model, config, label, **kwargs: shown.append((model, label)))
         play.main()
-        assert shown == [(marker, "DQN Model " + choice)]
+        assert shown == [(marker, play.MODEL_LABELS[choice])]
     output = capsys.readouterr().out
     assert "Use existing pretrained model" in output and "Train a new model from scratch" in output
     assert "Back to model selection" in output
@@ -187,27 +196,221 @@ def test_missing_and_incompatible_pretrained_checkpoints(monkeypatch):
     import play
     import pytest
     monkeypatch.setattr(play.os.path, "isfile", lambda path: False)
-    for choice in ("1", "2"):
+    for choice in ("1", "2", "3"):
         with pytest.raises(FileNotFoundError, match="Pretrained checkpoint missing"):
             play.load_game_mode(choice)
     monkeypatch.setattr(play.os.path, "isfile", lambda path: True)
     fake = type("Policy", (), {"observation_space": type("Space", (), {"shape": (1,)})(),
                                "action_space": type("Space", (), {"n": 21})()})()
     monkeypatch.setattr(play.DQN, "load", lambda *args, **kwargs: fake)
-    for choice in ("1", "2"):
+    for choice in ("1", "2", "3"):
         with pytest.raises(ValueError, match="Incompatible checkpoint"):
             play.load_game_mode(choice)
 
 
 def test_back_menu_and_fresh_model_demonstration(monkeypatch, capsys):
     import play
-    answers = iter(["1", "3", "2", "2"])
+    answers = iter(["1", "3", "2", "2", "2"])
     monkeypatch.setattr("builtins.input", lambda prompt: next(answers))
     model = object()
     events = []
-    monkeypatch.setattr(play, "train_fresh", lambda choice: (model, run.all_pegs_config(), "new_run"))
-    monkeypatch.setattr(play, "evaluate_new_model", lambda m, c, folder: events.append(("evaluate", m, folder)))
-    monkeypatch.setattr(play, "demonstrate", lambda m, c, label: events.append(("play", m, label)))
+    monkeypatch.setattr(play, "train_fresh", lambda choice, **kwargs: (model, run.all_pegs_config(), "new_run"))
+    monkeypatch.setattr(play, "evaluate_new_model", lambda m, c, folder, **kwargs: events.append(("evaluate", m, folder)))
+    monkeypatch.setattr(play, "play_policy", lambda m, c, label, **kwargs: events.append(("play", m, label)))
     play.main()
-    assert events == [("evaluate", model, "new_run"), ("play", model, "DQN Model 2")]
+    assert events == [("evaluate", model, "new_run"), ("play", model, play.MODEL_LABELS["2"])]
     assert capsys.readouterr().out.count("PEGGLE REINFORCEMENT LEARNING") == 2
+
+
+class TestViewer:
+    """Exercise real environment recording/callbacks without a desktop window."""
+    __test__ = False
+
+    def __init__(self):
+        self.active = True
+        self.shots, self.stages, self.panels = [], [], []
+
+    def animate(self, shot, config, stats):
+        final = shot["trajectory"][-1]
+        assert not final["ball_alive"] and len(final["is_hit"]) == 77
+        if config.goal == "all":
+            assert sum(final["is_hit"]) == shot["info"]["pegs_cleared"]
+        self.shots.append(shot)
+        self.panels.append(dict(stats))
+
+    def stage(self, name, detail=""):
+        self.stages.append(name)
+
+    def panel(self, stats):
+        self.panels.append(dict(stats))
+
+    def finish(self):
+        pass
+
+    def close(self):
+        self.active = False
+
+
+def test_all_twelve_menu_combinations_and_navigation(monkeypatch, capsys):
+    import play
+    for choice in ("1", "2", "3"):
+        for source in ("1", "2"):
+            for mode in ("1", "2"):
+                answers = iter([choice, source, mode])
+                monkeypatch.setattr("builtins.input", lambda prompt: next(answers))
+                viewer, model, events = TestViewer(), object(), []
+                config = RLConfig(observation="compact") if choice == "1" else run.all_pegs_config()
+                monkeypatch.setattr(play, "LiveGame", lambda: viewer)
+                monkeypatch.setattr(play, "load_game_mode", lambda c: (events.append(("load", c)) or (model, config)))
+                monkeypatch.setattr(play, "train_fresh", lambda c, **kw: (
+                    events.append(("train", c, kw["viewer"])) or (model, config, "isolated")))
+                monkeypatch.setattr(play, "evaluate_new_model", lambda m, c, f, **kw:
+                    events.append(("evaluate", kw["assisted"])))
+                monkeypatch.setattr(play, "play_policy", lambda m, c, label, **kw:
+                    events.append(("play", m, c, kw["viewer"])))
+                play.main()
+                selected_viewer = viewer if mode == "1" else None
+                assert events[-1] == ("play", model, config, selected_viewer)
+                if source == "1":
+                    assert events[:-1] == [("load", choice)]
+                else:
+                    assert events[:-1] == [("train", choice, selected_viewer), ("evaluate", choice == "3")]
+    # Invalid values at all levels; mode Back returns to source, source Back to models.
+    answers = iter(["bad", "1", "bad", "1", "bad", "3", "3", "2", "1", "2"])
+    monkeypatch.setattr("builtins.input", lambda prompt: next(answers))
+    play.main()
+    output = capsys.readouterr().out
+    assert output.count("Please enter 1, 2, or 3.") == 3
+    assert "SELECT TRAINING MODE" in output and "SELECT PLAYBACK MODE" in output
+
+
+def test_missing_graphics_can_fall_back_to_headless(monkeypatch, capsys):
+    import play
+    def unavailable():
+        raise RuntimeError("Live graphics are unavailable. Choose headless execution.")
+    answers = iter(["2", "1", "1", "2"])
+    monkeypatch.setattr("builtins.input", lambda prompt: next(answers))
+    monkeypatch.setattr(play, "LiveGame", unavailable)
+    monkeypatch.setattr(play, "load_game_mode", lambda choice: (object(), run.all_pegs_config()))
+    selected = []
+    monkeypatch.setattr(play, "play_policy", lambda *args, **kwargs: selected.append(kwargs["viewer"]))
+    play.main()
+    assert selected == [None] and "Choose headless" in capsys.readouterr().out
+
+
+def test_pretrained_visual_and_headless_match_without_files(monkeypatch):
+    import play
+    import webbrowser
+    from levels.visualize_data import play_policy, plt
+    figures = plt.get_fignums()
+    def no_browser(*args, **kwargs):
+        raise AssertionError("Playback opened a browser")
+    monkeypatch.setattr(webbrowser, "open", no_browser)
+    for choice in ("1", "2", "3"):
+        model, config = play.load_game_mode(choice)
+        original_step = PeggleEnv.step
+        def headless_step(env, action):
+            assert not env.record_trajectory
+            result = original_step(env, action)
+            assert env.trajectory == []
+            return result
+        with monkeypatch.context() as patch:
+            patch.setattr(PeggleEnv, "step", headless_step)
+            plain = play_policy(model, config, play.MODEL_LABELS[choice])
+        viewer = TestViewer()
+        shown = play_policy(model, config, play.MODEL_LABELS[choice], viewer=viewer)
+        import pandas as pd
+        pd.testing.assert_frame_equal(plain, shown)
+        assert len(viewer.shots) == len(plain)
+        if choice in ("2", "3"):
+            assert plain.iloc[-1].pegs_cleared == 77 and plain.iloc[-1].success
+            assert len(plain) == (10 if choice == "2" else 8)
+        assert plt.get_fignums() == figures
+
+
+def test_display_preserves_training_actions_weights_and_terminal_boards():
+    from stable_baselines3.common.monitor import Monitor
+    from levels.visualize_data import TrainingDisplay
+    torch.set_num_threads(1)
+    results = []
+    for mode in ("original", "headless", "visual"):
+        viewer = TestViewer() if mode == "visual" else None
+        display = TrainingDisplay("Test DQN", 64, viewer=viewer, render_every=1)
+        env = Monitor(PeggleEnv(run.all_pegs_config()))
+        if mode != "original":
+            env = display.wrap(env)
+        model = DQN("MlpPolicy", env, seed=42, device="cpu", learning_starts=16,
+                    buffer_size=128, batch_size=16, train_freq=4)
+        model.learn(64, callback=display if mode != "original" else None)
+        assert model._n_updates == 12 and model.policy.optimizer.state_dict()["state"]
+        assert model.num_timesteps == 64
+        if mode != "original":
+            assert display.completed_steps == 64 and display.episodes == 6
+        buffer = model.replay_buffer
+        results.append(([buffer.observations.copy(), buffer.next_observations.copy(),
+                         buffer.actions.copy(), buffer.rewards.copy(), buffer.dones.copy()],
+                        {key: value.clone() for key, value in model.q_net.state_dict().items()}))
+        if mode == "visual":
+            assert len(viewer.shots) == 64
+            for i, shot in enumerate(viewer.shots):
+                assert shot["action"] == int(buffer.actions[i, 0, 0])
+                np.testing.assert_array_equal(shot["observation"], buffer.observations[i, 0])
+                np.testing.assert_array_equal(shot["next_observation"], buffer.next_observations[i, 0])
+                # Terminal images must survive the automatic reset, with the old board's hits.
+                if buffer.dones[i, 0]:
+                    assert shot["info"]["shots_used"] == 10 and shot["next_observation"][-1] == 0
+                    assert shot["trajectory"][-1]["is_hit"] == shot["next_observation"][:-1].astype(bool).tolist()
+        else:
+            assert not env.unwrapped.record_trajectory and env.unwrapped.trajectory == []
+        env.close()
+    # Only compare filled replay slots; unused np.empty memory is unspecified.
+    for measured in results[1:]:
+        for left, right in zip(results[0][0], measured[0]):
+            np.testing.assert_array_equal(left[:64], right[:64])
+        for key, weights in results[0][1].items():
+            assert torch.equal(weights, measured[1][key])
+
+
+def test_periodic_rendering_and_close_do_not_skip_training():
+    from stable_baselines3.common.monitor import Monitor
+    from levels.visualize_data import TrainingDisplay
+    viewer = TestViewer()
+    display = TrainingDisplay("Test", 12, viewer=viewer, render_every=3)
+    env = display.wrap(Monitor(PeggleEnv(RLConfig(goal="all", max_shots=1))))
+    model = DQN("MlpPolicy", env, seed=42, learning_starts=16, buffer_size=128, device="cpu")
+    model.learn(8, callback=display)
+    assert [shot["episode"] for shot in viewer.shots] == [1, 3, 6]
+    assert display.completed_steps == display.episodes == 8
+    viewer.active = False
+    model.learn(4, callback=display, reset_num_timesteps=False)
+    assert len(viewer.shots) == 3 and display.completed_steps == display.episodes == 12
+    assert model.replay_buffer.size() == 12 and env.unwrapped.trajectory == []
+    assert not env.unwrapped.record_trajectory
+    env.close()
+
+
+def test_three_visual_training_paths_use_real_updates_and_unique_outputs(tmp_path, monkeypatch):
+    import play
+    from levels import train_dqn
+    one, standard, assisted = train_dqn.train_model_one, train_dqn.train_standard_all_pegs, train_dqn.train_model_two
+    monkeypatch.setattr(train_dqn, "train_model_one", lambda folder, **kw: one(folder, steps=208, **kw))
+    monkeypatch.setattr(train_dqn, "train_standard_all_pegs", lambda folder, **kw:
+        standard(folder, steps=1004, validation_games=1, **kw))
+    monkeypatch.setattr(train_dqn, "train_model_two", lambda folder, **kw:
+        assisted(folder, base_steps=1004, additional_steps=1004, cloning_updates=4,
+                 validation_games=1, interval=1004, **kw))
+    folders = []
+    for choice in ("1", "2", "3"):
+        viewer = TestViewer()
+        model, config, folder = play.train_fresh(choice, str(tmp_path), viewer=viewer)
+        folders.append(folder)
+        assert model._n_updates > 0 and model.policy.optimizer.state_dict()["state"]
+        assert os.path.isfile(os.path.join(folder, "best_model.zip")) and viewer.shots
+        assert any("Training progress" in stats for stats in viewer.panels)
+        if choice == "3":
+            assert all(any(name.startswith(f"Stage {stage}:") for name in viewer.stages) for stage in range(1, 6))
+            assert any(stats.get("Mode", "").startswith("Demonstration data") for stats in viewer.panels)
+            assert len(model.replay_buffer.observations[0, 0]) == 78
+        else:
+            assert not any("Demonstration" in name for name in viewer.stages)
+    assert len(set(folders)) == 3

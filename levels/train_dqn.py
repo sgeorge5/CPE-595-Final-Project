@@ -4,9 +4,6 @@ import argparse
 import glob
 import numpy as np
 from stable_baselines3.common.utils import LinearSchedule
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 import pandas as pd
 import torch
 from stable_baselines3 import DQN
@@ -17,6 +14,7 @@ from levels.config_rl import (CONFIG, DEFAULT_TIMESTEPS, DQN_POLICY, DQN_SETTING
     VALIDATION_EPISODES, VALIDATION_SEED, ORIGINAL_LEVEL1_MODEL_PATH, RESULTS_DIR, BEST_MODEL_PATH)
 from levels.peggle_env import PeggleEnv
 from levels.evaluate import run_policy
+from levels.visualize_data import plt, TrainingDisplay
 
 
 def checkpoint_key(row):
@@ -163,7 +161,8 @@ def select_best_experiment():
 def train_agent(total_timesteps=DEFAULT_TIMESTEPS, seed=SEED, model_path=None,
                 results_dir=None, config=CONFIG, verbose=1, dqn_settings=None,
                 resume_from=None, checkpoint_interval=CHECKPOINT_INTERVAL,
-                validation_episodes=VALIDATION_EPISODES, validation_seed=VALIDATION_SEED):
+                validation_episodes=VALIDATION_EPISODES, validation_seed=VALIDATION_SEED,
+                display=None):
     if total_timesteps < 1 or checkpoint_interval < 1 or validation_episodes < 1:
         raise ValueError('Training and evaluation budgets must be positive.')
     model_path = os.path.join(IMPROVED_MODELS_DIR, 'last_model.zip') if model_path is None else str(model_path)
@@ -181,7 +180,9 @@ def train_agent(total_timesteps=DEFAULT_TIMESTEPS, seed=SEED, model_path=None,
     os.makedirs(folder, exist_ok=True)
     settings = dict(DQN_SETTINGS if dqn_settings is None else dqn_settings)
     torch.set_num_threads(1)
-    env = Monitor(PeggleEnv(config))
+    if display is None:
+        display = TrainingDisplay('Orange DQN', total_timesteps)
+    env = display.wrap(Monitor(PeggleEnv(config)))
     if resume_from is None:
         model = DQN(DQN_POLICY,env,seed=seed,device='cpu',verbose=verbose,**settings)
     else:
@@ -217,7 +218,7 @@ def train_agent(total_timesteps=DEFAULT_TIMESTEPS, seed=SEED, model_path=None,
     callback = EpisodeLogger(previous_rows,checkpoint_rows,model_path,folder,config,
                              checkpoint_interval,validation_episodes,validation_seed)
     try:
-        model.learn(total_timesteps=total_timesteps,callback=callback,
+        model.learn(total_timesteps=total_timesteps,callback=[callback, display],
                     reset_num_timesteps=resume_from is None,log_interval=100)
         model.save(model_path)
         model.save_replay_buffer(os.path.splitext(model_path)[0] + '.pkl')
@@ -292,7 +293,7 @@ def insert_demonstration(model, transitions, copies=1):
                                     np.array([reward]), np.array([done]), [{}])
 
 
-def clone_actions(model, transitions, updates=1000):
+def clone_actions(model, transitions, updates=1000, display=None):
     observations = torch.as_tensor(np.stack([t[0] for t in transitions]), device=model.device)
     actions = torch.as_tensor([t[1] for t in transitions], device=model.device)
     optimizer = torch.optim.Adam(model.q_net.parameters(), lr=0.001)
@@ -306,6 +307,9 @@ def clone_actions(model, transitions, updates=1000):
         if update % 100 == 0 or update == updates - 1:
             log.append(dict(update=update + 1, loss=float(loss.detach()),
                             correct=int((logits.argmax(dim=1) == actions).sum())))
+            if display is not None:
+                display.stage('Stage 3: Supervised Action-Preference Training',
+                    f"No gameplay. Update {update + 1}/{updates}; loss {float(loss.detach()):.4f}")
     model.q_net_target.load_state_dict(model.q_net.state_dict())
     model.policy.optimizer = torch.optim.Adam(model.q_net.parameters(), lr=ALL_PEG_SETTINGS["learning_rate"])
     return pd.DataFrame(log)
@@ -326,30 +330,35 @@ class EpisodeLog(TrainingLog):
         return result
 
 
-def train_model_one(output_dir="models/source_only/model1", steps=50_000):
+def train_model_one(output_dir="models/source_only/model1", steps=50_000, display=None):
     from levels.config_rl import RLConfig
     os.makedirs(output_dir, exist_ok=True)
     settings = dict(DQN_SETTINGS, learning_rate=0.0003)
+    if display is not None:
+        display.total_steps = steps
     train_agent(steps, model_path=os.path.join(output_dir, "last_model.zip"),
                 results_dir=output_dir, config=RLConfig(observation="compact"),
-                dqn_settings=settings, verbose=0)
+                dqn_settings=settings, verbose=0, display=display)
     return os.path.join(output_dir, "best_model.zip")
 
 
-def train_initial_all_pegs(output_dir, steps=90_000, on_checkpoint=None):
+def train_initial_all_pegs(output_dir, steps=90_000, on_checkpoint=None, display=None):
     from levels.config_rl import RLConfig
     if steps < 4 or steps % 4:
         raise ValueError("Initial training steps must be positive and divisible by four.")
     torch.set_num_threads(1)
     os.makedirs(output_dir, exist_ok=True)
     paths = sorted(glob.glob(os.path.join(output_dir, "checkpoint_*.zip")), key=checkpoint_step)
-    env = TrainingMonitor(PeggleEnv(RLConfig(goal="all", max_shots=10,
-                                          free_balls=False, n_actions=21)), SEED)
+    if display is None:
+        display = TrainingDisplay('Standard all-peg DQN', steps)
+    monitor = TrainingMonitor(PeggleEnv(RLConfig(goal="all", max_shots=10,
+                                              free_balls=False, n_actions=21)), SEED)
+    env = display.wrap(monitor)
     try:
         if paths:
             model = DQN.load(paths[-1], env=env, device="cpu")
             model.load_replay_buffer(os.path.splitext(paths[-1])[0] + ".pkl")
-            env.boards = np.random.default_rng(1_000_000 + SEED + model.num_timesteps)
+            monitor.boards = np.random.default_rng(1_000_000 + SEED + model.num_timesteps)
             model.get_env().seed(1_000_000 + SEED + model.num_timesteps)
         else:
             model = DQN("MlpPolicy", env, seed=SEED, device="cpu", **ALL_PEG_SETTINGS)
@@ -362,7 +371,7 @@ def train_initial_all_pegs(output_dir, steps=90_000, on_checkpoint=None):
             model.exploration_schedule = LinearSchedule(1.0, 0.05, 60_000 / target)
             begin = len(log.rows)
             model.learn(target - model.num_timesteps, reset_num_timesteps=False,
-                        callback=log, log_interval=None)
+                        callback=[log, display], log_interval=None)
             path = os.path.join(output_dir, f"checkpoint_{model.num_timesteps}")
             if os.path.exists(path + ".zip"):
                 raise FileExistsError(path)
@@ -371,7 +380,10 @@ def train_initial_all_pegs(output_dir, steps=90_000, on_checkpoint=None):
             write_csv(pd.DataFrame(log.rows[begin:]), path + "_episodes.csv")
             print(f"Initial all-peg stage saved at {model.num_timesteps:,} shots.", flush=True)
             if on_checkpoint is not None:
+                stage = display.stage_name
+                display.stage('Checkpoint Evaluation', 'Validation games run headlessly; not training gameplay.')
                 on_checkpoint(model, path + ".zip")
+                display.stage(stage, 'Continuing reinforcement learning')
         return os.path.join(output_dir, f"checkpoint_{model.num_timesteps}.zip")
     finally:
         env.close()
@@ -384,7 +396,7 @@ def standard_validation_key(row):
 
 
 def train_standard_all_pegs(output_dir="models/source_only/standard_all", steps=100_000,
-                            validation_games=50):
+                            validation_games=50, display=None):
     from levels.evaluate import evaluate_standard_all_pegs
     if steps < 4 or steps % 4 or validation_games < 1:
         raise ValueError("Use positive steps divisible by four and positive validation games.")
@@ -412,7 +424,10 @@ def train_standard_all_pegs(output_dir="models/source_only/standard_all", steps=
         print(f"Standard validation {model.num_timesteps:,}: "
               f"{summary['greedy_pegs']}/77 greedy, {summary['wins']}/{validation_games} wins.", flush=True)
 
-    train_initial_all_pegs(output_dir, steps, on_checkpoint=validate)
+    if display is None:
+        display = TrainingDisplay('Standard all-peg DQN', steps)
+    display.total_steps = steps
+    train_initial_all_pegs(output_dir, steps, on_checkpoint=validate, display=display)
     chosen = max(scores, key=standard_validation_key)
     best_path = os.path.join(output_dir, "best_model.zip")
     shutil.copyfile(chosen["checkpoint"], best_path)
@@ -426,7 +441,7 @@ def train_standard_all_pegs(output_dir="models/source_only/standard_all", steps=
 
 def train_model_two(output_dir="models/source_only/model2", base_steps=90_000,
                     additional_steps=25_000, cloning_updates=1000, validation_games=50,
-                    interval=5000):
+                    interval=5000, display=None):
     from levels.demonstation_assisted_dqn import CompletionReward, collect_demonstration, rank
     from levels.evaluate import evaluate_model_two
     if additional_steps < 4 or additional_steps % 4 or interval < 4 or interval % 4:
@@ -441,11 +456,17 @@ def train_model_two(output_dir="models/source_only/model2", base_steps=90_000,
                     replay_demo_copies=100, replay_demo_interval=32,
                     terminal_bonus_per_unused_shot=20, **ALL_PEG_SETTINGS)
     write_csv(pd.DataFrame([settings]), os.path.join(output_dir, "settings.csv"))
-    base_path = train_initial_all_pegs(os.path.join(output_dir, "initial_stage"), base_steps)
+    if display is None:
+        display = TrainingDisplay('Demonstration-assisted DQN', base_steps + additional_steps)
+    display.total_steps = base_steps + additional_steps
+    display.stage('Stage 1: Initial Standard DQN Training', 'Learning from random weights; no demonstrations yet.')
+    base_path = train_initial_all_pegs(os.path.join(output_dir, "initial_stage"), base_steps,
+                                      display=display)
     folder = os.path.join(output_dir, "demonstration_stage")
     os.makedirs(folder, exist_ok=True)
-    transitions = collect_demonstration()
-    env = Monitor(CompletionReward())
+    display.stage('Stage 2: Collecting Demonstration Transitions', 'Simulator-discovered demonstration data, not independent RL.')
+    transitions = collect_demonstration(viewer=display.viewer)
+    env = display.wrap(Monitor(CompletionReward()))
     torch.set_num_threads(1)
     paths = sorted(glob.glob(os.path.join(folder, "checkpoint_*.zip")), key=checkpoint_step)
     rows = []
@@ -460,7 +481,8 @@ def train_model_two(output_dir="models/source_only/model2", base_steps=90_000,
             model = DQN.load(base_path, env=env, device="cpu")
             model.replay_buffer.reset()
             model.learning_starts = model.num_timesteps + 1000
-            cloning = clone_actions(model, transitions, updates=cloning_updates)
+            display.stage('Stage 3: Supervised Action-Preference Training')
+            cloning = clone_actions(model, transitions, updates=cloning_updates, display=display)
             write_csv(cloning, os.path.join(output_dir, "supervised_updates.csv"))
             insert_demonstration(model, transitions, copies=100)
         model.get_env().seed(SEED + model.num_timesteps)
@@ -470,9 +492,10 @@ def train_model_two(output_dir="models/source_only/model2", base_steps=90_000,
         for target in targets:
             path = os.path.join(folder, f"checkpoint_{target}.zip")
             if target > model.num_timesteps:
+                display.stage('Stage 4: Demonstration-Assisted DQN Training', 'Actual epsilon-greedy training actions with demonstration replay.')
                 begin = len(log.rows)
                 model.exploration_schedule = LinearSchedule(0.05, 0.05, 0.5)
-                model.learn(target - model.num_timesteps, callback=log,
+                model.learn(target - model.num_timesteps, callback=[log, display],
                             reset_num_timesteps=False, log_interval=None)
                 if os.path.isfile(path):
                     raise FileExistsError(path)
@@ -480,6 +503,7 @@ def train_model_two(output_dir="models/source_only/model2", base_steps=90_000,
                 model.save(path)
                 write_csv(pd.DataFrame(log.rows[begin:]), os.path.splitext(path)[0] + "_episodes.csv")
             if not any(row["checkpoint"] == path for row in rows):
+                display.stage('Stage 5: Checkpoint Evaluation', 'Validation games run headlessly; not training gameplay.')
                 candidate = DQN.load(path, device="cpu")
                 score, _, _ = evaluate_model_two(candidate, episodes=validation_games, seed=47_042)
                 score.update(checkpoint=path, timesteps=target)

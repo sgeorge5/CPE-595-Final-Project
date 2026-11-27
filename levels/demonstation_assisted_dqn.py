@@ -27,18 +27,30 @@ class CompletionReward(gym.Wrapper):
         return obs, reward, done, truncated, info
 
 
-def collect_demonstration():
+def collect_demonstration(viewer=None):
     env = CompletionReward()
     obs, _ = env.reset(seed=DEMO_SEED)
     transitions = []
     try:
         for angle in DEMONSTRATION_ANGLES:
+            env.unwrapped.record_trajectory = viewer is not None and viewer.active
+            board = env.unwrapped.board_records() if env.unwrapped.record_trajectory else None
             action = int((angle + 60) // 6)
             assert env.unwrapped.config.angles_degrees[action] == angle
             before = obs.copy()
             obs, reward, done, truncated, info = env.step(action)
             assert before.shape == obs.shape == (78,) and before.dtype == np.float32
             transitions.append((before, action, reward, obs.copy(), done))
+            if viewer is not None and viewer.active:
+                viewer.animate(dict(board=board, trajectory=env.unwrapped.trajectory, info=info),
+                    env.unwrapped.config, {"Model": "Demonstration-assisted DQN",
+                    "Mode": "Demonstration data (not independent RL)",
+                    "Stage": "Stage 2: Collecting Demonstration Transitions",
+                    "Current shot / angle": f"{info['shots_used']} / {angle:+.0f} degrees",
+                    "Pegs cleared": f"{info['pegs_cleared']}/77",
+                    "Shots remaining": info["shots_remaining"],
+                    "Episode reward": f"{sum(t[2] for t in transitions):.2f}",
+                    "Status": "Success" if done else "Collecting demonstration data"})
         assert info["success"] and info["shots_used"] == 8 and info["shots_remaining"] == 2
         assert len(transitions) == 8 and transitions[-1][2] == 148
         assert not truncated

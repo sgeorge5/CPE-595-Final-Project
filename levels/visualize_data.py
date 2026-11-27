@@ -6,12 +6,252 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import gymnasium as gym
+from stable_baselines3.common.callbacks import BaseCallback
 
 from levels.config_rl import (
     CONFIG, PEGGLE_ROOT, IMPROVED_RESULTS_DIR, SEED, load_level_coordinates
 )
 from levels.peggle_env import PeggleEnv
 from levels.evaluate import model_observation
+
+RENDER_EVERY_N_EPISODES = 10  # Show episode 1, then 10, 20, 30, ...
+PROGRESS_EVERY_N_SHOTS = 1000
+ANIMATION_FRAME_STRIDE = 8
+ANIMATION_DELAY = 0.02  # Display speed only; never changes the physics timestep.
+
+
+class LiveGame:
+    """Draw recorded frames from the real environment, without stepping it."""
+
+    def __init__(self):
+        try:
+            if str(matplotlib.get_backend()).lower() not in (
+                    "tkagg", "qtagg", "qt5agg", "wxagg", "macosx"):
+                plt.switch_backend("TkAgg")
+            self.fig, (self.board_ax, self.info_ax) = plt.subplots(
+                1, 2, figsize=(13, 7), gridspec_kw={"width_ratios": [1.4, 1]})
+        except Exception as error:
+            raise RuntimeError("Live graphics are unavailable. Choose headless execution. "
+                               f"Matplotlib reported: {error}") from error
+        self.active, self.paused = True, False
+        self.stride = ANIMATION_FRAME_STRIDE
+        self.fig.canvas.mpl_connect("close_event", self._closed)
+        self.fig.canvas.mpl_connect("key_press_event", self._key)
+        self.fig.subplots_adjust(left=0.06, right=0.98, top=0.88, bottom=0.19, wspace=0.24)
+        plt.show(block=False)
+
+    def _closed(self, event):
+        if self.active:
+            print("Visualization closed; execution continues headlessly.", flush=True)
+        self.active, self.paused = False, False
+
+    def _key(self, event):
+        if event.key == " ":
+            self.paused = not self.paused
+        elif event.key in ("+", "="):
+            self.stride = min(64, self.stride * 2)
+        elif event.key == "-":
+            self.stride = max(1, self.stride // 2)
+
+    def panel(self, stats):
+        if not self.active:
+            return
+        self.info_ax.clear()
+        self.info_ax.axis("off")
+        lines = [f"{key}: {value}" for key, value in stats.items()]
+        self.info_ax.text(0, 1, "\n".join(lines), va="top", fontsize=11, linespacing=1.6,
+                          transform=self.info_ax.transAxes, wrap=True)
+        self.fig.suptitle("Peggle reinforcement learning", fontsize=16)
+        self.fig.canvas.draw_idle()
+        plt.pause(0.001)
+
+    def stage(self, name, detail="No gameplay during this stage"):
+        if self.active:
+            self.board_ax.clear()
+            self.board_ax.axis("off")
+            self.board_ax.text(0.5, 0.5, detail, ha="center", va="center", wrap=True,
+                               transform=self.board_ax.transAxes, fontsize=13)
+            self.panel({"Stage": name, "Status": detail})
+
+    def animate(self, shot, config, stats):
+        if not self.active:
+            return
+        trajectory, board = shot["trajectory"], shot["board"]
+        index = 0
+        while self.active:
+            while self.paused and self.active:
+                plt.pause(0.05)
+            if not self.active:
+                break
+            plot_gameplay(board, trajectory, index, shot["info"]["angle_degrees"],
+                          shot["info"]["shots_used"], config, ax=self.board_ax, layout=False)
+            frame_stats = dict(stats)
+            frame = trajectory[index]
+            cleared = sum(hit for peg, hit in zip(board, frame["is_hit"])
+                          if config.goal == "all" or peg["color"] == "orange")
+            target = config.n_pegs if config.goal == "all" else config.n_orange
+            frame_stats["Pegs cleared"] = f"{cleared}/{target}"
+            if index < len(trajectory) - 1:
+                frame_stats["Episode reward"] = "N/A (shot in progress)"
+                frame_stats["Status"] = "Shot in progress"
+            self.panel(frame_stats)
+            plt.pause(ANIMATION_DELAY)
+            if index == len(trajectory) - 1:
+                break
+            index = min(index + self.stride, len(trajectory) - 1)
+
+    def finish(self):
+        if self.active:
+            print("Close the visualization window to finish playback.", flush=True)
+            plt.show(block=True)
+
+    def close(self):
+        self.active = False
+        plt.close(self.fig)
+
+
+class ObservedTrainingEnv(gym.Wrapper):
+    """Save one real training shot before SB3 automatically resets the board."""
+
+    def __init__(self, env, display):
+        super().__init__(env)
+        self.display = display
+        self.episode = display.episodes
+        self.last_shot = None
+
+    def reset(self, **kwargs):
+        observation, info = self.env.reset(**kwargs)
+        self.episode += 1
+        self.unwrapped.record_trajectory = bool(self.display.viewer.active and
+            (self.episode == 1 or self.episode % self.display.render_every == 0))
+        self.observation = observation.copy()
+        return observation, info
+
+    def step(self, action):
+        recording = self.unwrapped.record_trajectory and self.display.viewer.active
+        self.unwrapped.record_trajectory = recording
+        board = self.unwrapped.board_records() if recording else None
+        before = self.observation
+        observation, reward, done, truncated, info = self.env.step(action)
+        self.last_shot = None
+        if recording:
+            self.last_shot = dict(board=board, trajectory=self.unwrapped.trajectory,
+                                  info=dict(info), action=int(action), episode=self.episode,
+                                  observation=before, next_observation=observation.copy())
+        self.observation = observation.copy()
+        return observation, reward, done, truncated, info
+
+
+class TrainingDisplay(BaseCallback):
+    """Read SB3's real actions/rewards; never select actions or change training."""
+
+    def __init__(self, label, total_steps, viewer=None, render_every=None):
+        super().__init__()
+        self.label, self.total_steps, self.viewer = label, total_steps, viewer
+        self.render_every = RENDER_EVERY_N_EPISODES if render_every is None else render_every
+        if self.render_every < 1:
+            raise ValueError("The rendering interval must be positive.")
+        self.stage_name = "Standard DQN Training"
+        self.completed_steps = self.episodes = self.successes = 0
+        self.episode_reward = 0.0
+        self.recent_clearance = []
+        self.observed_env = None
+        self.config = None
+
+    def wrap(self, env):
+        self.config = env.unwrapped.config
+        self.episode_reward = 0.0
+        if self.viewer is None:
+            return env
+        self.observed_env = ObservedTrainingEnv(env, self)
+        return self.observed_env
+
+    def stage(self, name, detail="No gameplay during this stage"):
+        self.stage_name = name
+        print(name, flush=True)
+        if self.viewer is not None:
+            self.viewer.stage(name, detail)
+            self.viewer.panel({"Model": self.label, "Mode": "Visual training",
+                               "Stage": name, "Status": detail})
+
+    def _on_step(self):
+        info = self.locals["infos"][0]
+        action = int(self.locals["actions"][0])
+        self.completed_steps += 1
+        self.episode_reward += float(self.locals["rewards"][0])
+        target = self.config.n_pegs if self.config.goal == "all" else self.config.n_orange
+        cleared = info["pegs_cleared"] if self.config.goal == "all" else info["orange_cleared"]
+        episode = self.episodes + 1
+        reward = self.episode_reward
+        if "episode" in info:
+            self.episodes += 1
+            self.successes += int(info["success"])
+            self.recent_clearance = (self.recent_clearance + [cleared])[-50:]
+            self.episode_reward = 0.0
+        recent = (f"{np.mean(self.recent_clearance):.2f}/{target}"
+                  if self.recent_clearance else "N/A")
+        stats = {"Model": self.label, "Mode": "Visual training" if self.viewer else "Headless training",
+                 "Stage": self.stage_name, "Episode": episode,
+                 "Timesteps": f"{self.num_timesteps:,} (current DQN)",
+                 "Training progress": f"{self.completed_steps:,} / {self.total_steps:,} shots",
+                 "Current shot / angle": f"{info['shots_used']} / {info['angle_degrees']:+.0f} degrees",
+                 "Pegs cleared": f"{cleared}/{target}", "Shots remaining": info["shots_remaining"],
+                 "Episode reward": f"{reward:.2f}",
+                 "Exploration epsilon": f"{self.model.exploration_rate:.3f}",
+                 "Successful episodes": self.successes, "Recent average clearance": recent,
+                 "Status": ("Success" if info["success"] else "Shot budget exhausted")
+                     if self.locals["dones"][0] else "Training"}
+        if self.num_timesteps <= self.model.learning_starts:
+            stats["Exploration epsilon"] += " (random warm-up)"
+        if self.viewer is not None and self.viewer.active:
+            shot = self.observed_env.last_shot
+            if shot is not None:
+                assert shot["action"] == action
+                self.viewer.animate(shot, self.config, stats)
+            elif self.completed_steps % 50 == 0 or "episode" in info:
+                self.viewer.stage(self.stage_name, "Training continues without animation")
+                self.viewer.panel(stats)
+        if self.completed_steps == 1 or self.completed_steps % PROGRESS_EVERY_N_SHOTS == 0:
+            print(" | ".join(f"{key}: {value}" for key, value in stats.items()
+                            if key not in ("Mode", "Status")), flush=True)
+        return True
+
+
+def play_policy(model, config, label, seed=50042, viewer=None):
+    """Live or headless deterministic inference; no files and no training."""
+    env = PeggleEnv(config)
+    observation, _ = env.reset(seed=seed)
+    done, total_reward = False, 0.0
+    rows = []
+    print(label)
+    try:
+        while not done:
+            env.record_trajectory = viewer is not None and viewer.active
+            board = env.board_records() if env.record_trajectory else None
+            action, _ = model.predict(observation, deterministic=True)
+            observation, reward, done, truncated, info = env.step(int(action))
+            done = done or truncated
+            total_reward += reward
+            cleared = info["pegs_cleared"] if config.goal == "all" else info["orange_cleared"]
+            target = config.n_pegs if config.goal == "all" else config.n_orange
+            rows.append(dict(action=int(action), reward=reward, **info))
+            print(f"Shot {info['shots_used']}: Angle {info['angle_degrees']:+.0f} degrees | "
+                  f"Pegs cleared {cleared}/{target} | Shots remaining {info['shots_remaining']}", flush=True)
+            if viewer is not None and viewer.active:
+                stats = {"Model": label, "Mode": "Visual pretrained / selected-policy playback",
+                         "Current shot / angle": f"{info['shots_used']} / {info['angle_degrees']:+.0f} degrees",
+                         "Pegs cleared": f"{cleared}/{target}", "Shots remaining": info["shots_remaining"],
+                         "Episode reward": f"{total_reward:.2f}",
+                         "Status": ("Success" if info["success"] else "Shot budget exhausted") if done else "Playing"}
+                viewer.animate(dict(board=board, trajectory=env.trajectory, info=info), config, stats)
+        print(f"GAME COMPLETE | Pegs cleared: {cleared}/{target} | "
+              f"Shots used: {info['shots_used']} | Success: {info['success']}", flush=True)
+        if viewer is not None:
+            viewer.finish()
+        return pd.DataFrame(rows)
+    finally:
+        env.close()
 
 
 def original_level_data(level_name="Level 1.lvl"):
@@ -90,7 +330,7 @@ def plot_original_board(data=None, path=None):
 
 
 def plot_gameplay(board, trajectory, frame_index, angle, shot_number,
-                  config=CONFIG, ax=None):
+                  config=CONFIG, ax=None, layout=True):
     if ax is None:
         fig, ax = plt.subplots(figsize=(5, 4.5))
     else:
@@ -159,7 +399,8 @@ def plot_gameplay(board, trajectory, frame_index, angle, shot_number,
     ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.17),
               ncol=4, fontsize=8, frameon=False, handletextpad=0.3,
               columnspacing=1)
-    fig.tight_layout()
+    if layout:
+        fig.tight_layout()
     return fig
 
 

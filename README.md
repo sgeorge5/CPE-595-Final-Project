@@ -1,13 +1,14 @@
 # CPE 595 Peggle DQN Project
 
-This project provides two trained DQN policies on the original PegglePy Level 1 board, plus their source training procedures.
+This project provides three trained DQN policies on the original PegglePy Level 1 board, plus their source training procedures.
 
 | Model | Objective | Inputs | Selected pretrained checkpoint |
 |---|---|---|---|
 | DQN Model 1 | Clear the 25 orange pegs | 155 | `models/level1_improved/best_model.zip` |
-| DQN Model 2 | Clear all 77 pegs | 78 | `models/dqn_eight_shot_experiment/best_new.zip` |
+| Standard all-peg DQN | Clear all 77 pegs | 78 | `models/dqn_all_pegs_best.zip` |
+| Demonstration-assisted DQN | Clear all 77 pegs | 78 | `models/dqn_eight_shot_experiment/best_new.zip` |
 
-Both models use 21 launch angles, a maximum of ten shots, the original physics and no free balls. The two selected checkpoints are included for reproducible saved-policy playback. Experimental checkpoints and replay buffers are excluded from the submission commit.
+All three models use 21 launch angles, a maximum of ten shots, the original physics and no free balls. The three selected checkpoints are included for reproducible saved-policy playback. Experimental checkpoints and replay buffers are excluded from the current repository tree.
 
 ## Install and run
 
@@ -21,8 +22,9 @@ python play.py
 First choose the objective.
 
 ```text
-1. DQN Model 1 - Clear all orange pegs
-2. DQN Model 2 - Clear all 77 pegs
+1. Standard DQN - Clear orange pegs
+2. Standard DQN - Clear all 77 pegs
+3. Demonstration-assisted DQN - Clear all 77 pegs
 ```
 
 Then choose the action.
@@ -33,17 +35,33 @@ Then choose the action.
 3. Back to model selection
 ```
 
-Pretrained playback loads exactly the corresponding checkpoint listed above, runs its neural-network predictions and displays an animated recording of actual gameplay. A missing or incompatible checkpoint produces an error and returns to the action menu. This option never starts training automatically.
+Pretrained playback loads exactly the corresponding checkpoint listed above and uses deterministic neural-network predictions. A missing or incompatible checkpoint produces an error; use Back to return to model source selection. This option never starts training automatically.
 
-Fresh training creates a unique empty directory under `models/retrained/model1/run_*` or `models/retrained/model2/run_*`. Each request starts from new random network weights. It saves checkpoints, validation results and the selected new model in that run directory. After training, the program prints an actual 100-game evaluation, saves its CSVs in the same run directory, and demonstrates the newly trained policy. A previous run is never reused by this menu choice. Historical checkpoints are preserved.
+Fresh training creates a unique empty directory under `models/retrained/model1/run_*`, `model2/run_*` or `model3/run_*`. Each request starts from new random network weights. It saves checkpoints, validation results and the selected new model in that run directory. After training, the program prints an actual 100-game evaluation, saves its CSVs in the same run directory, and plays the newly selected policy in the chosen execution mode. A previous run is never reused by this menu choice. Historical checkpoints are preserved.
 
 Training can take considerably longer than playback. A fresh model may perform differently from the historical checkpoints. The program reports its measured outcome and does not assume an eight-shot win or the original orange-clearance result.
+
+## Visual and headless execution
+
+After choosing a model and its source, choose `1` for visual execution, `2` for headless execution, or `3` to go back one menu. For example, `2`, `1`, `2` runs the existing standard all-peg DQN headlessly; `3`, `1`, `1` watches the existing demonstration-assisted DQN live. Choose source `2` instead to start fresh training.
+
+Visual playback shows the original board and the actual recorded ball trajectory after each shot is simulated. A side panel shows the angle, clearance, shots remaining and outcome. No saved CSV, GIF or historical result is needed. Matplotlib uses an interactive backend only when visual mode is explicitly selected. If no interactive backend is available, choose headless execution from the menu.
+
+Visual training observes the actual training environment, including epsilon-greedy exploratory actions. By default, episode 1 and every tenth episode are animated. Change `RENDER_EVERY_N_EPISODES = 10` near the top of `levels/visualize_data.py` to change that interval. Every episode still trains normally. The panel and terminal show measured progress, rewards, epsilon, successes and recent average clearance. Between animated episodes, the window indicates that training continues without animation.
+
+The demonstration-assisted path labels all five stages: initial standard DQN learning, demonstration collection, supervised action-preference updates, demonstration-assisted DQN learning and checkpoint evaluation. Demonstration shots are explicitly labeled as data; supervised updates and headless validation display their stage rather than unrelated gameplay.
+
+Visual training is slower because it draws trajectories and waits for animation. Headless training is recommended for full runs. Headless playback prints shot-by-shot results without opening a window or browser, recording trajectories or generating files. Headless training retains the existing budgets, settings and checkpoint selection, prints periodic progress, and saves new outputs only in the unique run directory.
+
+In the visual window, Space pauses/resumes animation, `+` speeds it up and `-` slows it down. These controls change display speed only. Closing the window continues execution headlessly. At the end of visual playback, close the window to exit. No additional Python packages are required; the live window uses Matplotlib's existing interactive backend (normally TkAgg).
 
 ## What the models learned
 
 Model 1's saved 45,000-step checkpoint historically averaged 92.60% orange clearance, or 23.15 of 25 targets, with 12 wins out of 100 games. Its selected compact training settings and original reward remain in `train_dqn.py` and `config_rl.py`.
 
-Model 2's selected 110,000-step checkpoint greedily clears all 77 pegs in eight shots. Its learned angles are `[-6, 12, -30, -60, -54, 0, -42, -42]`. Its saved matched epsilon-greedy evaluation at epsilon 0.05 recorded 78/100 wins, including 69 eight-shot wins and nine nine-shot wins.
+The independent standard all-peg DQN (menu option 2) uses its original 90,000-step checkpoint and greedily clears 77/77 in ten shots, without demonstrations.
+
+The demonstration-assisted policy (menu option 3, historically called Model 2) uses its selected 110,000-step checkpoint and greedily clears all 77 pegs in eight shots. Its learned angles are `[-6, 12, -30, -60, -54, 0, -42, -42]`. Its saved matched epsilon-greedy evaluation at epsilon 0.05 recorded 78/100 wins, including 69 eight-shot wins and nine nine-shot wins.
 
 The improved model used demonstration-assisted DQN training. Its initialization came from an earlier all-peg DQN trained for 90,000 steps. Eight actual simulator transitions supplied 1,000 supervised action-preference updates. A fresh replay buffer contained 100 copies of those transitions, with another copy added every 32 gameplay steps during standard SB3 DQN training. The run completed 25,000 additional steps and selected the checkpoint after 20,000 additional steps using validation games. The network chooses its own actions during inference.
 
@@ -65,9 +83,9 @@ The lower-level training APIs and `python -m levels.train_dqn orange` / `all` re
 
 ## Files and historical research
 
-`play.py` contains the two menus. `train_dqn.py` trains both models. `demonstation_assisted_dqn.py` loads and plays Model 2 and constructs demonstration transitions. `evaluate.py`, `peggle_env.py`, `config_rl.py` and `visualize_data.py` provide evaluation, the shared environment, configuration and rendering. The two `test_*.py` files check observations, rewards, physics, checkpoints, menus and isolated fresh training.
+`play.py` contains model, source and execution-mode menus. `train_dqn.py` trains the three policies. `demonstation_assisted_dqn.py` loads and plays the assisted policy and constructs demonstration transitions. Its optional viewer argument displays demonstration collection without changing the data. `evaluate.py`, `peggle_env.py`, `config_rl.py` and `visualize_data.py` provide evaluation, the shared environment, configuration and rendering. The two `test_*.py` files check observations, rewards, physics, checkpoints, menus and isolated fresh training.
 
-The runtime also needs `local/PegglePy-main/local/vectors.py`, `ball.py`, `collision.py`, and `local/PegglePy-main/levels/Level 1.lvl`, in their existing locations. The full original PegglePy source remains available locally. Its separate graphical game may require its own optional dependencies. The final DQN interface uses Matplotlib recordings.
+The runtime also needs `local/PegglePy-main/local/vectors.py`, `ball.py`, `collision.py`, and `local/PegglePy-main/levels/Level 1.lvl`, in their existing locations. The full original PegglePy source remains available locally. Its separate graphical game may require its own optional dependencies. The DQN menu uses optional live Matplotlib visualization; existing notebook recording helpers remain available.
 
 Historical DQN/PPO checkpoints, CSVs, figures, search evidence and notebook outputs are preserved. The independent simulator search and the demonstration-assisted trained DQN are distinct stages of the research. Fixed Level 1 geometry and limited recovery performance restrict conclusions about new levels. Eight shots is the shortest clear found in our experiments, with no mathematical optimality proof.
 

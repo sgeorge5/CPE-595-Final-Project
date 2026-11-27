@@ -1,12 +1,14 @@
-"""Choose a DQN objective, then pretrained playback or a fresh training run."""
 import os
 import tempfile
 import pandas as pd
 from stable_baselines3 import DQN
 from levels.config_rl import BEST_MODEL_PATH, FINAL_DQN_PATH, RLConfig
-from levels.visualize_data import demonstrate
+from levels.visualize_data import LiveGame, TrainingDisplay, play_policy
 
 STANDARD_ALL_PATH = "models/dqn_all_pegs_best.zip"
+MODEL_LABELS = {"1": "Standard DQN - Clear orange pegs",
+                "2": "Standard DQN - Clear all 77 pegs",
+                "3": "Demonstration-assisted DQN - Clear all 77 pegs"}
 
 
 def load_game_mode(choice):
@@ -31,8 +33,7 @@ def load_game_mode(choice):
     return model, config
 
 
-def train_fresh(choice, output_root="models/retrained"):
-    """An empty, uniquely named run prevents reuse of any previous trained weights."""
+def train_fresh(choice, output_root="models/retrained", viewer=None):
     from levels.train_dqn import train_model_one, train_standard_all_pegs, train_model_two
     if choice not in ("1", "2", "3"):
         raise ValueError("Please enter 1, 2, or 3.")
@@ -40,18 +41,20 @@ def train_fresh(choice, output_root="models/retrained"):
     os.makedirs(parent, exist_ok=True)
     run_dir = tempfile.mkdtemp(prefix="run_", dir=parent)
     print(f"Fresh training output: {run_dir}")
+    budget = {"1": 50_000, "2": 100_000, "3": 115_000}[choice]
+    display = TrainingDisplay(MODEL_LABELS[choice], budget, viewer=viewer)
     if choice == "1":
         print("Training a new orange-only DQN from random network weights.")
-        path = train_model_one(run_dir)
+        path = train_model_one(run_dir, display=display)
         config = RLConfig(observation="compact")
     elif choice == "2":
         print("Training a new standard all-peg DQN from random weights, without demonstrations.")
-        path = train_standard_all_pegs(run_dir)
+        path = train_standard_all_pegs(run_dir, display=display)
         config = RLConfig(goal="all", max_shots=10, free_balls=False, n_actions=21)
     else:
         from levels.demonstation_assisted_dqn import all_pegs_config
         print("Training a new initial all-peg DQN, then demonstration-assisted DQN learning.")
-        path = train_model_two(run_dir)
+        path = train_model_two(run_dir, display=display)
         config = all_pegs_config()
     print(f"New selected checkpoint: {path}")
     return DQN.load(path, device="cpu"), config, run_dir
@@ -85,6 +88,7 @@ def main():
             print("Please enter 1, 2, or 3.")
             continue
         while True:
+            print("\nSELECT MODEL SOURCE\n")
             print("1. Use existing pretrained model")
             print("2. Train a new model from scratch")
             print("3. Back to model selection")
@@ -94,20 +98,40 @@ def main():
             if action not in ("1", "2"):
                 print("Please enter 1, 2, or 3.")
                 continue
-            try:
+            while True:
                 if action == "1":
-                    model, config = load_game_mode(choice)
+                    print("\nSELECT PLAYBACK MODE\n")
+                    print("1. Visual playback - Watch the agent play live")
+                    print("2. Headless playback - Run without graphics")
                 else:
-                    model, config, run_dir = train_fresh(choice)
-                    if choice == "3":
-                        evaluate_new_model(model, config, run_dir, assisted=True)
+                    print("\nSELECT TRAINING MODE\n")
+                    print("1. Visual training - Watch the agent learn live")
+                    print("2. Headless training - Train without graphics (fastest)")
+                print("3. Back")
+                mode = input("Enter your choice: ").strip()
+                if mode == "3":
+                    break
+                if mode not in ("1", "2"):
+                    print("Please enter 1, 2, or 3.")
+                    continue
+                viewer = None
+                try:
+                    if mode == "1":
+                        viewer = LiveGame()
+                    if action == "1":
+                        model, config = load_game_mode(choice)
                     else:
-                        evaluate_new_model(model, config, run_dir)
-            except Exception as error:
-                print(f"Unable to prepare DQN Model {choice}: {error}")
-                continue
-            demonstrate(model, config, "DQN Model " + choice)
-            return
+                        model, config, run_dir = train_fresh(choice, viewer=viewer)
+                        if viewer is not None:
+                            viewer.stage("Final checkpoint evaluation", "Measuring the selected new policy in headless games.")
+                        evaluate_new_model(model, config, run_dir, assisted=choice == "3")
+                    play_policy(model, config, MODEL_LABELS[choice], viewer=viewer)
+                    return
+                except Exception as error:
+                    print(f"Unable to run DQN Model {choice}: {error}")
+                finally:
+                    if viewer is not None:
+                        viewer.close()
 
 
 if __name__ == "__main__":

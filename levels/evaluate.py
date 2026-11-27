@@ -11,7 +11,6 @@ from levels.peggle_env import PeggleEnv
 
 
 def model_observation(env, model):
-    """Use the same numerical representation this model was trained with."""
     size = model.observation_space.shape[0]
     if size == env.config.n_pegs * 4 + 1:
         return env._observation('full')
@@ -22,7 +21,6 @@ def model_observation(env, model):
 
 def run_policy(model=None, policy='dqn', episodes=100, seed=TEST_SEED,
                config=CONFIG, name='DQN'):
-    """Play without saving files: used for selection and separate final tests."""
     if episodes < 1 or policy not in ('dqn', 'random', 'fixed'):
         raise ValueError('Choose a supported policy and a positive episode count.')
     rows, shots, arrangements = [], [], []
@@ -112,7 +110,6 @@ def plot_comparison(summary, path=None):
 def evaluate_agents(model_path=None, episodes=DEFAULT_EVAL_EPISODES, seed=TEST_SEED,
                     results_dir=None, config=CONFIG, model=None, include_baselines=False,
                     original_model_path=ORIGINAL_LEVEL1_MODEL_PATH):
-    """Rerun all policies under current rules, including the same empty-shot penalty."""
     model_path = BEST_MODEL_PATH if model_path is None else model_path
     folder = IMPROVED_RESULTS_DIR if results_dir is None else results_dir
     if model is None:
