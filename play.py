@@ -7,7 +7,6 @@ from levels.config_rl import BEST_MODEL_PATH, FINAL_DQN_PATH, RLConfig
 from levels.visualize_data import LiveGame, TrainingDisplay, play_policy
 
 STANDARD_ALL_PATH = "models/dqn_all_pegs_best.zip"
-# DQN evaluation episode 78: 25/25 in seven shots (evaluation_episodes.csv).
 ORANGE_PRESENTATION_SEED = 50119
 MODEL_LABELS = {"1": "Standard DQN - Clear orange pegs",
                 "2": "Standard DQN - Clear all 77 pegs",
