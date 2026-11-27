@@ -179,7 +179,7 @@ def test_pretrained_menu_routes_three_models_without_training(monkeypatch, capsy
         raise AssertionError("Pretrained playback started training")
     monkeypatch.setattr(play, "train_fresh", no_training)
     for choice in ("1", "2", "3"):
-        answers = iter([choice, "1", "2"])
+        answers = iter([choice, "1", "2"] + (["1"] if choice == "1" else []))
         monkeypatch.setattr("builtins.input", lambda prompt: next(answers))
         config = RLConfig(observation="compact") if choice == "1" else run.all_pegs_config()
         monkeypatch.setattr(play, "load_game_mode", lambda selected: (marker, config))
@@ -256,7 +256,7 @@ def test_all_twelve_menu_combinations_and_navigation(monkeypatch, capsys):
     for choice in ("1", "2", "3"):
         for source in ("1", "2"):
             for mode in ("1", "2"):
-                answers = iter([choice, source, mode])
+                answers = iter([choice, source, mode] + (["1"] if choice == "1" else []))
                 monkeypatch.setattr("builtins.input", lambda prompt: next(answers))
                 viewer, model, events = TestViewer(), object(), []
                 config = RLConfig(observation="compact") if choice == "1" else run.all_pegs_config()
@@ -318,14 +318,142 @@ def test_pretrained_visual_and_headless_match_without_files(monkeypatch):
             patch.setattr(PeggleEnv, "step", headless_step)
             plain = play_policy(model, config, play.MODEL_LABELS[choice])
         viewer = TestViewer()
-        shown = play_policy(model, config, play.MODEL_LABELS[choice], viewer=viewer)
+        shown = play_policy(model, config, play.MODEL_LABELS[choice],
+                            seed=int(plain.iloc[0].seed), viewer=viewer)
         import pandas as pd
         pd.testing.assert_frame_equal(plain, shown)
         assert len(viewer.shots) == len(plain)
         if choice in ("2", "3"):
+            assert plain.seed.eq(50042).all()
             assert plain.iloc[-1].pegs_cleared == 77 and plain.iloc[-1].success
             assert len(plain) == (10 if choice == "2" else 8)
         assert plt.get_fignums() == figures
+
+
+def test_orange_random_arrangements_print_seed_and_keep_actions_greedy(monkeypatch, capsys):
+    import play
+    import pandas as pd
+    from levels import visualize_data as visual
+    model, config = play.load_game_mode("1")
+    seeds = iter([50042, 50045])
+    # Control only playback's new entropy generator, so this check is reproducible.
+    rng = type("Seeds", (), {"integers": lambda self, *args: next(seeds)})()
+    monkeypatch.setattr(visual.np.random, "default_rng", lambda: rng)
+    first_view, second_view = TestViewer(), TestViewer()
+    first = visual.play_policy(model, config, "Orange DQN", viewer=first_view)
+    second = visual.play_policy(model, config, "Orange DQN", viewer=second_view)
+    assert first.seed.eq(50042).all() and second.seed.eq(50045).all()
+    first_colors = [p["color"] for p in first_view.shots[0]["board"]]
+    second_colors = [p["color"] for p in second_view.shots[0]["board"]]
+    assert first_colors != second_colors
+    assert first_colors.count("orange") == second_colors.count("orange") == 25
+    repeated = visual.play_policy(model, config, "Orange DQN", seed=50045)
+    pd.testing.assert_frame_equal(second, repeated)
+    env = PeggleEnv(config)
+    obs, _ = env.reset(seed=50045)
+    for row in second.itertuples():
+        with torch.no_grad():
+            action = int(model.q_net(torch.as_tensor(obs[None], device=model.device)).argmax(dim=1))
+        assert action == row.action
+        obs, _, _, _, _ = env.step(action)
+    env.close()
+    output = capsys.readouterr().out
+    assert "Game seed: 50042" in output and "Game seed: 50045" in output
+
+
+def test_orange_presentation_seed_is_an_actual_historical_win():
+    import play
+    import pandas as pd
+    from levels.visualize_data import play_policy
+    model, config = play.load_game_mode("1")
+    assert play.ORANGE_PRESENTATION_SEED == 50119
+    path = "results/level1_improved/evaluation_episodes.csv"
+    for seed, expected_shots, episode in ((50119, 7, 78), (50045, 8, 4)):
+        rows = play_policy(model, config, "Orange presentation", seed=seed)
+        viewer = TestViewer()
+        arrangement = "Selected demonstration case" if seed == 50119 else "Custom seed arrangement"
+        shown = play_policy(model, config, "Orange presentation", seed=seed,
+                            viewer=viewer, arrangement_label=arrangement)
+        pd.testing.assert_frame_equal(rows, shown)
+        assert all(panel["Arrangement"] == arrangement for panel in viewer.panels)
+        final = rows.iloc[-1]
+        assert final.success and final.orange_cleared == 25 and final.shots_used == expected_shots
+        if os.path.isfile(path):
+            history = pd.read_csv(path)
+            game = history[(history.agent == "DQN") & (history.seed == seed)].iloc[0]
+            assert game.episode == episode and game.success and game.orange_cleared == 25 and game.shots_used == expected_shots
+
+
+def test_playback_seed_options_only_apply_to_orange_model(monkeypatch, capsys):
+    import play
+    selected = []
+    monkeypatch.setattr(play, "load_game_mode", lambda choice: (object(), object()))
+    monkeypatch.setattr(play, "play_policy", lambda *args, **kwargs: selected.append(kwargs["seed"]))
+    for choice in ("1", "2", "3"):
+        for seed, winning in ((None, False), (1234, False), (None, True)):
+            answers = iter([choice, "1", "2"] + (["1"] if choice == "1" and seed is None and not winning else []))
+            monkeypatch.setattr("builtins.input", lambda prompt: next(answers))
+            play.main(seed=seed, winning_arrangement=winning)
+            expected = (play.ORANGE_PRESENTATION_SEED if winning else seed) if choice == "1" else None
+            assert selected[-1] == expected
+    output = capsys.readouterr().out
+    assert output.count("Previously verified winning arrangement:") == 1
+    assert "selected demonstration case, not a randomly generated test game" in output
+
+
+def test_orange_arrangement_menu_choices_and_invalid_input(monkeypatch, capsys):
+    import play
+    for answers, expected in ((["1"], ("1", None)), (["2"], ("2", 50119)),
+                              (["3", "50045"], ("3", 50045)), (["4"], ("4", None))):
+        inputs = iter(answers)
+        monkeypatch.setattr("builtins.input", lambda prompt: next(inputs))
+        assert play.select_orange_arrangement() == expected
+    inputs = iter(["bad", "3", "bad", "3", "-1", "3", "0"])
+    monkeypatch.setattr("builtins.input", lambda prompt: next(inputs))
+    assert play.select_orange_arrangement() == ("3", 0)
+    output = capsys.readouterr().out
+    assert output.count("Please enter a nonnegative integer seed.") == 2
+    assert output.count("Please enter 1, 2, 3, or 4.") == 1
+
+
+def test_orange_arrangement_options_reach_both_playback_modes(monkeypatch, capsys):
+    import play
+    marker, selected = object(), []
+    monkeypatch.setattr(play, "LiveGame", TestViewer)
+    monkeypatch.setattr(play, "load_game_mode", lambda choice: (marker, object()))
+    monkeypatch.setattr(play, "play_policy", lambda model, config, label, **kw: selected.append(kw))
+    for mode in ("1", "2"):
+        for arrangement, expected_seed in (("1", None), ("2", 50119), ("3", 50045)):
+            answers = iter(["1", "1", mode, arrangement] + (["50045"] if arrangement == "3" else []))
+            monkeypatch.setattr("builtins.input", lambda prompt: next(answers))
+            play.main()
+            assert selected[-1]["seed"] == expected_seed
+            assert (selected[-1]["viewer"] is not None) == (mode == "1")
+            label = selected[-1]["arrangement_label"]
+            if arrangement == "2":
+                assert label == "Selected demonstration case (previously successful)"
+            elif arrangement == "1":
+                assert label == "Random orange peg arrangement"
+            else:
+                assert label == "Custom seed arrangement"
+    assert capsys.readouterr().out.count("not a randomly generated test game") == 2
+
+
+def test_orange_arrangement_back_returns_without_loading_or_training(monkeypatch, capsys):
+    import play
+    # Arrangement Back -> mode Back -> source Back -> select the all-peg model.
+    answers = iter(["1", "1", "2", "4", "3", "3", "2", "1", "2"])
+    monkeypatch.setattr("builtins.input", lambda prompt: next(answers))
+    loaded, played = [], []
+    monkeypatch.setattr(play, "load_game_mode", lambda choice: (loaded.append(choice) or (object(), object())))
+    monkeypatch.setattr(play, "play_policy", lambda *args, **kw: played.append(kw))
+    def no_training(*args, **kw):
+        raise AssertionError("Back navigation started training")
+    monkeypatch.setattr(play, "train_fresh", no_training)
+    play.main()
+    assert loaded == ["2"] and len(played) == 1
+    assert played[0]["seed"] is None and played[0]["arrangement_label"] is None
+    assert capsys.readouterr().out.count("SELECT PLAYBACK MODE") == 3
 
 
 def test_display_preserves_training_actions_weights_and_terminal_boards():

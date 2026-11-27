@@ -47,6 +47,21 @@ After choosing a model and its source, choose `1` for visual execution, `2` for 
 
 Visual playback shows the original board and the actual recorded ball trajectory after each shot is simulated. A side panel shows the angle, clearance, shots remaining and outcome. No saved CSV, GIF or historical result is needed. Matplotlib uses an interactive backend only when visual mode is explicitly selected. If no interactive backend is available, choose headless execution from the menu.
 
+After choosing Model 1, its source and its visual/headless execution mode, choose the playback arrangement:
+
+```text
+1. Random orange peg arrangement
+2. Previously verified winning arrangement (seed 50119)
+3. Enter a custom seed
+4. Back
+```
+
+Random mode assigns the 25 orange pegs using a new seed; custom mode reproduces the entered seed. Back returns to the execution-mode menu before loading or training anything. Every game prints its actual seed. All actions remain deterministic DQN predictions. The same checkpoint and seed give identical visual and headless results. Models 2 and 3 retain their original fixed playback behavior. Formal evaluation and checkpoint-selection seeds are unchanged.
+
+Option 2 is labeled in the terminal and visual panel as a **selected demonstration case, not a randomly generated test game**: seed **50119**, episode 78 of `results/level1_improved/evaluation_episodes.csv`, cleared **25/25 in seven shots**. Seed **50045** also cleared **25/25 in eight shots** and can be replayed with the custom-seed option. These selected examples are not unbiased evaluations or guarantees for newly trained policies. Model 1's historical average remains **92.60% clearance, 23.15/25 orange pegs and 12 wins out of 100 games**. Repeated late -60-degree shots also occurred in the historical evaluation.
+
+The optional shortcuts `python play.py --winning-arrangement` (seed 50119) and `python play.py --seed 50045` bypass the arrangement question for Model 1. Seeds are stored in the source or supplied by the user, so playback does not require historical CSV files. These shortcuts do not affect Models 2 and 3.
+
 Visual training observes the actual training environment, including epsilon-greedy exploratory actions. By default, episode 1 and every tenth episode are animated. Change `RENDER_EVERY_N_EPISODES = 10` near the top of `levels/visualize_data.py` to change that interval. Every episode still trains normally. The panel and terminal show measured progress, rewards, epsilon, successes and recent average clearance. Between animated episodes, the window indicates that training continues without animation.
 
 The demonstration-assisted path labels all five stages: initial standard DQN learning, demonstration collection, supervised action-preference updates, demonstration-assisted DQN learning and checkpoint evaluation. Demonstration shots are explicitly labeled as data; supervised updates and headless validation display their stage rather than unrelated gameplay.

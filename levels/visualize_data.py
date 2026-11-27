@@ -218,13 +218,21 @@ class TrainingDisplay(BaseCallback):
         return True
 
 
-def play_policy(model, config, label, seed=50042, viewer=None):
-    """Live or headless deterministic inference; no files and no training."""
+def play_policy(model, config, label, seed=None, viewer=None, arrangement_label=None):
+    """Random orange arrangements by default; actions always use greedy inference."""
+    if seed is None:
+        if config.goal == "orange":
+            seed = int(np.random.default_rng().integers(0, 2**32))
+        else:
+            seed = 50042  # Preserve both all-peg models' original playback.
     env = PeggleEnv(config)
     observation, _ = env.reset(seed=seed)
     done, total_reward = False, 0.0
     rows = []
     print(label)
+    print(f"Game seed: {seed}", flush=True)
+    if arrangement_label is not None:
+        print(f"Arrangement: {arrangement_label}", flush=True)
     try:
         while not done:
             env.record_trajectory = viewer is not None and viewer.active
@@ -235,15 +243,18 @@ def play_policy(model, config, label, seed=50042, viewer=None):
             total_reward += reward
             cleared = info["pegs_cleared"] if config.goal == "all" else info["orange_cleared"]
             target = config.n_pegs if config.goal == "all" else config.n_orange
-            rows.append(dict(action=int(action), reward=reward, **info))
+            rows.append(dict(seed=seed, action=int(action), reward=reward, **info))
             print(f"Shot {info['shots_used']}: Angle {info['angle_degrees']:+.0f} degrees | "
                   f"Pegs cleared {cleared}/{target} | Shots remaining {info['shots_remaining']}", flush=True)
             if viewer is not None and viewer.active:
                 stats = {"Model": label, "Mode": "Visual pretrained / selected-policy playback",
+                         "Game seed": seed,
                          "Current shot / angle": f"{info['shots_used']} / {info['angle_degrees']:+.0f} degrees",
                          "Pegs cleared": f"{cleared}/{target}", "Shots remaining": info["shots_remaining"],
                          "Episode reward": f"{total_reward:.2f}",
                          "Status": ("Success" if info["success"] else "Shot budget exhausted") if done else "Playing"}
+                if arrangement_label is not None:
+                    stats["Arrangement"] = arrangement_label
                 viewer.animate(dict(board=board, trajectory=env.trajectory, info=info), config, stats)
         print(f"GAME COMPLETE | Pegs cleared: {cleared}/{target} | "
               f"Shots used: {info['shots_used']} | Success: {info['success']}", flush=True)
@@ -352,7 +363,6 @@ def plot_gameplay(board, trajectory, frame_index, angle, shot_number,
         if not frame["is_visible"][i]:
             continue
         color = "#ed8b22" if peg["color"] == "orange" else "#2786c4"
-        # Hit pegs stay solid until removed: keep their color and mark an X.
         ax.add_patch(plt.Circle((peg["x"], peg["y"]), peg["radius"],
                                facecolor=color, edgecolor="black", linewidth=0.7,
                                zorder=3))

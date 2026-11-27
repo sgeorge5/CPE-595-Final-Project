@@ -1,4 +1,5 @@
 import os
+import argparse
 import tempfile
 import pandas as pd
 from stable_baselines3 import DQN
@@ -6,6 +7,8 @@ from levels.config_rl import BEST_MODEL_PATH, FINAL_DQN_PATH, RLConfig
 from levels.visualize_data import LiveGame, TrainingDisplay, play_policy
 
 STANDARD_ALL_PATH = "models/dqn_all_pegs_best.zip"
+# DQN evaluation episode 78: 25/25 in seven shots (evaluation_episodes.csv).
+ORANGE_PRESENTATION_SEED = 50119
 MODEL_LABELS = {"1": "Standard DQN - Clear orange pegs",
                 "2": "Standard DQN - Clear all 77 pegs",
                 "3": "Demonstration-assisted DQN - Clear all 77 pegs"}
@@ -77,7 +80,34 @@ def evaluate_new_model(model, config, run_dir, assisted=False):
     return summary
 
 
-def main():
+def select_orange_arrangement():
+    while True:
+        print("\nSELECT MODEL 1 PLAYBACK ARRANGEMENT\n")
+        print("1. Random orange peg arrangement")
+        print("2. Previously verified winning arrangement (seed 50119)")
+        print("3. Enter a custom seed")
+        print("4. Back")
+        choice = input("Enter your choice: ").strip()
+        if choice == "1":
+            return choice, None
+        if choice == "2":
+            return choice, ORANGE_PRESENTATION_SEED
+        if choice == "3":
+            try:
+                seed = int(input("Enter a nonnegative integer seed: ").strip())
+            except ValueError:
+                print("Please enter a nonnegative integer seed.")
+                continue
+            if seed < 0:
+                print("Please enter a nonnegative integer seed.")
+                continue
+            return choice, seed
+        if choice == "4":
+            return choice, None
+        print("Please enter 1, 2, 3, or 4.")
+
+
+def main(seed=None, winning_arrangement=False):
     while True:
         print("PEGGLE REINFORCEMENT LEARNING\n")
         print("1. Standard DQN - Clear orange pegs")
@@ -114,6 +144,28 @@ def main():
                 if mode not in ("1", "2"):
                     print("Please enter 1, 2, or 3.")
                     continue
+                playback_seed, arrangement_label = None, None
+                if choice == "1":
+                    if winning_arrangement:
+                        arrangement, playback_seed = "2", ORANGE_PRESENTATION_SEED
+                    elif seed is not None:
+                        arrangement, playback_seed = "3", seed
+                    else:
+                        arrangement, playback_seed = select_orange_arrangement()
+                        if arrangement == "4":
+                            continue  # Back to playback/training mode, before starting anything.
+                    if arrangement == "1":
+                        arrangement_label = "Random orange peg arrangement"
+                    elif arrangement == "2":
+                        arrangement_label = "Selected demonstration case (previously successful)"
+                        print("Previously verified winning arrangement: the original pretrained Model 1 "
+                              "cleared 25/25 orange pegs in seven shots with seed 50119. "
+                              "This is a selected demonstration case, not a randomly generated test game "
+                              "or an unbiased evaluation; a newly trained model may perform differently.")
+                    else:
+                        arrangement_label = "Custom seed arrangement"
+                elif seed is not None or winning_arrangement:
+                    print("Seed options apply only to Model 1; keeping this all-peg model's original playback.")
                 viewer = None
                 try:
                     if mode == "1":
@@ -125,7 +177,8 @@ def main():
                         if viewer is not None:
                             viewer.stage("Final checkpoint evaluation", "Measuring the selected new policy in headless games.")
                         evaluate_new_model(model, config, run_dir, assisted=choice == "3")
-                    play_policy(model, config, MODEL_LABELS[choice], viewer=viewer)
+                    play_policy(model, config, MODEL_LABELS[choice], seed=playback_seed,
+                                viewer=viewer, arrangement_label=arrangement_label)
                     return
                 except Exception as error:
                     print(f"Unable to run DQN Model {choice}: {error}")
@@ -135,4 +188,12 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Play a pretrained DQN or train a new policy.")
+    seed_options = parser.add_mutually_exclusive_group()
+    seed_options.add_argument("--seed", type=int, help="Reproduce a Model 1 orange arrangement using this seed.")
+    seed_options.add_argument("--winning-arrangement", action="store_true",
+                              help="Use Model 1's selected demonstration arrangement (seed 50119).")
+    args = parser.parse_args()
+    if args.seed is not None and args.seed < 0:
+        parser.error("The seed must be nonnegative.")
+    main(seed=args.seed, winning_arrangement=args.winning_arrangement)
